@@ -2,7 +2,7 @@
 # Replace repo url with the repository url for your Jumpstart Pro application
 services:
   - type: web
-    repo: https://github.com/GITHUB_USERNAME/GITHUB_REPOSITORY # Replace this url
+    repo: https://github.com/HNIX/Swayed # Replace this url
     name: rails
     env: ruby
     region: oregon # the region must be consistent across all services for the internal keys to be read
