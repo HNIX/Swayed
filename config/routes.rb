@@ -44,6 +44,8 @@ Rails.application.routes.draw do
       resources :accounts
       resources :users
       resources :notification_tokens, only: :create
+      #post '/leads', to: 'leads#create'
+      #post '/ping', to: 'leads#ping'
     end
   end
 
