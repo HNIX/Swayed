@@ -1,6 +1,5 @@
 class Api::V1::PasswordsController < Api::BaseController
   before_action :configure_permitted_parameters, only: [:create]
-  skip_before_action :authenticate_affiliate_token!
 
   def update
     if current_user.update_with_password(password_params)
