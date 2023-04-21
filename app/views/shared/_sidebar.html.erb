@@ -1,4 +1,4 @@
-
+<% if user_signed_in? %>
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
   <div data-toggle-target="toggleable" class="hidden relative z-20 lg:hidden" role="dialog" aria-modal="true">
     <!--
@@ -321,3 +321,4 @@
       </nav>
     </div>
   </div>
+<% end %>

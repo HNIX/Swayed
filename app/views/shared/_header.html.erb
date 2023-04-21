@@ -1,5 +1,6 @@
 <nav class="sticky top-0 z-10 flex flex-wrap items-center justify-between px-8 py-3 bg-white border-b border-gray-200 text-sm font-medium" data-controller="dropdown">
 
+  <% if user_signed_in? %>
   <div class="block lg:hidden flex justify-between w-full">
       <button data-action="click->toggle#toggle touch->toggle#toggle" type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
           <span class="sr-only">Open sidebar</span>
@@ -19,7 +20,6 @@
 
     <div>
       <%= render "shared/right_nav" %>
-      <% if user_signed_in? %>
         <div class="hidden lg:inline-block">
           <%= render "shared/notifications" %>
         </div>
