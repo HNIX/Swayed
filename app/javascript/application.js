@@ -8,7 +8,7 @@ import "@hotwired/turbo-rails"
 window.Rails = Rails
 
 // Swiper
-import "swiper/css/bundle"
+//import "swiper/css/bundle"
 
 require("@rails/activestorage").start()
 import "@rails/actiontext"
