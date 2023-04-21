@@ -24,7 +24,7 @@ class Lead < ApplicationRecord
   belongs_to :api_ping
   has_many :outbound_pings
   has_many :campaign_distributions, through: :outbound_pings
-  has_manu :distributions, through: :campaign_distributions
+  has_many :distributions, through: :campaign_distributions
   
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :leads, partial: "leads/index", locals: {lead: self} }
