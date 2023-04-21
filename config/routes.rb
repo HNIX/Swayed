@@ -21,7 +21,7 @@ Rails.application.routes.draw do
         resource :impersonate, module: :user
       end
       resources :connected_accounts
-      resources :accounts
+      resources :accounts 
       resources :account_users
       resources :plans
       namespace :pay do
@@ -37,15 +37,24 @@ Rails.application.routes.draw do
 
   # API routes
   namespace :api, defaults: {format: :json} do
+      
     namespace :v1 do
       resource :auth
       resource :me, controller: :me
       resource :password
       resources :accounts
+      resources :campaigns
       resources :users
       resources :notification_tokens, only: :create
-      #post '/leads', to: 'leads#create'
-      #post '/ping', to: 'leads#ping'
+      resources :affiliates
+      resources :campaign_sources, path: :inbound do 
+        member do 
+          post :ping
+          post :post
+          post :direct
+          post :test_buyer
+        end
+      end
     end
   end
 
@@ -62,6 +71,38 @@ Rails.application.routes.draw do
 
   resources :announcements, only: [:index, :show]
   resources :api_tokens
+  resources :affiliate_tokens
+
+  resources :campaigns do 
+    collection do
+      get :field
+    end
+    get :inbound
+    get :outbound
+    get :connections
+    get :settings
+    post :create_source, on: :member
+  end
+
+  resources :verticals do 
+    collection do
+      get :field
+    end
+  end
+
+  resources :companies do 
+    collection do
+      get "contact_field"
+    end
+    resources :contacts
+    resources :sources
+    resources :distributions
+  end
+
+  resources :sources
+  resources :campaign_sources, only: [:destroy]
+  resources :campaign_distributions, only: [:destroy]
+
   resources :accounts do
     member do
       patch :switch

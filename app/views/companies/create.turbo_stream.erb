@@ -1,0 +1,6 @@
+<%# Render new dropdown on successful customer create otherwise show errors on the modal itself %>
+<% if @company.persisted? %>
+  <%= turbo_stream.update "companies", partial: "campaign/company_dropdown", locals: { companies: Company.all } %>
+<% elsif @company.errors.present? %>
+  <%= turbo_stream.replace "new_company", partial: "companies/form", locals: { company: @company } %>
+<% end %>

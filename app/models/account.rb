@@ -73,6 +73,10 @@ class Account < ApplicationRecord
     owner_id == user.id
   end
 
+  def monthly_api_pings_count(month: Time.zone.now.month, year: Time.zone.now.year)
+    api_pings.where(created_at: Date.new(year, month).beginning_of_month.Date.new(year, month).end_of_month).count
+  end
+
   # An account can be transferred by the owner if it:
   # * Isn't a personal account
   # * Has more than one user in it

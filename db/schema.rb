@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_19_211821) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "account_invitations", force: :cascade do |t|
     t.bigint "account_id", null: false
@@ -112,12 +113,65 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
     t.index ["addressable_type", "addressable_id"], name: "index_addresses_on_addressable"
   end
 
+  create_table "affiliate_tokens", force: :cascade do |t|
+    t.datetime "expires_at"
+    t.datetime "last_used_at"
+    t.jsonb "metadata", default: {}
+    t.string "name"
+    t.string "token"
+    t.boolean "transient", default: false
+    t.bigint "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "company_id"
+    t.index ["account_id"], name: "index_affiliate_tokens_on_account_id"
+    t.index ["company_id"], name: "index_affiliate_tokens_on_company_id"
+    t.index ["token"], name: "index_affiliate_tokens_on_token", unique: true
+  end
+
+  create_table "affiliates", force: :cascade do |t|
+    t.jsonb "metadata", default: {}
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.bigint "account_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_affiliates_on_account_id"
+    t.index ["user_id"], name: "index_affiliates_on_user_id"
+  end
+
   create_table "announcements", force: :cascade do |t|
     t.string "kind"
     t.string "title"
     t.datetime "published_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "api_pings", id: false, force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.text "request_body"
+    t.text "endpoint"
+    t.text "action"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "headers"
+    t.string "host"
+    t.string "request_method"
+    t.bigint "campaign_source_id"
+    t.boolean "accepted"
+    t.boolean "lead_posted"
+    t.boolean "test"
+    t.string "ip_address"
+    t.integer "price"
+    t.jsonb "response"
+    t.jsonb "post_params"
+    t.uuid "id", default: -> { "uuid_generate_v4()" }
+    t.integer "status", default: 0
+    t.index ["account_id"], name: "index_api_pings_on_account_id"
+    t.index ["campaign_source_id"], name: "index_api_pings_on_campaign_source_id"
   end
 
   create_table "api_tokens", force: :cascade do |t|
@@ -132,6 +186,78 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
     t.index ["user_id"], name: "index_api_tokens_on_user_id"
+  end
+
+  create_table "campaign_distributions", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.bigint "distribution_id", null: false
+    t.integer "weekly_limit"
+    t.integer "daily_limit"
+    t.integer "monthly_limit"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "field_mapping"
+    t.index ["campaign_id"], name: "index_campaign_distributions_on_campaign_id"
+    t.index ["distribution_id"], name: "index_campaign_distributions_on_distribution_id"
+  end
+
+  create_table "campaign_fields", force: :cascade do |t|
+    t.string "name"
+    t.string "label"
+    t.string "data_type"
+    t.boolean "validated"
+    t.boolean "post_required"
+    t.boolean "ping_required"
+    t.boolean "hide"
+    t.bigint "campaign_id", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_campaign_fields_on_account_id"
+    t.index ["campaign_id"], name: "index_campaign_fields_on_campaign_id"
+  end
+
+  create_table "campaign_sources", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.bigint "source_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "daily_limit"
+    t.integer "weekly_limit"
+    t.integer "monthly_limit"
+    t.index ["campaign_id"], name: "index_campaign_sources_on_campaign_id"
+    t.index ["source_id"], name: "index_campaign_sources_on_source_id"
+  end
+
+  create_table "campaigns", force: :cascade do |t|
+    t.bigint "vertical_id", null: false
+    t.bigint "account_id", null: false
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 0
+    t.integer "campaign_type", default: 0
+    t.index ["account_id"], name: "index_campaigns_on_account_id"
+    t.index ["vertical_id"], name: "index_campaigns_on_vertical_id"
+  end
+
+  create_table "companies", force: :cascade do |t|
+    t.string "name"
+    t.string "payment_terms"
+    t.string "billing_cycle"
+    t.string "address"
+    t.string "city"
+    t.string "state"
+    t.string "zip_code"
+    t.string "tax_id"
+    t.string "currency"
+    t.integer "payment_threshold"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "account_id"
+    t.index ["account_id"], name: "index_companies_on_account_id"
   end
 
   create_table "connected_accounts", force: :cascade do |t|
@@ -149,6 +275,50 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
     t.index ["owner_id", "owner_type"], name: "index_connected_accounts_on_owner_id_and_owner_type"
   end
 
+  create_table "contacts", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "phone"
+    t.bigint "company_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_contacts_on_company_id"
+  end
+
+  create_table "distributions", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "account_id", null: false
+    t.string "endpoint"
+    t.string "key"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "response_mapping"
+    t.string "response_format"
+    t.jsonb "template"
+    t.index ["account_id"], name: "index_distributions_on_account_id"
+    t.index ["company_id"], name: "index_distributions_on_company_id"
+  end
+
+  create_table "fields", force: :cascade do |t|
+    t.string "name"
+    t.string "label"
+    t.string "data_type"
+    t.boolean "validated", default: false
+    t.boolean "post_required", default: false
+    t.boolean "ping_required", default: false
+    t.boolean "hide", default: false
+    t.bigint "vertical_id", null: false
+    t.bigint "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_fields_on_account_id"
+    t.index ["label", "vertical_id"], name: "index_fields_on_label_and_vertical_id", unique: true
+    t.index ["name", "vertical_id"], name: "index_fields_on_name_and_vertical_id", unique: true
+    t.index ["vertical_id"], name: "index_fields_on_vertical_id"
+  end
+
   create_table "leads", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -160,6 +330,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
     t.integer "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "api_ping_id"
+    t.index ["api_ping_id"], name: "index_leads_on_api_ping_id"
   end
 
   create_table "notification_tokens", force: :cascade do |t|
@@ -183,6 +355,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
     t.datetime "interacted_at", precision: nil
     t.index ["account_id"], name: "index_notifications_on_account_id"
     t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient_type_and_recipient_id"
+  end
+
+  create_table "outbound_pings", force: :cascade do |t|
+    t.boolean "accepted"
+    t.string "endpoint"
+    t.jsonb "headers"
+    t.string "host"
+    t.boolean "lead_posted"
+    t.text "request_body"
+    t.string "request_method"
+    t.jsonb "response"
+    t.boolean "test"
+    t.bigint "account_id", null: false
+    t.bigint "campaign_distribution_id", null: false
+    t.bigint "lead_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_outbound_pings_on_account_id"
+    t.index ["campaign_distribution_id"], name: "index_outbound_pings_on_campaign_distribution_id"
+    t.index ["lead_id"], name: "index_outbound_pings_on_lead_id"
   end
 
   create_table "pay_charges", force: :cascade do |t|
@@ -286,6 +478,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
     t.boolean "charge_per_unit"
   end
 
+  create_table "sources", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.string "terms"
+    t.integer "status"
+    t.string "landing_page_url"
+    t.string "privacy_policy_url"
+    t.string "postback_url"
+    t.string "payout_method"
+    t.string "payout_type"
+    t.integer "payout"
+    t.integer "payout_cap"
+    t.integer "ping_cap"
+    t.integer "budget"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["company_id"], name: "index_sources_on_company_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -326,14 +537,45 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_015413) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "verticals", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_verticals_on_account_id"
+  end
+
   add_foreign_key "account_invitations", "accounts"
   add_foreign_key "account_invitations", "users", column: "invited_by_id"
   add_foreign_key "account_users", "accounts"
   add_foreign_key "account_users", "users"
   add_foreign_key "accounts", "users", column: "owner_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "affiliate_tokens", "accounts"
+  add_foreign_key "affiliates", "accounts"
+  add_foreign_key "affiliates", "users"
+  add_foreign_key "api_pings", "accounts"
   add_foreign_key "api_tokens", "users"
+  add_foreign_key "campaign_distributions", "campaigns"
+  add_foreign_key "campaign_distributions", "distributions"
+  add_foreign_key "campaign_fields", "accounts"
+  add_foreign_key "campaign_fields", "campaigns"
+  add_foreign_key "campaign_sources", "campaigns"
+  add_foreign_key "campaign_sources", "sources"
+  add_foreign_key "campaigns", "accounts"
+  add_foreign_key "campaigns", "verticals"
+  add_foreign_key "contacts", "companies"
+  add_foreign_key "distributions", "accounts"
+  add_foreign_key "distributions", "companies"
+  add_foreign_key "fields", "accounts"
+  add_foreign_key "fields", "verticals"
+  add_foreign_key "outbound_pings", "accounts"
+  add_foreign_key "outbound_pings", "campaign_distributions"
+  add_foreign_key "outbound_pings", "leads"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
+  add_foreign_key "sources", "companies"
+  add_foreign_key "verticals", "accounts"
 end

@@ -1,0 +1,3 @@
+<%= turbo_stream.append "fields" do %>
+    <%= render partial: "field", locals: { field: Field.new } %>
+<% end %>

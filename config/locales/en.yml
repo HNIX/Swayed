@@ -154,6 +154,152 @@ en:
       revoke: "Revoke Token"
       confirm: "Are you sure you want to revoke this API token?"
       auth_header: "Authenticate using Header"
+  
+  campaigns:
+    created: "Successfully created campaign"
+    updated: "Successfully updated campaign"
+    destroyed: "Your campaign has been deleted"
+    all: "All Campaigns"
+    default: "Default"
+    app: "App"
+
+    index:
+      title: "Campaigns"
+      create: "Create a Campaign"
+      view: "View"
+    new:
+      title: "New Campaign"
+    edit:
+      title: "Edit"
+    show:
+      edit: "Edit Campaign"
+      click_to_copy: "Click to copy"
+      revoke: "Revoke Campaign"
+      confirm: "Are you sure you want to revoke this Campaign?"
+      auth_header: "Authenticate using Header"
+    header:
+      edit: "Edit Campaign"
+      click_to_copy: "Click to copy"
+      revoke: "Revoke Campaign"
+      confirm: "Are you sure you want to revoke this Campaign?"
+      auth_header: "Authenticate using Header"
+    post:
+      auth_header: "Authenticate using Header"
+
+  contacts:
+    created: "Successfully created contact"
+    updated: "Successfully updated contact"
+    destroyed: "Your contact has been deleted"
+    all: "All Contacts"
+    default: "Default"
+    app: "App"
+
+    index:
+      title: "Contacts"
+      create: "Create a Contact"
+      view: "View"
+    new:
+      title: "New Contact"
+    edit:
+      title: "Edit"
+    show:
+      edit: "Edit Contact"
+      click_to_copy: "Click to copy"
+    header:
+      edit: "Edit Contact"
+      click_to_copy: "Click to copy"
+  
+  companies:
+    created: "Successfully created company"
+    updated: "Successfully updated company"
+    destroyed: "Your company has been deleted"
+    all: "All Companies"
+    default: "Default"
+    app: "App"
+
+    index:
+      title: "Companies"
+      create: "Create a Company"
+      view: "View"
+    new:
+      title: "New Company"
+    edit:
+      title: "Edit"
+    show:
+      edit: "Edit Company"
+      click_to_copy: "Click to copy"
+    header:
+      edit: "Edit Contact"
+      click_to_copy: "Click to copy"
+  
+  affiliates:
+    created: "Successfully created affiliate"
+    updated: "Successfully updated affiliate"
+    destroyed: "Your affiliate has been deleted"
+    all: "All Affiliates"
+    default: "Default"
+    app: "App"
+
+    index:
+      title: "Affiliates"
+      create: "Create a Affiliate"
+      view: "View"
+    new:
+      title: "New Affiliate"
+    edit:
+      title: "Edit"
+    show:
+      edit: "Edit Affiliate"
+      click_to_copy: "Click to copy"
+      revoke: "Revoke Affiliate"
+      confirm: "Are you sure you want to revoke this Affiliate?"
+      auth_header: "Authenticate using Header"
+  
+  verticals:
+    created: "Successfully created vertical"
+    updated: "Successfully updated vertical"
+    destroyed: "Your vertical has been deleted"
+    all: "All Verticals"
+    default: "Default"
+    app: "App"
+
+    index:
+      title: "Verticals"
+      create: "Create a Vertical"
+      view: "View"
+    new:
+      title: "New Vertical"
+    edit:
+      title: "Edit"
+    show:
+      edit: "Edit Vertical"
+      click_to_copy: "Click to copy"
+      revoke: "Revoke Vertical"
+      confirm: "Are you sure you want to revoke this Vertical?"
+      auth_header: "Authenticate using Header"
+  
+  affiliate_tokens:
+    created: "Successfully created Affiliate token"
+    updated: "Successfully updated Affiliate token"
+    destroyed: "Your Affiliate token has been revoked"
+    all: "All Affiliate Tokens"
+    default: "Default"
+    app: "App"
+
+    index:
+      title: "Affiliate Tokens"
+      create: "Create an Affiliate Token"
+      view: "View"
+    new:
+      title: "New Affiliate Token"
+    edit:
+      title: "Edit"
+    show:
+      edit: "Edit Token"
+      click_to_copy: "Click to copy"
+      revoke: "Revoke Token"
+      confirm: "Are you sure you want to revoke this Affiliate token?"
+      auth_header: "Authenticate using Header"
 
   payment_methods:
     new:
@@ -216,6 +362,15 @@ en:
       billing: "Billing"
       accounts: "Accounts"
       api_tokens: "API"
+      affiliate_tokens: "Affiliate Tokens"
+    header:
+      profile: "Profile"
+      password: "Password"
+      connected_accounts: "Connected Accounts"
+      billing: "Billing"
+      accounts: "Accounts"
+      api_tokens: "API"
+      affiliate_tokens: "Affiliate Tokens"
     flash:
       confirm_payment: "Confirm your latest payment"
     navbar:
@@ -224,6 +379,22 @@ en:
       connected_accounts: "Connected Accounts"
       billing: "Billing"
       api_tokens: "API"
+      affiliate_tokens: "Affiliate Tokens"
+      campaigns: "Campaigns"
+      accounts: "Accounts"
+      admin: "Admin"
+      dashboard: "Dashboard"
+      sign_out: "Sign Out"
+      log_in: "Log In"
+      sign_up: "Sign Up"
+    header:
+      profile: "Profile"
+      password: "Password"
+      connected_accounts: "Connected Accounts"
+      billing: "Billing"
+      api_tokens: "API"
+      affiliate_tokens: "Affiliate Tokens"
+      campaigns: "Campaigns"
       accounts: "Accounts"
       admin: "Admin"
       dashboard: "Dashboard"
@@ -514,6 +685,9 @@ en:
       api_token:
         last_used_at: "Last Used"
         created_at: "Created"
+      affiliate_token:
+        last_used_at: "Last Used"
+        created_at: "Created"
       account:
         name_on_card: "Name on Card"
 
@@ -560,6 +734,8 @@ en:
         extra_billing_info: "VAT ID, Business name, address, etc..."
         billing_email: "account@example.com"
       api_token:
+        name: "Token Name"
+      affiliate_token:
         name: "Token Name"
       user:
         name: "Steve Jobs"

@@ -1,0 +1,22 @@
+<%= fields_for "campaign[campaign_fields_attributes][#{field.persisted? ? field.id : Time.now.to_i }]", field do |ff| %>
+  <%= ff.hidden_field :id %>
+
+  <div class="flow-root">
+    <div class="-my-2 overflow-x-auto">
+      <div class="inline-block min-w-full py-2 align-middle">
+        <table class="min-w-full divide-y divide-gray-300">
+          <tbody>          <!-- Odd row -->
+              <tr>
+                <td class="whitespace-nowrap py-2 pr-3 text-sm font-medium text-gray-900"><%= ff.text_field :name, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6", placeholder: "field_name" %></td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><%= ff.text_field :label, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6", placeholder: "Field Label" %></td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><%= ff.text_field :data_type, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6", placeholder: "Data Type" %></td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><%= ff.check_box :ping_required, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" %><label for="ping" class="font-medium text-gray-900">* Ping</label></td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><%= ff.check_box :post_required, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" %><label for="comments" class="font-medium text-gray-900">* Post</label></td>
+              </tr>
+            <!-- More people... -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% end %>

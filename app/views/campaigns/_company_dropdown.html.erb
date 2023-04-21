@@ -1,0 +1,4 @@
+<div class="sm:col-span-4" data-controller="companies">
+  <label class="form-label">Company</label>
+  <%= select_tag('source[company_id]', options_for_select(companies.map { |c| [c.name.humanize, c.id] }, @company.id), class: 'form-select form-select-solid') %>
+</div>

@@ -1,0 +1,83 @@
+<div class="relative z-40" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+<!-- Background backdrop, show/hide based on slide-over state. -->
+
+    <div class="fixed inset-0 overflow-hidden transition-opacity ease-linear duration-300 opacity-0 hidden"  data-slideover-target="overlay">
+        <div class="fixed inset-0 bg-gray-800 opacity-30"></div>
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full w-2/6 pl-10 sm:pl-16">
+                <!--
+                Slide-over panel, show/hide based on slide-over state.
+
+                Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+                    From: "translate-x-full"
+                    To: "translate-x-0"
+                Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+                    From: "translate-x-0"
+                    To: "translate-x-full"
+                -->
+                <div class="pointer-events-auto w-full transform transition ease-in-out duration-500 sm:duration-700 translate-x-full hidden" id="slideover-target" data-slideover-target="menu" >
+                    <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                        <%= form_with(model: campaign, local: true) do |form| %>
+                            <div class="flex-1 overflow-y-auto">
+                                <div class="bg-indigo-700 py-6 px-4 sm:px-6">
+                                    <div class="flex items-center justify-between">
+                                    <h2 class="text-base font-semibold leading-6 text-white" id="slide-over-title">Edit Distribution</h2>
+                                    <div class="ml-3 flex h-7 items-center" >
+                                        <button data-action="slideover#_hide" type="button" class="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+                                        <span class="sr-only">Close panel</span>
+                                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                        </button>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-between">
+                                    <%= render "shared/error_messages", resource: form.object %>
+                                    <div class="divide-y divide-gray-200 px-4 sm:px-6">
+                                        <div class="space-y-6 pt-6 pb-5">  
+                                            
+                                            <div>
+                                            <%= form.fields_for :campaign_distributions, campaign_distribution do |cd_form| %>
+                                                <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
+                                                    <div class="sm:col-span-4">
+                                                        <div>
+                                                        <%= cd_form.label :distribution_id, "distribution" %>
+                                                        <%= campaign_distribution.distribution.endpoint %>
+                                                        </div>
+                                                    </div>
+                                                        <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
+                                                          
+                                                            <h3>Field Mapping</h3>
+                                                            <% @campaign.campaign_fields.each do |field| %>
+                                                            <div class="sm:col-span-2">
+                                                                <div>
+                                                                <label><%= field.name %>:</label>
+                                                                <%= cd_form.text_field "field_mapping[#{field.name}]", value: campaign_distribution.field_mapping["#{field.name}"], placeholder: "Enter buyer's field name" %>
+                                                                </div>
+                                                            </div>
+                                                            <% end %>
+                                                            
+                                                            
+                                                        </div>
+                                                    
+                                                    
+                                                </div>
+                                            <% end %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-shrink-0 justify-end px-4 py-3">
+                                <button data-action="slideover#_hide" type="button" class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
+                                <%= form.button "Update distribution", class: "ml-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+                                </div>
+                            </div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

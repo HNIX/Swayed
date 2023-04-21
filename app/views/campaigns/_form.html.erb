@@ -1,0 +1,53 @@
+<%= form_with(model: campaign) do |form| %>
+  <div class="flex-1 overflow-y-auto">  
+    <div class="flex flex-1 flex-col justify-between">
+      
+      <%= render "shared/error_messages", resource: form.object %>
+      
+      <div class="divide-y divide-gray-200 px-4 sm:px-6">
+        <div class="space-y-6 pt-6 pb-5">
+          <div>
+            <label for="project-name" class="block text-sm font-medium leading-6 text-gray-900">Campaign name</label>
+            <div class="mt-2">
+              <%= form.text_field :name, placeholder: true, autofocus: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+            </div>
+          </div>
+          <div>
+            <label for="vertical" class="block text-sm font-medium leading-6 text-gray-900">Vertical</label>
+            <div class="mt-2">
+              <%= form.collection_select :vertical_id, Vertical.order(:name), :id, :name %>
+            </div>
+          </div>
+
+          <div>
+            <label for="campaign_type" class="block text-sm font-medium leading-6 text-gray-900">Campaign Type</label>
+            <div class="mt-2">
+              <%= form.select :status, Campaign.campaign_types.keys.map { |type| [type.titleize, type] } %>
+            </div>
+          </div>
+
+         
+        </div>
+
+        <div class="pt-4 pb-6">
+          <div class="mt-4 flex text-sm">
+            <a href="#" class="group inline-flex items-center text-gray-500 hover:text-gray-900">
+              <svg class="h-5 w-5 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+              </svg>
+              <span class="ml-2">Learn more about campaigns</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="flex flex-shrink-0 justify-end px-4 py-3">
+    <%= form.button class: "ml-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+    
+    <% if form.object.persisted? %>
+      <%= link_to t("delete"), form.object, class: "btn btn-danger outline", data: { turbo_method: :delete, turbo_confirm: t("are_you_sure") } %>
+    <% end %>
+  </div>
+<% end %>

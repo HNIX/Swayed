@@ -1,0 +1,57 @@
+# == Schema Information
+#
+# Table name: sources
+#
+#  id                 :bigint           not null, primary key
+#  budget             :integer
+#  landing_page_url   :string
+#  name               :string
+#  payout             :integer
+#  payout_cap         :integer
+#  payout_method      :string
+#  payout_type        :string
+#  ping_cap           :integer
+#  postback_url       :string
+#  privacy_policy_url :string
+#  status             :integer
+#  terms              :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  company_id         :bigint           not null
+#
+# Indexes
+#
+#  index_sources_on_company_id  (company_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (company_id => companies.id)
+#
+
+one:
+  company: one
+  terms: MyString
+  status: 1
+  landing_page_url: MyString
+  privacy_policy_url: MyString
+  postback_url: MyString
+  payout_method: MyString
+  payout_type: MyString
+  payout: 1
+  payout_cap: 1
+  ping_cap: 1
+  budget: 1
+
+two:
+  company: two
+  terms: MyString
+  status: 1
+  landing_page_url: MyString
+  privacy_policy_url: MyString
+  postback_url: MyString
+  payout_method: MyString
+  payout_type: MyString
+  payout: 1
+  payout_cap: 1
+  ping_cap: 1
+  budget: 1

@@ -1,0 +1,54 @@
+<%= render 'header', campaign: @campaign %>
+
+<div class="mx-auto pb-6 lg:pb-16">
+  <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+    <div class="lg:col-span-12">
+      <!--- START CAMPAIGN SETTINGS --->
+      <div class="mt-4 mx-auto px-4 py-6 sm:px-6 lg:px-8 bg-white rounded-lg shadow">
+
+        <%= form_with(model: campaign) do |form| %>
+          <div class="flex-1 overflow-y-auto">
+            
+            <div class="flex flex-1 flex-col justify-between">
+              <%= render "shared/error_messages", resource: form.object %>
+              <div class="divide-y divide-gray-200">
+                <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div class="sm:col-span-4"> 
+                    <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Campaign Name</label>
+                    <div class="mt-2">
+                      <%= form.text_field :name, placeholder: true, autofocus: true, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+                    </div>
+                  </div>
+                  <div class="sm:col-span-4">
+                    <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Vertical</label>
+                    <div class="mt-2">
+                      <%= form.collection_select :vertical_id, Vertical.order(:name), :id, :name %>
+                    </div>
+                  </div>
+                
+                  
+                </div>
+                <div class="flex justify-between mt-6 pt-4 pb-6">
+                  
+                  <div class="mt-4 flex text-sm">
+                    <a href="#" class="group inline-flex items-center text-gray-500 hover:text-gray-900">
+                      <svg class="h-5 w-5 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                      </svg>
+                      <span class="ml-2">Learn more about campaigns</span>
+                    </a>
+                  </div>
+                  <div class="flex flex-shrink-0 justify-end px-4 py-3">
+                    <%= form.button class: "ml-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <!--- END CAMPAIGN SETTINGS --->
+    </div>
+  </div>
+</div>
+

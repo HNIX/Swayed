@@ -1,0 +1,13 @@
+<nav class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6" aria-label="Pagination">
+    <div class="hidden sm:block">
+        Page <%= pagination[:current_page] %> of <%= pagination[:total_pages] %>
+    </div>
+    <div class="flex flex-1 justify-between sm:justify-end">
+        <% if pagination[:current_page] > 1 %>
+            <%= link_to "Previous", @permitted_params.merge(page_param => pagination[:current_page] - 1, :anchor => "inbound"), class: "relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0" %>
+        <% end %>
+        <% if pagination[:current_page] < pagination[:total_pages] %>
+            <%= link_to "Next", @permitted_params.merge(page_param => pagination[:current_page] + 1, :anchor => "inbound"), class: "relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0" %>
+        <% end %>
+    </div>
+</nav>

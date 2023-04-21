@@ -1,4 +1,6 @@
 class Api::V1::NotificationTokensController < Api::BaseController
+  skip_before_action :authenticate_affiliate_token!
+  
   def create
     current_user.notification_tokens.find_or_create_by!(
       token: params[:token],

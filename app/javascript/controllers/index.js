@@ -19,3 +19,6 @@ application.register('slideover', Slideover)
 
 import Flatpickr from 'stimulus-flatpickr'
 application.register('flatpickr', Flatpickr)
+
+import Carousel from 'stimulus-carousel'
+application.register('carousel', Carousel)

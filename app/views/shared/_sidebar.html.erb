@@ -1,0 +1,323 @@
+
+  <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
+  <div data-toggle-target="toggleable" class="hidden relative z-20 lg:hidden" role="dialog" aria-modal="true">
+    <!--
+      Off-canvas menu backdrop, show/hide based on off-canvas menu state.
+
+      Entering: "transition-opacity ease-linear duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+      Leaving: "transition-opacity ease-linear duration-300"
+        From: "opacity-100"
+        To: "opacity-0"
+    -->
+    <div data-toggle-target="toggleable" class="hidden fixed inset-0 bg-gray-900/80"></div>
+
+    <div class="fixed inset-0 flex">
+      <!--
+        Off-canvas menu, show/hide based on off-canvas menu state.
+
+        Entering: "transition ease-in-out duration-300 transform"
+          From: "-translate-x-full"
+          To: "translate-x-0"
+        Leaving: "transition ease-in-out duration-300 transform"
+          From: "translate-x-0"
+          To: "-translate-x-full"
+      -->
+      <div class="relative mr-16 flex w-full max-w-xs flex-1">
+        <!--
+          Close button, show/hide based on off-canvas menu state.
+
+          Entering: "ease-in-out duration-300"
+            From: "opacity-0"
+            To: "opacity-100"
+          Leaving: "ease-in-out duration-300"
+            From: "opacity-100"
+            To: "opacity-0"
+        -->
+        <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
+          <button data-action="click->toggle#toggle touch->toggle#toggle" type="button" class="-m-2.5 p-2.5">
+            <span class="sr-only">Close sidebar</span>
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sidebar component, swap this element with another sidebar if you like -->
+        <div data-toggle-target="toggleable" class="hidden flex grow flex-col gap-y-5 overflow-y-auto bg-gray-800 px-6 pb-4">
+          
+          <div class="flex h-16 shrink-0 items-center">
+            <%= link_to root_path do %>
+                <%= image_tag "pivot_logo_mobile", class: "w-28 mt-6" %>
+                <span class="sr-only"><%= Jumpstart.config.application_name %></span>
+            <% end %>
+          </div>
+          
+          <nav class="flex flex-1 flex-col">
+            <ul role="list" class="flex flex-1 flex-col gap-y-7 list-none">
+              <li>
+                <ul role="list" class="-mx-2 space-y-1 list-none">
+                  <li>
+                    <%= nav_link_to root_path, class: "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>
+                    <svg class="h-6 w-6 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                      </svg>
+                      Dashboard
+                    <% end %>
+                  </li>
+
+                  <li>
+                    <%= nav_link_to campaigns_path, class: "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white', starts_with: ["/campaign", "/campaigns"] do %>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122" />
+                      </svg>
+
+                      Campaigns
+                    <% end %>
+                  </li>
+
+                  <li data-controller="toggle">
+                    <div>
+                      <button type="button" data-action="click->toggle#toggle touch->toggle#toggle" class="text-gray-300 hover:text-white hover:bg-gray-700 flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold" aria-controls="sub-menu-2" aria-expanded="false">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0 text-gray-400">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                        </svg>
+
+                        Connections
+                        <!-- Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400" -->
+    
+              
+                        <svg data-toggle-target="toggleable" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="hidden text-gray-400 ml-auto h-5 w-5 shrink-0">
+                          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                        </svg>
+                        <svg data-toggle-target="toggleable" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-gray-400 ml-auto h-5 w-5 shrink-0">
+                          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+
+                      </button>
+                      <!-- Expandable link section, show/hide based on state. -->
+                      <ul class="mt-1 px-2 list-none" id="sub-menu-2" data-toggle-target="toggleable">
+                        <li>
+                          <!-- 44px -->
+                          <%= nav_link_to companies_path, class: "block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-300", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>Partners<% end %>
+                        </li>
+
+                        <li>
+                          <!-- 44px -->
+                          <%= nav_link_to sources_path, class: "block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-300", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>Sources<% end %>
+                        </li>
+
+                        <li>
+                          <!-- 44px -->
+                          <%= nav_link_to sources_path, class: "block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-300", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>Distributions<% end %>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+                  
+
+                  <li>
+                    <%= nav_link_to verticals_path, class: "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>
+            
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                      </svg>
+
+
+                      Verticals
+                    <% end %>
+                  </li>
+
+                  <li>
+                    <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                      <svg class="h-6 w-6 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                      </svg>
+                      Reports
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <div class="text-xs font-semibold leading-6 text-gray-400">Your Campaigns</div>
+                <ul role="list" class="-mx-2 mt-2 space-y-1 list-none">
+                  <li>
+                    <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
+                    <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-gray-700 text-gray-200 border-gray-300 ">HS</span>
+                      <span class="truncate">Home Services</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-gray-700 text-gray-200 border-gray-300 ">MT</span>
+                      <span class="truncate">Mass Tort</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                      <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-gray-700 text-gray-200 border-gray-300 ">AI</span>
+                      <span class="truncate">Auto Insurance</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="mt-auto">
+                <a href="#" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-300 hover:text-white hover:bg-gray-700">
+                  <svg class="h-6 w-6 shrink-0 text-gray-400 " fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Settings
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Static sidebar for desktop -->
+  <div class="hidden lg:fixed lg:inset-y-0 lg:z-20 lg:flex lg:w-72 lg:flex-col ">
+    <!-- Sidebar component, swap this element with another sidebar if you like -->
+    <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-gray-800 px-6 pb-4 shadow">
+      <div class="flex h-16 shrink-0 items-center">
+        <%= link_to root_path do %>
+            <%= render_svg "pivot_logo", styles: "mt-8 fill-current text-gray-700 hover:text-gray-800 w-36" %>
+            <span class="sr-only"><%= Jumpstart.config.application_name %></span>
+        <% end %>
+      </div>
+      <nav class="flex flex-1 flex-col">
+        <ul role="list" class="flex flex-1 flex-col gap-y-7 list-none">
+          <li>
+            <ul role="list" class="-mx-2 space-y-1 list-none">
+              <li>
+                <%= nav_link_to root_path, class: "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>
+                 <svg class="h-6 w-6 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                  </svg>
+                  Dashboard
+                <% end %>
+              </li>
+
+              <li>
+                <%= nav_link_to campaigns_path, class: "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white', starts_with: ["/campaign", "/campaigns"] do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0 text-gray-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122" />
+                  </svg>
+
+                  Campaigns
+                <% end %>
+              </li>
+
+              <li data-controller="toggle">
+                <div>
+                  <button type="button" data-action="click->toggle#toggle touch->toggle#toggle" class="text-gray-300 hover:text-white hover:bg-gray-700 flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold" aria-controls="sub-menu-2" aria-expanded="false">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0 text-gray-400">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                    </svg>
+
+                    Connections
+                    <!-- Expanded: "rotate-90 text-gray-500", Collapsed: "text-gray-400" -->
+ 
+           
+                    <svg data-toggle-target="toggleable" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="hidden text-gray-400 ml-auto h-5 w-5 shrink-0">
+                      <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                    </svg>
+                    <svg data-toggle-target="toggleable" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-gray-400 ml-auto h-5 w-5 shrink-0">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+
+                  </button>
+                  <!-- Expandable link section, show/hide based on state. -->
+                  <ul class="mt-1 px-2 list-none" id="sub-menu-2" data-toggle-target="toggleable">
+                    <li>
+                      <!-- 44px -->
+                      <%= nav_link_to companies_path, class: "block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-300", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>Partners<% end %>
+                    </li>
+
+                    <li>
+                      <!-- 44px -->
+                      <%= nav_link_to sources_path, class: "block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-300", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>Sources<% end %>
+                    </li>
+
+                    <li>
+                      <!-- 44px -->
+                      <%= nav_link_to sources_path, class: "block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-300", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>Distributions<% end %>
+                    </li>
+
+                  </ul>
+                </div>
+              </li>
+              
+
+              <li>
+                <%= nav_link_to verticals_path, class: "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold", inactive_class: "text-gray-300 hover:text-white hover:bg-gray-700", active_class: 'bg-gray-700 text-white hover:text-white' do %>
+        
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0 text-gray-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                  </svg>
+
+
+                  Verticals
+                <% end %>
+              </li>
+
+              <li>
+                <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                  <svg class="h-6 w-6 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                  </svg>
+                  Reports
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <div class="text-xs font-semibold leading-6 text-gray-400">Your Campaigns</div>
+            <ul role="list" class="-mx-2 mt-2 space-y-1 list-none">
+              <li>
+                <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
+                <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-gray-700 text-gray-200 border-gray-300 ">HS</span>
+                  <span class="truncate">Home Services</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-gray-700 text-gray-200 border-gray-300 ">MT</span>
+                  <span class="truncate">Mass Tort</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="#" class="text-gray-300 hover:text-white hover:bg-gray-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-gray-700 text-gray-200 border-gray-300 ">AI</span>
+                  <span class="truncate">Auto Insurance</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="mt-auto">
+            <a href="#" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-300 hover:text-white hover:bg-gray-700">
+              <svg class="h-6 w-6 shrink-0 text-gray-400 " fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>

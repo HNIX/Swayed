@@ -35,6 +35,14 @@ module.exports = {
         "code-400": "#fefcf9",
         "code-600": "#3c455b",
       },
+      opacity: {
+        '4': '.04',
+      },
+      backgroundImage: {
+        'topography-pattern': "url('topography.svg')",
+        'circuit-pattern': "url('circuit-board.svg')",
+        'footer-texture': "url('texture.svg')",
+      },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },

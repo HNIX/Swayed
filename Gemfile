@@ -110,6 +110,8 @@ gem "rotp", "~> 6.2"
 gem "rqrcode", "~> 2.1"
 gem "ruby-oembed", "~> 0.16.0", require: "oembed"
 gem "whenever", "~> 1.0", require: false
+gem "chartkick"
+gem "phonelib"
 
 # Jumpstart manages a few gems for us, so install them from the extra Gemfile
 if File.exist?("config/jumpstart/Gemfile")

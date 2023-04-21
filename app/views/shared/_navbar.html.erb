@@ -1,7 +1,8 @@
-<nav class="flex flex-wrap items-center justify-between px-4 py-2 bg-white border-b border-gray-200 text-sm font-medium" data-controller="toggle">
+<nav class="py-3 bg-gray-100 border-b border-gray-200 text-sm font-medium" data-controller="toggle">
+<div class="max-w-[1280px] mx-auto flex flex-wrap items-center justify-between px-6">
   <div class="flex items-center flex-shrink-0 mr-6">
     <%= link_to root_path do %>
-      <%= render_svg "swayedlogo", styles: "fill-current text-gray-700 hover:text-gray-800 w-2/5" %>
+      <%= render_svg "swayedlogo", styles: "fill-current text-gray-700 hover:text-gray-800 w-28" %>
       <span class="sr-only"><%= Jumpstart.config.application_name %></span>
     <% end %>
   </div>
@@ -12,8 +13,9 @@
     </button>
   </div>
 
-  <div class="flex-grow hidden w-full pb-6 lg:flex lg:w-auto lg:pb-0" data-toggle-target="toggleable">
+  <div class="flex-grow hidden w-full lg:flex lg:w-auto lg:pb-0" data-toggle-target="toggleable">
     <div class="lg:flex-grow">
+    
       <%= render "shared/left_nav" %>
     </div>
 
@@ -56,7 +58,6 @@
             <div data-action="click->dropdown#toggle click@window->dropdown#hide touch->dropdown#toggle touch@window->dropdown#hide" role="button" class="inline-block select-none" aria-label="Profile Menu">
               <span class="flex items-center text-gray-700 appearance-none">
                 <%= account_avatar current_account, include_user: true, class: "rounded-full h-8 w-8" %>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-4 h-4"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path></svg>
               </span>
             </div>
             <div data-dropdown-target="menu" class="z-20 hidden mt-2 lg:absolute lg:right-0 dropdown-menu">
@@ -103,4 +104,7 @@
 
     </div>
   </div>
+  </div>
 </nav>
+
+ 
