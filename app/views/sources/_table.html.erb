@@ -1,0 +1,45 @@
+<div class="overflow-hidden bg-white shadow sm:rounded-b-lg">
+    <div class="w-full overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                <th class="sticky left-0 z-10 w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-white border-r border-gray-200">Partner</th>
+                <!-- Other column headers -->
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Primary Vertical</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Secondary Vertical</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source Page</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Column 3</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Column 3</th>
+                
+                <!-- Add more column headers as needed -->
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <% if sources.present? %>
+                <% sources.each do |source| %>
+                <tr>
+                <%= link_to company_path(source.company) do %>
+                    <td class="sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-white border-r border-gray-200"><%= source.company.name %></td>
+                <% end %>
+                <!-- Other row cells -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source&.vertical&.primary_category&.titleize %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source&.vertical&.secondary_category&.titleize  %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source.landing_page_url %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source.updated_at.strftime("%b %e, %Y") %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Row 1, Column 6</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Row 1, Column 7</td>
+        
+                <!-- Add more row cells as needed -->
+                </tr>
+                <% end %>
+            <% else %>
+                <div class="text-center p-8">
+                    <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+                </div>
+            <% end %>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+    </div>

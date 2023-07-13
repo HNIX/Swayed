@@ -35,7 +35,7 @@ brew services start postgresql
 brew services start redis
 ```
 
-#### Initial Setup
+#### Initial Setup 
 
 First, edit `config/database.yml` and change the database name.
 

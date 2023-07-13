@@ -12,8 +12,13 @@
   <% end %>
 
   <div class="form-group">
-    <%= form.label :name %>
-    <%= form.text_field :name, placeholder: true, autofocus: true, class: "form-control" %>
+    <%= form.label :primary_category %>
+    <%= form.select :primary_category, Vertical.primary_categories.keys.map { |category| [category.titleize, category] } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :secondary_category %>
+    <%= form.text_field :secondary_category, placeholder: true, autofocus: true, class: "form-control" %>
   </div>
 
   <div id="fields" class="">
@@ -32,10 +37,11 @@
 
  
   <div class="mt-6 flex items-center justify-end gap-x-6">
-    <%= link_to t("back"), verticals_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
     <% if form.object.persisted? %>
+      <%= link_to t("back"), vertical_path(vertical), class: "text-sm font-semibold leading-6 text-gray-900" %>
       <%= form.submit "Update Vertical", class: "rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
     <% else %>
+      <%= link_to t("back"), verticals_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
       <%= form.submit "Create Vertical", class: "rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
     <% end %>
   </div>

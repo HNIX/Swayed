@@ -16,68 +16,7 @@
                     To: "translate-x-full"
                 -->
                 <div data-controller="companies" class="pointer-events-auto w-full transform transition ease-in-out duration-500 sm:duration-700 translate-x-full hidden" data-slideover-target="menu" >
-                    <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl" data-companies-target='newCSForm'>
-                            <%= form_with(model: campaign, local: true) do |form| %>
-                                <div class="flex-1 overflow-y-auto">
-                                    <div class="bg-indigo-700 py-6 px-4 sm:px-6">
-                                        <div class="flex items-center justify-between">
-                                        <h2 class="text-base font-semibold leading-6 text-white" id="slide-over-title">Connect a Source</h2>
-                                        <div class="ml-3 flex h-7 items-center" >
-                                            <button data-action="slideover#_hide" type="button" class="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
-                                            <span class="sr-only">Close panel</span>
-                                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                            </button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-1 flex-col justify-between">
-                                        <%= render "shared/error_messages", resource: form.object %>
-                                        <div class="divide-y divide-gray-200 px-4 sm:px-6">
-                                            <div class="space-y-6 pt-6 pb-5">  
-                                                
-                                                <div>
-                                                <%= form.fields_for CampaignSource.new do |cs_form| %>
-                                                    <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
-                                                        <div class="sm:col-span-4">
-                                                            <turbo-frame id="sources">
-                                                                <div>
-                                                                <%= cs_form.label :source_id, "Select an Existing Source" %>
-                                                                <p class="text-sm text-gray-500 my-3">or start typing to create a new source</p>
-                                                                <%= cs_form.select(:source_id, options_for_select(@sources.map{ |c| [c.landing_page_url, c.id] }), {include_blank: true}, id: 'source_name', data: { companies_target: 'sourceSelectField' }) %>
-                                                                </div>
-                                                            </turbo-frame>
-                                                        </div>
-                                                        <div class="sm:col-span-2">
-                                                            <div>
-                                                            <%= cs_form.label :daily_limit, "Daily Ping Limit" %>
-                                                            <%= cs_form.number_field :daily_limit, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
-                                                            </div>
-                                                        </div>
-                                                       
-                                                        <div class="sm:col-span-2">
-                                                            <div>
-                                                            <%= cs_form.label :monthly_limit, "Monthly Ping Limit" %>
-                                                            <%= cs_form.number_field :monthly_limit, class: "block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                <% end %>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-shrink-0 justify-end px-4 py-3">
-                                    <button data-action="slideover#_hide" type="button" class="rounded-md bg-white py-2 px-3 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
-                                    <%= form.button "Add Source", data: { turbo: false }, class: "ml-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
-                                    </div>
-                                </div>
-                            <% end %>
-                            </div>
-                            
-                            <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl hidden" data-companies-target='newSourceForm'>
+                            <div class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl" data-companies-target='newSourceForm'>
                             <%= form_with url: create_source_campaign_path(campaign), model: Source.new, local: true do |form| %>
                                 <div class="flex-1 overflow-y-auto">
                                     <div class="bg-indigo-700 py-6 px-4 sm:px-6">
@@ -94,7 +33,7 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-1 flex-col justify-between">
-                                        <%#= render "shared/error_messages", resource: form.object %>
+                                        <%= render "shared/error_messages", resource: form.object %>
                                         <div class="divide-y divide-gray-200 px-4 sm:px-6">
                                             <div class="space-y-6 pt-6 pb-5">  
                                                 <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
@@ -112,6 +51,20 @@
                                                             <%= form.select(:company_id, options_for_select(@companies.map{ |c| [c.name, c.id] }), {include_blank: true}, id: 'company_name', data: { companies_target: 'companySelectField' }) %>
                                                             </div>
                                                         </turbo-frame>
+                                                    </div>
+                                                    <div class="sm:col-span-4">
+                                                        <turbo-frame id="verticals">
+                                                            <div>
+                                                            <%= form.label :vertical_id, "Select a vertical" %>
+                                                            <%= form.select(:vertical_id, options_for_select(@verticals.map{ |c| [c.name, c.id] }), {include_blank: false}, id: 'vertical_name') %>
+                                                            </div>
+                                                        </turbo-frame>
+                                                    </div>
+                                                    <div class="sm:col-span-2">
+                                                        <div>
+                                                        <%= form.label :name, "Offer Type" %>
+                                                        <%= form.select :offer_type, Source.offer_types.keys.map { |type| [type.upcase, type] } %>
+                                                        </div>
                                                     </div>
                                                     <div class="sm:col-span-2">
                                                         <div>

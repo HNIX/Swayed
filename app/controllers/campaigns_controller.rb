@@ -51,6 +51,7 @@ class CampaignsController < ApplicationController
     @companies = Company.all
     @sources = Source.all #- form.object.sources
     @distributions = Distribution.all
+    @verticals = Vertical.all
   end
 
   def inbound
@@ -94,7 +95,7 @@ class CampaignsController < ApplicationController
   end
 
   def source_params
-    params.require(:source).permit(:landing_page_url, :post_back_url, :budget, :payout, :company_id)
+    params.require(:source).permit(:name, :vertical_id, :offer_type, :postback_url, :landing_page_url, :budget, :payout, :company_id)
   end
 
   def count_pings

@@ -1,7 +1,7 @@
 
 <%= render 'header', campaign: @campaign %>
 
-<div data-controller="tabs" data-tabs-active-tab="border-indigo-500 text-indigo-600" data-tabs-inactive-tab="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" class="mt-6 py-6 bg-white rounded-lg shadow mb-16">
+<div data-controller="tabs" data-tabs-active-tab="border-indigo-500 text-indigo-600" data-tabs-inactive-tab="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" class=" mt-6 bg-white rounded-lg shadow">
     <div class="sm:hidden">
         <label for="tabs" class="sr-only">Select a tab</label>
         <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
@@ -15,12 +15,12 @@
         <div class="border-b border-gray-200">
         <nav class="-mb-px flex" aria-label="Tabs">
             <!-- Current: "border-indigo-500 text-indigo-600", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
-            <a href="#" data-tabs-target="tab" data-action="click->tabs#change" class="w-1/2 border-b-2 py-4 px-1 text-center text-sm font-medium" aria-current="page">Sources</a>
-            <a href="#" data-tabs-target="tab" data-action="click->tabs#change" class="w-1/2 border-b-2 py-4 px-1 text-center text-sm font-medium">Distributions</a>
+            <a href="#" id="sources" data-tabs-target="tab" data-action="click->tabs#change" class="w-1/2 border-b-2 py-4 px-1 text-center text-sm font-medium" aria-current="page">Sources</a>
+            <a href="#" id="distributions" data-tabs-target="tab" data-action="click->tabs#change" class="w-1/2 border-b-2 py-4 px-1 text-center text-sm font-medium">Distributions</a>
         </nav>
         </div>
     </div>
-    <div data-tabs-target="panel" data-controller="slideover"
+    <div id="sources" data-tabs-target="panel" data-controller="slideover"
                 data-slideover-invisible-class="translate-x-full,opacity-0"
                 data-slideover-visible-class="translate-x-0,opacity-100"
                 data-slideover-entering-class=""
@@ -36,9 +36,9 @@
             <%= form_with(model: @campaign, local: true, class: "mt-5 sm:flex sm:items-center") do |form| %>
                 <%= render "shared/error_messages", resource: form.object %>
                 
-                <%= form.fields_for CampaignSource.new do |cs_form| %>
+                <%= form.fields_for :campaign_sources, CampaignSource.new do |cs_form| %>
                     <div class="w-full sm:max-w-xs">
-                        <%= cs_form.select(:source_id, options_for_select(@sources.map{ |c| [c.landing_page_url, c.id] }), {include_blank: true}, id: 'source_name') %>
+                        <%= cs_form.select(:source_id, options_for_select(@sources.map{ |c| [c.display_name, c.id] }), {include_blank: true}, id: 'source_name') %>
                     </div>
                     <%= form.button "Connect", data: { turbo: false }, class: "ml-4 inline-flex justify-center rounded-md bg-indigo-600 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
                     <div class="ml-4 flex-shrink-0" data-action="click->slideover#_show">
@@ -58,7 +58,7 @@
                                 <div class="flex min-w-0 flex-1 items-center">
                                 <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                                     <div>
-                                    <p class="flex items-center truncate text-sm font-medium text-indigo-600"><%= cs.source.landing_page_url %></p>
+                                    <p class="flex items-center truncate text-sm font-medium text-indigo-600"><%= cs.source.display_name %></p>
                                     </div>
                                     <div class="hidden md:block">
                                     <div>
@@ -93,21 +93,64 @@
                                                         <div class="space-y-6 pb-5">     
                                                             <div>
                                                                 <div class="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                                                    <div class="sm:col-span-2">
+                                                                    <div class="sm:col-span-5">
                                                                         <div>
                                                                         <%= cs.source.landing_page_url %>
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="sm:col-span-1">
-                                                                        <div>
-                                                                        
-                                                                        </div>
-                                                                    </div>
+                                                                    
+                                                                    <div data-controller="dropdown" class="relative ml-auto sm:col-span-1">
+                                                                        <button data-action="click->dropdown#toggle touch->dropdown#toggle click@window->dropdown#hide" type="button" class="top-0 right-0 block p-1 text-gray-400 hover:text-gray-500" id="options-menu-0-button" aria-expanded="false" aria-haspopup="true">
+                                                                            <span class="sr-only">Open options</span>
+                                                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                                <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+                                                                            </svg>
+                                                                        </button>
 
-                                                                    <div class="sm:col-span-1">
+                                                                        <!--
+                                                                        Dropdown menu, show/hide based on menu state.
+
+                                                                        Entering: "transition ease-out duration-100"
+                                                                            From: "transform opacity-0 scale-95"
+                                                                            To: "transform opacity-100 scale-100"
+                                                                        Leaving: "transition ease-in duration-75"
+                                                                            From: "transform opacity-100 scale-100"
+                                                                            To: "transform opacity-0 scale-95"
+                                                                        -->
+                                                                        <div data-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-0.5 w-36 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-0-button" tabindex="-1">
+                                                                        <!-- Active: "bg-gray-50", Not Active: "" -->
                                                                         <div>
-                                                                        
+                                                                           <div data-controller="slideover"
+                                                                                data-slideover-invisible-class="translate-x-full,opacity-0"
+                                                                                data-slideover-visible-class="translate-x-0,opacity-100"
+                                                                                data-slideover-entering-class=""
+                                                                                data-slideover-enter-timeout="300,300"
+                                                                                data-slideover-leaving-class=""
+                                                                                data-slideover-leave-timeout="300,300"
+                                                                                data-slideover-active-target="#slideover-target">
+                                                                                <a href="#" data-action="click->slideover#_show"  class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-0">
+                                                                                    Settings
+                                                                                </a>
+                                                                                <%= render 'cs_edit_slideover', campaign: @campaign, campaign_source: cs %>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                            <div data-controller="slideover"
+                                                                                data-slideover-invisible-class="translate-x-full,opacity-0"
+                                                                                data-slideover-visible-class="translate-x-0,opacity-100"
+                                                                                data-slideover-entering-class=""
+                                                                                data-slideover-enter-timeout="300,300"
+                                                                                data-slideover-leaving-class=""
+                                                                                data-slideover-leave-timeout="300,300"
+                                                                                data-slideover-active-target="#slideover-target">
+                                                                                <a href="#" data-action="click->slideover#_show" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-1">
+                                                                                    Edit Source
+                                                                                </a>
+                                                                                <%= render 'edit_source_slideover', campaign: @campaign, source: cs.source %>
+                                                                            </div>
+                                                                        </div>
+                                                                            <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-1">Pause<span class="sr-only">, Tuple</span></a>
                                                                         </div>
                                                                     </div>
 
@@ -129,6 +172,7 @@
                                     </div>
                                 </div>
                             </div>
+                           
                             </li>
                         <% end %>
                         
@@ -147,8 +191,13 @@
                                 </div>
                             </nav>
                         <% else %>
-                        <div class="text-center p-8">
-                            <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+                        <div class="text-center p-12">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            </svg>
+                            <h3 class="mt-2 text-sm font-semibold text-gray-900">No sources</h3>
+                            <p class="mt-1 text-sm text-gray-500">Get started by creating a new source or connecting an existing source.</p>
+                            
                         </div>
                     <% end %>
                     </ul>
@@ -158,7 +207,7 @@
             </div>
         </div>
     </div>
-    <div data-tabs-target="panel" data-controller="slideover"
+    <div id="distributions" data-tabs-target="panel" data-controller="slideover"
                     data-slideover-invisible-class="translate-x-full,opacity-0"
                     data-slideover-visible-class="translate-x-0,opacity-100"
                     data-slideover-entering-class=""
@@ -173,7 +222,7 @@
             <%= form_with(model: @campaign, local: true, class: "mt-5 sm:flex sm:items-center") do |form| %>
                 <%= render "shared/error_messages", resource: form.object %>
                 
-                <%= form.fields_for CampaignDistribution.new do |cd_form| %>
+                <%= form.fields_for :campaign_distributions, CampaignDistribution.new do |cd_form| %>
                     <div class="w-full sm:max-w-xs">
                         <%= cd_form.select(:distribution_id, options_for_select(@distributions.map{ |c| [c.endpoint, c.id] }), {include_blank: true}, id: 'distribution_name') %>
                     </div>
@@ -304,8 +353,13 @@
                             </div>
                         </nav>
                     <% else %>
-                    <div class="text-center p-8">
-                        <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+                    <div class="text-center p-12">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-semibold text-gray-900">No distributions</h3>
+                        <p class="mt-1 text-sm text-gray-500">Get started by creating a new distribution or connecting an existing distribution.</p>
+                        
                     </div>
                 <% end %>
                 </ul>

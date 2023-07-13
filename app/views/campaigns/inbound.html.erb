@@ -1,70 +1,50 @@
 <%= render 'header', campaign: @campaign %>
     
-<div class="mx-auto pb-6 lg:pb-16">
+<div class="mx-auto mt-6">
   <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
     <div class="lg:col-span-12">
       <div class="mx-auto swiper-container ">
         <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none ">
-          <ul role="list" class="swiper-wrapper flex overflow-y-hidden list-none mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
-            <% @campaign.sources.limit(3).each do |source| %>
-            <li data-controller="dropdown" class="overflow-hidden rounded-xl border border-gray-200 bg-white">
-              <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
-
-                 <span class="h-12 w-12 flex shrink-0 items-center justify-center rounded-lg text-md font-medium bg-indigo-600 text-white ring-2 ring-indigo-700"><%= source.company.initials %></span>
-
-                <div>
-                  <div class="text-sm font-medium leading-6 text-gray-900"><%= source.company.name %></div>
-                  <div class="text-sm font-medium leading-6 text-gray-500"><%= source.landing_page_url %></div>
+          <% if @campaign.sources.exists? %>
+            <div data-controller="slideover"
+                data-slideover-invisible-class="translate-x-full,opacity-0"
+                data-slideover-visible-class="translate-x-0,opacity-100"
+                data-slideover-entering-class=""
+                data-slideover-enter-timeout="300,300"
+                data-slideover-leaving-class=""
+                data-slideover-leave-timeout="300,300"
+                data-slideover-active-target="#slideover-target">
+            <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6 rounded-t-lg">
+              <div class="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+                <div class="ml-4 mt-4">
+                  <h3 class="text-base font-semibold leading-6 text-gray-900">Sources</h3>
                 </div>
-                <div class="relative ml-auto">
-                  <button data-action="click->dropdown#toggle touch->dropdown#toggle click@window->dropdown#hide" type="button" class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500" id="options-menu-0-button" aria-expanded="false" aria-haspopup="true">
-                    <span class="sr-only">Open options</span>
-                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
-                    </svg>
-                  </button>
-
-                  <!--
-                    Dropdown menu, show/hide based on menu state.
-
-                    Entering: "transition ease-out duration-100"
-                      From: "transform opacity-0 scale-95"
-                      To: "transform opacity-100 scale-100"
-                    Leaving: "transition ease-in duration-75"
-                      From: "transform opacity-100 scale-100"
-                      To: "transform opacity-0 scale-95"
-                  -->
-                  <div data-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-0-button" tabindex="-1">
-                    <!-- Active: "bg-gray-50", Not Active: "" -->
-                    <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-0">View<span class="sr-only">, Tuple</span></a>
-                    <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-1">Edit<span class="sr-only">, Tuple</span></a>
-                  </div>
+                <div class="ml-4 mt-4 flex-shrink-0" data-action="click->slideover#_show">
+                  <button type="button" class="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add new contact</button>
                 </div>
               </div>
-              <dl class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
-                <div class="flex justify-between gap-x-4 py-3">
-                  <dt class="text-gray-500">Last posted</dt>
-                  <dd class="text-gray-700"><time datetime="2022-12-13"><%= source.api_pings.blank? ? "No Posts" : source.api_pings.maximum(:created_at).strftime("%b %e, %Y") %></time></dd>
-                </div>
-                <div class="flex justify-between gap-x-4 py-3">
-                  <dt class="text-gray-500">Daily Ping Limit</dt>
-                  <dd class="flex items-start gap-x-2">
-                    <div class="font-medium text-gray-900"><%= source.ping_cap.blank? ? "No Limit" : source.ping_cap %></div>
-                    <%# <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-red-600 bg-red-50 ring-red-600/10">Overdue</div> %>
-                  </dd>
-                </div>
-                <div class="flex justify-between gap-x-4 py-3">
-                  <dt class="text-gray-500">Daily Budget</dt>
-                  <dd class="flex items-start gap-x-2">
-                    <div class="font-medium text-gray-900"><%= source.budget.blank? ? "No Budget" : number_to_currency(source.budget, precision: 0) %></div>
-                    <%# <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-red-600 bg-red-50 ring-red-600/10">Overdue</div> %>
-                  </dd>
-                </div>
-              </dl>
-            </li>
-            <% end %>
+            </div>
+            <%= render 'sources/table', sources: @campaign.sources %>
+            </div>
             
-          </ul>
+          <% else %>
+          <ul role="list" class="swiper-wrapper flex overflow-y-hidden list-none grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
+            <li data-controller="dropdown" class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+             <%= link_to campaign_connections_path(@campaign) do %>
+              <div class="flex items-center gap-x-4 border-b border-gray-900/5 hover:bg-gray-50 bg-white px-6 py-10">
+
+                <div class="absolute rounded-md bg-indigo-500 p-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                </div>
+                  <div class="ml-16 text-md font-medium leading-6 text-gray-900">Add your first source</div>
+              </div>
+              <% end %>
+            </li>
+           </ul>
+          <% end %>
+            
         </div>
       </div>
 
@@ -94,55 +74,61 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-200 bg-white">
-                    <% @api_pings.each do |ping| %>
-                      <tr data-drawers-target="tab" data-action="click->drawers#change" >
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= ping.id %></td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.source.company.initials %>: <%= ping.campaign_source.source.landing_page_url %></td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.status.titleize %></td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.price %></td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Duplicate</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.created_at.strftime("%b %e, %Y") %></td>
-                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          <div>
-                            <svg data-drawers-target="open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" h-5 w-5 text-gray-400">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                            </svg>
+                    <% if @api_pings.present? %>
+                      <% @api_pings.each do |ping| %>
+                        <tr data-drawers-target="tab" data-action="click->drawers#change" >
+                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= ping.id %></td>
+                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.source.company.initials %>: <%= ping.campaign_source.source.landing_page_url %></td>
+                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.status.titleize %></td>
+                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.price %></td>
+                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Duplicate</td>
+                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.created_at.strftime("%b %e, %Y") %></td>
+                          <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                            <div>
+                              <svg data-drawers-target="open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" h-5 w-5 text-gray-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                              </svg>
 
-                            <svg data-drawers-target="close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-5 w-5 text-gray-400">
-                              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                            </svg>
+                              <svg data-drawers-target="close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-5 w-5 text-gray-400">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                              </svg>
 
-                          </div>
-                        </td>
-                      </tr>
-                      <tr data-drawers-target="panel" class="hidden bg-gray-200 h-36">
-                        <td colspan="8">
-                          <div class="overflow-hidden p-6">
-                            <div class="px-4 pb-5 sm:px-6">
-                              <h3 class="text-base font-semibold leading-6 text-gray-900">Ping Information</h3>
                             </div>
-                            <div class="border-t border-gray-200 px-4 sm:px-6">
-                              <dl class="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-4">
-                                <div class="sm:col-span-1">
-                                  <dt class="text-sm font-medium text-gray-500">Host</dt>
-                                  <dd class="mt-1 text-sm text-gray-900"><%= ping.host %></dd>
-                                </div>
-                                <div class="sm:col-span-2">
-                                  <dt class="text-sm font-medium text-gray-500">Request Body</dt>
-                                  <dd class="mt-1 text-sm text-gray-900">
-                                    <%= ping.request_body %>
-                                  </dd>
-                                </div>
-                              </dl>
+                          </td>
+                        </tr>
+                        <tr data-drawers-target="panel" class="hidden bg-gray-200 h-36">
+                          <td colspan="8">
+                            <div class="overflow-hidden p-6">
+                              <div class="px-4 pb-5 sm:px-6">
+                                <h3 class="text-base font-semibold leading-6 text-gray-900">Ping Information</h3>
+                              </div>
+                              <div class="border-t border-gray-200 px-4 sm:px-6">
+                                <dl class="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-4">
+                                  <div class="sm:col-span-1">
+                                    <dt class="text-sm font-medium text-gray-500">Host</dt>
+                                    <dd class="mt-1 text-sm text-gray-900"><%= ping.host %></dd>
+                                  </div>
+                                  <div class="sm:col-span-2">
+                                    <dt class="text-sm font-medium text-gray-500">Request Body</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">
+                                      <%= ping.request_body %>
+                                    </dd>
+                                  </div>
+                                </dl>
+                              </div>
                             </div>
-                          </div>
-                      
-                        </td>
+                        
+                          </td>
+                        </tr>
+                      <% end %>
+                    <% else %>
+                      <tr>
+                        <td colspan="8" class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">No inbound pings found</td>
                       </tr>
                     <% end %>
                   </tbody>
                 </table>
-                <%= render partial: 'pagination_controls', locals: { pagination: @api_pings_pagination, page_param: :api_pings_page } %>
+                <%= render partial: 'shared/pagination_controls', locals: { pagination: @api_pings_pagination, page_param: :api_pings_page } if @inbound_pings.present? %>
               </div>
             </div>
           </div>

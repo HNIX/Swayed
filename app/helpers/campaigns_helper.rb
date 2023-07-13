@@ -2,15 +2,15 @@ module CampaignsHelper
     def status_color_class(status)
         case status
         when 'draft'
-            'bg-gray-300 text-gray-800'
+            'bg-gray-50 text-gray-700 ring-gray-600/20'
         when 'active'
-            'bg-green-300 text-green-800'
+            'bg-green-50 text-green-700 ring-green-600/20'
         when 'paused'
-            'bg-yellow-300 text-yellow-800'
+            'bg-yellow-50 text-yellow-700 ring-yellow-600/20'
         when 'completed'
-            'bg-blue-300 text-blue-800'
+            'bg-blue-50 text-blue-700 ring-blue-600/20'
         else
-            'bg-gray-300 text-gray-800'
+            'bg-gray-50 text-gray-700 ring-gray-600/20'
         end
     end
 end

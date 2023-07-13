@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_19_211821) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_28_154813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -494,7 +494,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_211821) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.bigint "vertical_id"
+    t.integer "offer_type"
     t.index ["company_id"], name: "index_sources_on_company_id"
+    t.index ["vertical_id"], name: "index_sources_on_vertical_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -539,10 +542,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_211821) do
 
   create_table "verticals", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "secondary_category"
+    t.integer "primary_category"
+    t.boolean "archived"
     t.index ["account_id"], name: "index_verticals_on_account_id"
   end
 
@@ -577,5 +582,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_19_211821) do
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
   add_foreign_key "sources", "companies"
+  add_foreign_key "sources", "verticals"
   add_foreign_key "verticals", "accounts"
 end

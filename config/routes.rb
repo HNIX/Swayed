@@ -88,6 +88,10 @@ Rails.application.routes.draw do
     collection do
       get :field
     end
+    member do
+      put 'archive'
+      put 'unarchive'
+    end
   end
 
   resources :companies do 
@@ -97,6 +101,8 @@ Rails.application.routes.draw do
     resources :contacts
     resources :sources
     resources :distributions
+    get :settings
+
   end
 
   resources :sources

@@ -6,6 +6,7 @@
 #  budget             :integer
 #  landing_page_url   :string
 #  name               :string
+#  offer_type         :integer
 #  payout             :integer
 #  payout_cap         :integer
 #  payout_method      :string
@@ -18,14 +19,17 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  company_id         :bigint           not null
+#  vertical_id        :bigint
 #
 # Indexes
 #
-#  index_sources_on_company_id  (company_id)
+#  index_sources_on_company_id   (company_id)
+#  index_sources_on_vertical_id  (vertical_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (company_id => companies.id)
+#  fk_rails_...  (vertical_id => verticals.id)
 #
 require "test_helper"
 

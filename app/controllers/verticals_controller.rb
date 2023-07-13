@@ -33,11 +33,23 @@ class VerticalsController < ApplicationController
   end
 
   def destroy
-    @vertical.destroy
-    redirect_to verticals_path, status: :see_other, notice: t(".destroyed")
+    #@vertical.destroy
+    #redirect_to verticals_path, status: :see_other, notice: t(".destroyed")
   end
   
   def field
+  end
+  
+  def archive
+    @vertical = Vertical.find(params[:id])
+    @vertical.update(archived: true)
+    redirect_to verticals_path, notice: 'Vertical was successfully archived.'
+  end
+
+  def unarchive
+    @vertical = Vertical.find(params[:id])
+    @vertical.update(archived: false)
+    redirect_to verticals_path, notice: 'Vertical was successfully unarchived.'
   end
 
   private
@@ -47,6 +59,6 @@ class VerticalsController < ApplicationController
   end
 
   def vertical_params
-    params.require(:vertical).permit(:name, fields_attributes: [:name, :label, :data_type, :id, :ping_required, :post_required])
+    params.require(:vertical).permit(:name, :primary_category, :secondary_category, fields_attributes: [:name, :label, :data_type, :id, :ping_required, :post_required])
   end
 end

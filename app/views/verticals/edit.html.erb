@@ -1,36 +1,19 @@
--<main class="flex-1 overflow-y-auto">
+<%= render 'header', vertical: @vertical %>
+
+<main class="flex-1 overflow-y-auto">
   <!-- Primary column -->
   <section aria-labelledby="primary-heading" class="flex h-full min-w-0 flex-1 flex-col lg:order-last">
 
-    <div class="max-w-4xl px-12 mt-12">
-      <header class="pb-9 border-b border-0 border-solid border-b-slate-200">
-        <div class="xl:flex xl:items-center xl:justify-between">
-          <div class="min-w-0 flex-1">
-            <nav class="flex" aria-label="Breadcrumb">
-              <%= render_svg "icons/cheveron-left", styles: "fill-current icon-sm text-gray-600 inline-block" %>
-              <%= link_to "Cancel", verticals_path, class: "font-normal" %>
-            </nav>
-            <h1 class="mt-2 text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight">
-              <%= t(".title") %></h1>
-          </div>
-          <div class="mt-5 flex xl:mt-0 xl:ml-4">
-          
-          </div>
-        </div>
-      </header>
+    <div class="mt-6">
+      
+      <div class="overflow-hidden bg-white shadow sm:rounded-lg px-4 py-5 sm:px-6 ">
 
       <%= render "form", vertical: @vertical %>
 
+      </div>
     </div>
+
   </section>
 
 </main>
-
-<aside class="hidden w-96 overflow-y-auto border-l border-gray-200 bg-gray-100 lg:block pt-12 px-8">
-  <div>
-
-  </div>
-</aside>
-
-
 

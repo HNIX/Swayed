@@ -8,7 +8,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
-    require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
   ],
 
@@ -34,6 +33,9 @@ module.exports = {
         danger: colors.red,
         "code-400": "#fefcf9",
         "code-600": "#3c455b",
+        zinc: colors.zinc,
+        white: '#FEFEFE',
+        beige: '#F1F1F1',
       },
       opacity: {
         '4': '.04',

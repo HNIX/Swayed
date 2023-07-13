@@ -1,69 +1,63 @@
   
 <%= render 'header', campaign: @campaign %>
     
-<div class="mx-auto pb-6 lg:pb-16">
+<div class="mx-auto  mt-6">
     <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
-        <div class="lg:col-span-12">
+        
 
-         <!---- START CAMPAIGN OVERVIEW ---->
-          <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-              <dt>
-                <div class="absolute rounded-md bg-indigo-500 p-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-white">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l3 3m0 0l3-3m-3 3V2.25" />
-                  </svg>
-                </div>
-                <p class="ml-16 truncate text-sm font-medium text-gray-500">Inbound</p>
-              </dt>
-              <dd class="ml-16 flex items-baseline">
-                <p class="text-2xl font-semibold text-gray-900"><%= @current_month_inbound %></p>
-                <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                  <%= @mom_inbound %> Accepted 
-                </p>
-              
-              </dd>
-            </div>
-
-            <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-              <dt>
-                <div class="absolute rounded-md bg-indigo-500 p-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-white">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                  </svg>
-                </div>
-                <p class="ml-16 truncate text-sm font-medium text-gray-500">Outbound</p>
-              </dt>
-              <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
-                <p class="text-2xl font-semibold text-gray-900"><%= @current_month_outbound %></p>
-                <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                  <%= @mom_outbound %> Accepted
-                </p>
-              
-              </dd>
-            </div>
-
-            <div class="relative overflow-hidden rounded-lg bg-white px-4 pt-5 shadow sm:px-6 sm:pt-6">
-              <dt>
-                <div class="absolute rounded-md bg-indigo-500 p-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-white">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-
-                </div>
-                <p class="ml-16 truncate text-sm font-medium text-gray-500">Sales</p>
-              </dt>
-              <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
-                <p class="text-2xl font-semibold text-gray-900">$0</p>
-                <p class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
-                  <span class="sr-only"> Increased by </span>
-                  0%
-                </p>
-              </dd>
-            </div>
-          </dl>
-          <!---- END CAMPAIGN OVERVIEW ---->
+<div class="lg:col-span-12">
+          <!---- START CAMPAIGN SETUP ---->
+          <div class="bg-white px-4 sm:px-6 rounded-lg shadow">
+        <div class="relative isolate overflow-hidden">
+    <!-- Secondary navigation -->
+    <header class="pb-4 pt-6 sm:pb-6">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
+        <h1 class="text-base font-semibold leading-7 text-gray-900">Lead Flow</h1>
+        <div class="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
+          <a href="#" class="text-indigo-600">Last 7 days</a>
+          <a href="#" class="text-gray-700">Last 30 days</a>
+          <a href="#" class="text-gray-700">All-time</a>
         </div>
+        
+      </div>
+    </header>
+
+    
+
+    <!-- Stats -->
+    <div class="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
+      <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
+        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8">
+          <dt class="text-sm font-medium leading-6 text-gray-500">Inbound</dt>
+          <dd class="text-xs font-medium text-green-700"><%= @mom_inbound %> Accepted </dd>
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900"><%= @current_month_inbound %></dd>
+        </div>
+        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 sm:border-l">
+          <dt class="text-sm font-medium leading-6 text-gray-500">Outbound</dt>
+          <dd class="text-xs font-medium text-rose-600">+54.02%</dd>
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900"><%= @current_month_outbound %></dd>
+        </div>
+        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 lg:border-l">
+          <dt class="text-sm font-medium leading-6 text-gray-500">Sales</dt>
+          <dd class="text-xs font-medium text-gray-700">-1.39%</dd>
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">$245,988</dd>
+        </div>
+        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 sm:border-l">
+          <dt class="text-sm font-medium leading-6 text-gray-500">Profit</dt>
+          <dd class="text-xs font-medium text-rose-600">+10.18%</dd>
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">$30,156</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50" aria-hidden="true">
+      <div class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#73E22B] to-[#9089FC]" style="clip-path: polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)"></div>
+    </div>
+  </div>
+        </div>
+        </div>
+
+
         <div class="mt-6 lg:col-span-12">
           <!---- START CAMPAIGN SETUP ---->
           <div class=" mb-3 bg-white px-4 py-5 sm:px-6 rounded-lg shadow">
@@ -83,9 +77,10 @@
                   <div class="min-w-0 flex-1">
                     <div class="text-sm font-medium text-gray-900">
                       <a href="#">
+                      <%= link_to campaign_connections_path(@campaign, anchor: "sources") do %>
                         <span class="absolute inset-0" aria-hidden="true"></span>
                         Add Sources
-                      </a>
+                      <% end %>
                     </div>
                     <p class="text-sm text-gray-500">Add or manage sources for your campaign to organize where your leads are coming from.</p>
                   </div>
@@ -108,10 +103,10 @@
                   </div>
                   <div class="min-w-0 flex-1">
                     <div class="text-sm font-medium text-gray-900">
-                      <a href="#">
+                      <%= link_to campaign_connections_path(@campaign, anchor: "distributions") do %>
                         <span class="absolute inset-0" aria-hidden="true"></span>
                         Configure Distributions
-                      </a>
+                      <% end %>
                     </div>
                     <p class="text-sm text-gray-500">Define and manage how your leads are distributed to buyers or other destinations.</p>
                   </div>
@@ -135,10 +130,10 @@
                   </div>
                   <div class="min-w-0 flex-1">
                     <div class="text-sm font-medium text-gray-900">
-                      <a href="#">
+                      <%= link_to campaign_settings_path(@campaign) do %>
                         <span class="absolute inset-0" aria-hidden="true"></span>
                         Finalize Settings
-                      </a>
+                      <% end %>
                     </div>
                     <p class="text-sm text-gray-500">Review and confirm all of your campaign settings before launching.</p>
                   </div>

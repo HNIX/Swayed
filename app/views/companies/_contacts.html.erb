@@ -8,7 +8,7 @@
           data-slideover-leaving-class=""
           data-slideover-leave-timeout="300,300"
           data-slideover-active-target="#slideover-target">
-      <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6 rounded-t-md shadow">
+      <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6 rounded-t-lg">
         <div class="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
           <div class="ml-4 mt-4">
             <h3 class="text-base font-semibold leading-6 text-gray-900">Contacts</h3>
@@ -18,55 +18,48 @@
           </div>
         </div>
       </div>
-      <div class="overflow-hidden bg-white shadow sm:rounded-b-md">
-        <ul role="list" class="divide-y divide-gray-200 list-none"  data-controller="drawers">
-        <% if @company.contacts.present? %>
-          <% @company.contacts.each do |contact| %>
-            <li  data-drawers-target="tab" data-action="click->drawers#change">
-              <a href="#" class="block hover:bg-gray-50">
-                <div class="flex items-center px-4 py-4 sm:px-6">
-                  <div class="flex min-w-0 flex-1 items-center">
-                    <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                      <div>
-                        <p class="truncate text-sm font-medium text-indigo-600"><%= contact.name %></p>
-                        <p class="mt-2 flex items-center text-sm text-gray-500">
-                          
-                          <span class="truncate"><%= contact.email %></span>
-                        </p>
-                      </div>
-                      <div class="hidden md:block">
-                        <div>
-                          <p class="mt-2 flex items-center text-sm text-gray-500">
-                            Added <%= contact.created_at.strftime("%b %e, %Y") %>
-                          </p>
-                          <p class="mt-2 flex items-center text-sm text-gray-500">
-                            <%= number_to_phone(contact.phone, area_code: true)  %>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <svg data-drawers-target="open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 text-gray-400">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-
-                    <svg data-drawers-target="close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-5 w-5 text-gray-400">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                    </svg>
-
-                  </div>
+      <div class="overflow-hidden bg-white shadow sm:rounded-b-lg">
+        <div class="w-full overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="sticky left-0 z-10 w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-white border-r border-gray-200">Name</th>
+                <!-- Other column headers -->
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Column 3</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Column 3</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Column 3</th>
+                
+                <!-- Add more column headers as needed -->
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <% if @company.contacts.present? %>
+              <% @company.contacts.each do |contact| %>
+              <tr>
+                <td class="sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-white border-r border-gray-200"><%= contact.name %></td>
+                <!-- Other row cells -->
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= contact.email %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= number_to_phone(contact.phone, area_code: true)  %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= contact.updated_at.strftime("%b %e, %Y") %></td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Row 1, Column 5</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Row 1, Column 6</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Row 1, Column 7</td>
+       
+                <!-- Add more row cells as needed -->
+              </tr>
+              <% end %>
+            <% else %>
+                <div class="text-center p-8">
+                  <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
                 </div>
-              </a>
-            </li>
-            <%= render 'edit_contact', contact: contact %>
-          <% end %>
-          <% else %>
-            <div class="text-center p-8">
-              <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
-            </div>
-        <% end %>
-        </ul>
+            <% end %>
+              <!-- Add more rows as needed -->
+            </tbody>
+          </table>
+        </div>
       </div>
       <%= render 'contact_slideover', company: @company %>
     </div>

@@ -2,12 +2,14 @@
 #
 # Table name: verticals
 #
-#  id          :bigint           not null, primary key
-#  description :text
-#  name        :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  account_id  :bigint           not null
+#  id                 :bigint           not null, primary key
+#  archived           :boolean
+#  description        :text
+#  primary_category   :integer
+#  secondary_category :string
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  account_id         :bigint           not null
 #
 # Indexes
 #
@@ -32,6 +34,15 @@ class Vertical < ApplicationRecord
 
   scope :sorted, -> { order("created_at DESC") }
 
-  validates :name, presence: true
-  validates_uniqueness_to_tenant :name
+  enum primary_category: { home_services: 0, legal: 1, debt: 2 }
+
+  validates :primary_category, presence: true
+  validates :secondary_category, presence: true
+  validates_uniqueness_to_tenant :secondary_category
+
+  attribute :archived, :boolean, default: false
+
+  def name 
+    "#{primary_category&.titleize} - #{secondary_category&.titleize}"
+  end
 end
