@@ -1,16 +1,3 @@
-# Jumpstart Pro Rails Template
-
-All your Rails apps should start off with a bunch of great defaults.
-
-## Getting Started
-
-Jumpstart Pro is a preconfigured Rails application, so you can either
-download the code or clone this repository and add your own repo as a
-remote to merge in updates.
-
-#### Requirements
-
-You'll need the following installed to run the template successfully:
 
 * Ruby 3.0 or higher
 * bundler - `gem install bundler`
