@@ -9,11 +9,13 @@ class ApplicationClient
   #
   # An example API client:
   #
-  #   class DigitalOceanClient < ApiClient
+  #   class DigitalOceanClient < ApplicationClient
   #     BASE_URI = "https://api.digitalocean.com/v2"
   #
   #     def account
   #       get("/account").account
+  #     rescue *NET_HTTP_ERRORS
+  #       raise Error, "Unable to load your account"
   #     end
   #   end
 
@@ -32,6 +34,7 @@ class ApplicationClient
   class InternalError < Error; end
 
   BASE_URI = "https://example.org"
+  NET_HTTP_ERRORS = [Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError, Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError]
 
   attr_reader :token
 
@@ -73,6 +76,28 @@ class ApplicationClient
     {}
   end
 
+  # Loops through a URL with pagination
+  # Each request yields the response to the provide block
+  #
+  # The block should return a string URL or a hash of query parameters for the next page
+  # Return nil to stop paginating
+  def with_pagination(path, headers: {}, query: nil)
+    page_query = query.dup
+
+    loop do
+      next_page = yield get(path, headers: headers, query: page_query)
+
+      case next_page
+      when String
+        path = next_page
+      when Hash
+        page_query.merge!(next_page)
+      else
+        break
+      end
+    end
+  end
+
   # Make a GET request
   # Pass `headers: {}` to add or override default headers
   # Pass `query: {}` to add query parameters
@@ -93,25 +118,49 @@ class ApplicationClient
   # Make a POST request
   # Pass `headers: {}` to add or override default headers
   # Pass `query: {}` to add query parameters
-  # Pass `body: {}` to add a body to the request
-  def post(path, headers: {}, query: nil, body: nil)
-    make_request(klass: Net::HTTP::Post, path: path, headers: headers, query: query, body: body)
+  # Pass `body: {}` to add a JSON body to the request
+  # Pass `form_data: {}` to add form data to the request (multipart/form-data)
+  def post(path, headers: {}, query: nil, body: nil, form_data: nil)
+    make_request(
+      klass: Net::HTTP::Post,
+      path: path,
+      headers: headers,
+      query: query,
+      body: body,
+      form_data: form_data
+    )
   end
 
   # Make a PATCH request
   # Pass `headers: {}` to add or override default headers
   # Pass `query: {}` to add query parameters
   # Pass `body: {}` to add a body to the request
-  def patch(path, headers: {}, query: nil, body: nil)
-    make_request(klass: Net::HTTP::Patch, path: path, headers: headers, query: query, body: body)
+  # Pass `form_data: {}` to add form data to the request (multipart/form-data)
+  def patch(path, headers: {}, query: nil, body: nil, form_data: nil)
+    make_request(
+      klass: Net::HTTP::Patch,
+      path: path,
+      headers: headers,
+      query: query,
+      body: body,
+      form_data: form_data
+    )
   end
 
   # Make a PUT request
   # Pass `headers: {}` to add or override default headers
   # Pass `query: {}` to add query parameters
   # Pass `body: {}` to add a body to the request
-  def put(path, headers: {}, query: nil, body: nil)
-    make_request(klass: Net::HTTP::Put, path: path, headers: headers, query: query, body: body)
+  # Pass `form_data: {}` to add form data to the request (multipart/form-data)
+  def put(path, headers: {}, query: nil, body: nil, form_data: nil)
+    make_request(
+      klass: Net::HTTP::Put,
+      path: path,
+      headers: headers,
+      query: query,
+      body: body,
+      form_data: form_data
+    )
   end
 
   # Make a DELETE request
@@ -133,12 +182,23 @@ class ApplicationClient
   #   `headers:` is a Hash of HTTP headers
   #   `body:` can be a string, Hash, or any other object that can be serialized to a string
   #   `query:` is hash of query parameters to append to the path. For example: {foo: :bar} will add "?foo=bar" to the URL path
-  def make_request(klass:, path:, headers: {}, body: nil, query: nil)
-    uri = URI("#{base_uri}#{path}")
+  def make_request(klass:, path:, headers: {}, body: nil, query: nil, form_data: nil)
+    raise ArgumentError, "Cannot pass both body and form_data" if body.present? && form_data.present?
+
+    # If a full URL is passed in, use that, otherwise append to the base URI
+    uri = path.start_with?("http") ? URI(path) : URI("#{base_uri}#{path}")
 
     # Merge query params with any currently in `path`
-    existing_params = Rack::Utils.parse_query(uri.query).with_defaults(default_query_params)
-    query_params = existing_params.merge(query || {})
+    query_params = Rack::Utils.parse_query(uri.query).with_defaults(default_query_params)
+
+    # Merge query params for this request
+    case query
+    when String
+      query_params.merge! Rack::Utils.parse_query(query)
+    when Hash
+      query_params.merge! query
+    end
+
     uri.query = Rack::Utils.build_query(query_params) if query_params.present?
 
     Rails.logger.debug("#{klass.name.split("::").last.upcase}: #{uri}")
@@ -152,9 +212,14 @@ class ApplicationClient
     all_headers.delete("Content-Type") if klass == Net::HTTP::Get
 
     request = klass.new(uri.request_uri, all_headers)
-    request.body = build_body(body) if body.present?
 
-    handle_response http.request(request)
+    if body.present?
+      request.body = build_body(body)
+    elsif form_data.present?
+      request.set_form(form_data, "multipart/form-data")
+    end
+
+    handle_response Response.new(http.request(request))
   end
 
   # Handles an HTTP response
@@ -165,7 +230,7 @@ class ApplicationClient
   def handle_response(response)
     case response.code
     when "200", "201", "202", "203", "204"
-      parse_response(response) if response.body.present?
+      response
     when "401"
       raise Unauthorized, response.body
     when "403"
@@ -192,8 +257,69 @@ class ApplicationClient
     end
   end
 
-  # Override to customize response body parsing
-  def parse_response(response)
-    JSON.parse(response.body, object_class: OpenStruct)
+  class Response
+    # Provides easy access to the parsed response body as well as the response object headers and status code
+    #
+    # To add customer content type parser, register it in the PARSER hash
+    # ApplicationClient::Response::PARSER["text/html"] = ->(response) { Nokogiri::HTML(response.body) }
+    #
+    # To parse JSON as a Hash instead of OpenStruct
+    # ApplicationClient::Response::JSON_OBJECT_CLASS = nil
+
+    JSON_OBJECT_CLASS = OpenStruct
+    PARSER = {
+      "application/json" => ->(response) { JSON.parse(response.body, object_class: JSON_OBJECT_CLASS) },
+      "application/xml" => ->(response) { Nokogiri::XML(response.body) }
+    }
+    FALLBACK_PARSER = ->(response) { response.body }
+
+    attr_reader :original_response
+
+    delegate :code, :body, to: :original_response
+    delegate_missing_to :parsed_body
+
+    def initialize(original_response)
+      @original_response = original_response
+    end
+
+    # Returns a hash of headers with underscored names as symbols
+    def headers
+      @headers ||= original_response.each_header.to_h.transform_keys { |k| k.underscore.to_sym }
+    end
+
+    # Returns a hash of the Link header
+    # If there is no Link header, returns an empty hash
+    #
+    # For example:
+    #   <https://api.github.com/repositories/1300192/issues?page=2>; rel="prev", <https://api.github.com/repositories/1300192/issues?page=4>; rel="next", <https://api.github.com/repositories/1300192/issues?page=515>; rel="last", <https://api.github.com/repositories/1300192/issues?page=1>; rel="first"
+    #
+    #   {
+    #     next: "https://...",
+    #     prev: "https://...",
+    #     first: "https://...",
+    #     last: "https://...",
+    #   }
+    def link_header
+      @link_header ||= headers[:link]&.split(", ")&.map do |link|
+        rel = link[/rel="(.+)"/, 1].to_sym
+        url = link[/<(.+)>/, 1]
+        [rel, url]
+      end.to_h
+    end
+
+    # Removes charset and boundary and returns the mime type
+    #
+    # Given:
+    #   Content-Type: application/json; charset=utf-8
+    #
+    # Returns:
+    #   "application/json"
+    def content_type
+      headers[:content_type].split(";").first
+    end
+
+    def parsed_body
+      @parsed_body ||= PARSER.fetch(content_type, FALLBACK_PARSER).call(self)
+    end
   end
 end

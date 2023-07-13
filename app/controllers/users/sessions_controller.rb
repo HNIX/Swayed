@@ -1,45 +1,49 @@
 class Users::SessionsController < Devise::SessionsController
   include Devise::Controllers::Rememberable
 
+  # We need to intercept the Sessions#create action for processing OTP
   prepend_before_action :authenticate_with_two_factor, only: [:create]
 
-  # We need to intercept the create action for processing OTP.
-  # Unfortunately we can't override `create` because any code that calls `current_user` will
-  # automatically log the user in without OTP. To prevent that, we just have to handle it in
-  # a before_action instead
-
   def authenticate_with_two_factor
-    self.resource = find_user
-    return unless resource
-    return unless resource.otp_required_for_login?
+    if sign_in_params[:email]
+      self.resource = resource_class.find_by(email: sign_in_params[:email])
 
-    # Submitted email and password, save user ID and send along to OTP
-    if sign_in_params[:password] && resource.valid_password?(sign_in_params[:password])
-      session[:remember_me] = Devise::TRUE_VALUES.include?(sign_in_params[:remember_me])
-      session[:otp_user_id] = resource.id
-      render :otp, status: :unprocessable_entity
+      # Any new login attempt should reset 2FA user
+      clear_otp_user_from_session
 
-    # Submitted OTP, so verify and login
-    elsif session[:otp_user_id] && params[:otp_attempt]
-      if resource.verify_and_consume_otp!(params[:otp_attempt])
-        session.delete(:otp_user_id)
-        remember_me(resource) if session.delete(:remember_me)
-        set_flash_message!(:notice, :signed_in)
-        sign_in(resource, event: :authentication)
-        respond_with resource, location: after_sign_in_path_for(resource)
-      else
-        flash.now[:alert] = t(".incorrect_verification_code")
-        render :otp, status: :unprocessable_entity
-      end
+      # Intercept Devise if 2FA required. Otherwise let Devise handle non-2FA auth
+      authenticate_and_start_two_factor if resource&.otp_required_for_login?
+    elsif session[:otp_user_id]
+      authenticate_otp_attempt
     end
   end
 
-  def find_user
-    if session[:otp_user_id]
-      resource_class.find(session[:otp_user_id])
-
-    elsif sign_in_params[:email]
-      resource_class.find_by(email: sign_in_params[:email])
+  def authenticate_and_start_two_factor
+    if resource.valid_password?(sign_in_params[:password])
+      session[:remember_me] = Devise::TRUE_VALUES.include?(sign_in_params[:remember_me])
+      session[:otp_user_id] = resource.id
+      render :otp, status: :unprocessable_entity
+    else
+      # Let Devise handle invalid passwords
     end
+  end
+
+  def authenticate_otp_attempt
+    self.resource = resource_class.find(session[:otp_user_id])
+
+    if resource.verify_and_consume_otp!(params[:otp_attempt])
+      clear_otp_user_from_session
+      remember_me(resource) if session.delete(:remember_me)
+      set_flash_message!(:notice, :signed_in)
+      sign_in(resource, event: :authentication)
+      respond_with resource, location: after_sign_in_path_for(resource)
+    else
+      flash.now[:alert] = t(".incorrect_verification_code")
+      render :otp, status: :unprocessable_entity
+    end
+  end
+
+  def clear_otp_user_from_session
+    session.delete(:otp_user_id)
   end
 end

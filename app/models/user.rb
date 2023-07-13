@@ -47,19 +47,16 @@
 
 class User < ApplicationRecord
   include ActionText::Attachable
-  include PgSearch::Model
   include TwoFactorAuthentication
   include UserAccounts
   include UserAgreements
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, andle :trackable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable, :omniauthable
+  devise(*[:database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable, (:omniauthable if defined? OmniAuth)].compact)
 
   has_noticed_notifications
   has_person_name
-
-  pg_search_scope :search_by_full_name, against: [:first_name, :last_name], using: {tsearch: {prefix: true}}
 
   # ActiveStorage Associations
   has_one_attached :avatar

@@ -5,12 +5,12 @@ module SetLocale
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_locale
+    around_action :set_locale
   end
 
-  def set_locale
-    I18n.locale = find_locale
+  def set_locale(&action)
     @pagy_locale = I18n.locale.to_s
+    I18n.with_locale(find_locale, &action)
   end
 
   # Uncomment this if you'd like the locale included in URLs by default
