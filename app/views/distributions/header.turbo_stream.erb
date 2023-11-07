@@ -1,0 +1,3 @@
+<%= turbo_stream.append "header_fields" do %>
+    <%= render partial: "header_field", locals: { header: Header.new } %>
+<% end %>

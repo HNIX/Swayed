@@ -4,6 +4,7 @@
 #
 #  id                 :bigint           not null, primary key
 #  archived           :boolean
+#  base               :boolean          default(FALSE)
 #  description        :text
 #  primary_category   :integer
 #  secondary_category :string

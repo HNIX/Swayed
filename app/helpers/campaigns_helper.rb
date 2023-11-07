@@ -2,15 +2,31 @@ module CampaignsHelper
     def status_color_class(status)
         case status
         when 'draft'
-            'bg-gray-50 text-gray-700 ring-gray-600/20'
+            'text-gray-400 bg-gray-400/10'
         when 'active'
-            'bg-green-50 text-green-700 ring-green-600/20'
+            'text-green-400 bg-green-400/10'
         when 'paused'
-            'bg-yellow-50 text-yellow-700 ring-yellow-600/20'
+            'text-yellow-400 bg-yellow-400/10'
         when 'completed'
-            'bg-blue-50 text-blue-700 ring-blue-600/20'
+            'text-blue-400 bg-blue-400/10'
         else
-            'bg-gray-50 text-gray-700 ring-gray-600/20'
+            'text-gray-400 bg-gray-400/10'
+        end
+    end
+
+    def percentage_change(start_value, end_value)
+        if start_value.zero?
+            "<dd class='text-xs font-medium text-green-700'>+0%</dd>".html_safe
+        else 
+            change = ((end_value - start_value).to_f / start_value) * 100
+
+            if change > 0 
+                "<dd class='text-xs font-medium text-green-700'>+#{change}%</dd>".html_safe
+            elsif change < 0 
+                "<dd class='text-xs font-medium text-red-700'>-#{change}%</dd>".html_safe
+            else 
+                "<dd class='text-xs font-medium text-gray-700'>-#{change}%</dd>".html_safe
+            end 
         end
     end
 end

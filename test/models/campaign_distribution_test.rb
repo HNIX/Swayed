@@ -3,10 +3,7 @@
 # Table name: campaign_distributions
 #
 #  id              :bigint           not null, primary key
-#  daily_limit     :integer
 #  field_mapping   :jsonb
-#  monthly_limit   :integer
-#  weekly_limit    :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  campaign_id     :bigint           not null

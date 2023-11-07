@@ -1,0 +1,3 @@
+<%= turbo_stream.append "mapped_fields_for_distribution_#{@distribution.id}" do %>
+    <%= render partial: "mapped_field", locals: { mapped_field: MappedField.new } %>
+<% end %>

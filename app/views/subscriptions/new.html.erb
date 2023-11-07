@@ -1,6 +1,6 @@
 <nav class="p-4 border-b border-gray-200">
   <%= link_to root_path do %>
-    <%= render_svg "logo", styles: "inline-block fill-current text-gray-700 hover:text-gray-800" %>
+    <%= render_svg "pivot_logo", styles: "mt-2 fill-current text-gray-700 hover:text-gray-800 w-32" %>
     <span class="sr-only"><%= Jumpstart.config.application_name %></span>
   <% end %>
 </nav>
@@ -12,7 +12,7 @@
         <div>
           <h1 class="font-semibold text-lg text-gray-500">Try <%= @plan.name %></h1>
           <h3 class="my-1 font-bold text-3xl"><%= @plan.trial_period_days %> days free</h3>
-          <p class="font-medium text-gray-500">Then <span id="recurringTotal"><%= @plan.amount_with_currency %></span> per <%= @plan.interval %></p>
+          <p class="font-medium text-gray-500">Then <span id="recurringTotal"><%= @plan.amount_with_currency.truncate() %></span> per <%= @plan.interval %></p>
         </div>
 
       <% else %>
@@ -20,7 +20,7 @@
           <h1 class="font-semibold text-lg text-gray-500">Subscribe to <%= @plan.name %></h1>
 
           <div class="flex items-center">
-            <h3 id="recurringTotal" class="my-1 font-bold text-4xl"><%= @plan.amount_with_currency %></h3>
+            <h3 id="recurringTotal" class="my-1 font-bold text-4xl"><%= @plan.amount_with_currency.truncate() %></h3>
 
             <div class="ml-2 font-medium text-sm text-gray-500 leading-none">
               <% if @plan.unit_label? %>

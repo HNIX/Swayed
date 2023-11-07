@@ -1,0 +1,222 @@
+<div class="mx-auto">
+  <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+    <div class="lg:col-span-12">
+      <!--- START CAMPAIGN SETTINGS --->
+      <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8 bg-gray-800 rounded-lg shadow">
+
+        <%= render 'builder_header', step: 4 %>
+
+        <%= form_with(model: @campaign, url: wizard_path, method: :put) do |form| %>
+            <% if @campaign.errors.any? %>
+                <div style="color: red">
+                <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+
+                <ul>
+                    <% @campaign.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                    <% end %>
+                </ul>
+                </div>
+            <% end %>
+            
+            <div class="flex-1">  
+                <div class="flex flex-1 flex-col justify-between">
+                    <div class="divide-y divide-gray-500 pt-6">
+                        <div data-controller="select">
+                            <div class="sm:mb-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+                                
+                                <div class="sm:col-span-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+                                    <turbo-frame id="companies" class="sm:col-span-8" data-select-target="field">
+                                        <div class="">
+                                            <label for="distribution" class="block text-sm font-medium leading-6 text-white">Add a distribution</label>
+                                            <div class="mt-2 h-full">
+                                                <%= form.collection_select :distribution_ids, Distribution.all, :id, :name, { prompt: "Start typing to select or create"}, { :multiple => true, data: { select_target: 'input' }}  %>
+                                            </div>
+                                        </div>
+                                    </turbo-frame>
+                                    <div class="hidden sm:col-span-8" data-select-target="form">
+                                        <%= form.fields_for :distributions, Distribution.new do |ff| %>
+                
+                                            <%= ff.hidden_field :id %>
+
+                                            <div class="space-y-6 divide-y divide-white/5" data-controller="companies" >
+                                                <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-8">
+                                                    <div class="sm:col-span-4">
+                                                        <label for="website" class="block text-sm font-medium leading-6 text-white">Name</label>
+                                                        <div class="mt-2">
+                                                            <%= ff.text_field :name, placeholder: true, id: "name_field", class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", data: { companies_target: 'sourceNameField' } %>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="sm:col-span-4">
+                                                        <turbo-frame id="companies" class="sm:col-span-2">
+                                                            <div  data-controller="companies">
+                                                                <label for="vertical" class="block text-sm font-medium leading-6 text-white">Select a partner</label>
+                                                                <div class="mt-2 h-full">
+                                                                <%= ff.select :company_id, Company.all.pluck(:name, :id), { prompt: "Start typing" }, data: { companies_target: 'companyField' } %>
+                                                                </div>
+                                                            </div>
+                                                        </turbo-frame>
+                                                        <p class="mt-1 text-sm leading-6 text-gray-300">or start typing to create a new partner</p>
+                                                    </div>
+   
+                                                    <div class="sm:col-span-2">
+                                                        <label for="website" class="block text-sm font-medium leading-6 text-white">Request Method</label>
+                                                        <div class="mt-2">
+                                                            <%= ff.select :request_method, Distribution.request_methods.keys.map { |type| [type.upcase, type] }, { include_blank: 'Select method' }, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"  %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="sm:col-span-2">
+                                                        <label for="website" class="block text-sm font-medium leading-6 text-white">Request Format</label>
+                                                        <div class="mt-2">
+                                                            <%= ff.select :request_format, Distribution.request_formats.keys.map { |type| [type.upcase, type] }, { include_blank: 'Select format' }, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"  %>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="sm:col-span-4">
+                                                        <label for="website" class="block text-sm font-medium leading-6 text-white">Request URL</label>
+                                                        <div class="mt-2">
+                                                            <%= ff.text_field :endpoint, placeholder: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+                                                        </div>
+                                                    </div>
+    
+                                                </div>
+                                            </div>
+
+                                            <div class="pt-2">            
+                                                <div class="overflow-x-auto">
+                                                    <div class="inline-block min-w-full align-middle">
+                                                        <table class="min-w-full">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col" class="pr-3 py-2 text-left text-sm font-semibold text-white">Header Name</th>
+                                                                    <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-white">Header Value</th>
+                                                                    <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-white"></th>
+                                                                </tr>
+                                                            </thead> 
+                                                            <tbody id="header_fields">     
+                                                                <%= ff.fields_for :headers, ff.object.headers.new do |header_field| %>
+                                                                    <tr data-fields-target="field" data-controller="fields" >
+                                                                        <%= header_field.hidden_field :id %>  
+                                                                        
+                                                                        <td class="whitespace-nowrap pr-3 py-2 text-sm text-gray-500" data-controller="field-name">
+                                                                            <%= header_field.text_field :name, 
+                                                                                data: { action: "keyup->field-name#validate", field_name_target: "input" },
+                                                                                class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "Header name" %>
+                                                                                <div data-field-name-target="error" class="hidden text-red-500 mt-2 w-36"></div>
+                                                                        </td>
+                                                                        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><%= header_field.text_field :header_value, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "Header value" %></td>
+                                                                        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
+                                                                            <% if header_field.object.persisted? %>
+                                                                                <%= header_field.hidden_field :_destroy, data: { fields_target: "delete" }, header_id: header_field.object.id %>
+                                                                                <%= button_tag(type: 'button', data: { action: "click->fields#deleteField", header_id: header_field.object.id }, class: "rounded-full border border-gray-400 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600") do %>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-2 w-2 text-gray-200">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                                                                    </svg>
+                                                                                <% end %>
+                                                                            <% else %>
+                                                                                <button class="rounded-full border border-gray-400 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button" data-action="click->fields#removeField" data-field-id="<%= Time.now.to_i %>">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-2 w-2 text-gray-200">
+                                                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                                                                    </svg>
+                                                                                </button>
+                                                                            <% end %>
+                                                                        </td>
+                                                                    </tr>
+                                                                <% end %>
+                                                            <!-- More people... -->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="pb-4 pt-4">
+                                                <%= link_to header_distributions_path, data: { turbo_stream: true } do %>
+                                                    <%= button_tag(type: 'button', class: "btn btn-small btn-primary mr-2") do %>
+                                                        <div class="flex justify-middle">
+                                                            <svg class="h-4 w-4 text-white mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                                                            </svg>
+                                                            <p class="text-xs">Add Header</p>
+                                                        </div>
+                                                    <% end %>
+                                                <% end %>
+                                            </div> 
+                                            
+                                        <% end %>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-4">
+                                    <% if @campaign.distributions.present? %>
+                                        <div class="sm:ml-12">
+                                            <div class="bg-gray-700 rounded-lg">
+                                                <div class="mx-auto max-w-7xl">
+                                                    <div class="py-6">
+                                                    <div class="px-4 sm:px-6 lg:px-8">
+                                                        <div class="sm:flex sm:items-center">
+                                                            <div class="sm:flex-auto">
+                                                                <h1 class="text-base font-semibold leading-6 text-white">Connected Distributions</h1>
+                                                                <p class="mt-2 text-sm text-gray-300">A list of all the distributions in your campaign.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flow-root">
+                                                            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                                                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                                                                <table class="min-w-full divide-y divide-gray-700">
+                                                                    <tbody class="divide-y divide-gray-600">
+                                                                        <% @campaign.distributions.each do |dist| %>
+                                                                        <tr>
+                                                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"><%= dist.name %></td>
+                                                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300"><%= dist.request_method&.upcase %></td>
+                                                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300"><%= dist.endpoint&.downcase %></td>
+                                                                        </tr>
+                                                                        <% end %>
+                                                                    </tbody>
+                                                                </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% end %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 pb-4">
+                            <div class="mt-4 flex text-sm">
+                                <a href="#" class="group inline-flex items-center text-gray-500 hover:text-white">
+                                <svg class="h-5 w-5 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                                </svg>
+
+                                <span class="ml-2">Learn more about distributions</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+
+            <div class="flex items-center justify-end gap-x-6">
+                <div class="flex items-center justify-between w-full mr-8">
+                    <%= link_to 'Cancel', campaign_path(@campaign) %>
+                    <%= link_to '< Previous step', previous_wizard_path %>
+                </div>
+
+                <%= form.submit 'Save', name: 'save_and_stay', class: "btn btn-secondary mr-2" %>
+                <%= form.submit 'Save and Next >', name: 'save_and_next', class: "btn btn-primary mr-2" %>
+            </div>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+

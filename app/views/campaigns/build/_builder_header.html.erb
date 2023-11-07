@@ -1,0 +1,74 @@
+<nav class="flex pb-6" aria-label="Breadcrumb">
+    <ol role="list" class="flex items-center space-x-4 list-none">
+        <li>
+            <div class="flex items-center">
+                <%= link_to "All Campaigns", campaigns_path, class: "text-sm font-medium text-gray-500 hover:text-blue-600" %>
+            </div>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                </svg>
+                <% if @campaign.persisted? %>
+                    <%= link_to @campaign.name, campaign_path(@campaign), class: "ml-4 text-sm font-medium text-gray-500" %>
+                <% else %>
+                    <div class="ml-4 text-sm font-medium text-gray-500">New Campaign Builder</div>
+                <% end %>
+            </div>
+        </li>
+    </ol>
+</nav>
+
+<div class="border-b border-gray-500 pb-6">
+    <div>
+        <h4 class="sr-only">Status</h4>
+        <div class="mt-4 pb-8" aria-hidden="true">
+            <div class="overflow-hidden rounded-full bg-gray-200">
+                <div class="h-0.5 rounded-full bg-indigo-500" style="width: <%= step <= 5 ? step * 15 : 100 %>%"></div>
+            </div>
+            <div class="mt-6 hidden grid-cols-6 text-sm font-medium text-gray-500 sm:grid hover:text-gray-600">
+                <%= link_to 'Basic Setup', wizard_path(:basic_setup), class: step >= 1 ? "text-white hover:text-gray-300" : "hover:text-gray-300" %>
+                <%= link_to 'Data', wizard_path(:data_config), class: step >= 2 ? "text-white text-left hover:text-gray-300" : "text-gray-500 text-left hover:text-gray-300" %>
+                <%= link_to 'Sources', wizard_path(:sources), class: step >= 3 ? "text-white text-left hover:text-gray-300" : "text-gray-500 text-left hover:text-gray-300" %>
+                <%= link_to 'Distributions', wizard_path(:distributions), class: step >= 4 ? "text-white text-left hover:text-gray-300" : "text-gray-500 text-left hover:text-gray-300" %>
+                <%= link_to 'Mapping', wizard_path(:mapping), class: step >= 5 ? "text-white text-center hover:text-gray-300" : "text-gray-500 text-center hover:text-gray-300" %>
+                <%= link_to 'Finalize', wizard_path(:finalize), class: step >= 6 ? "text-white text-right hover:text-gray-300" : "text-gray-500 text-right hover:text-gray-300" %>
+            </div>
+        </div>
+    </div>
+
+    <% if step == 1 %>
+        <h3 class="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">Build Your Campaign</h3>
+        <p class="mt-2 max-w-4xl text-sm text-white">Start by choosing your campaign type and select the relevant vertical that aligns with your campaign's industry or focus. The type will determine how the lead distribution occurs and the vertical will help in pre-populating relevant fields in subsequent steps.</p>
+    <% elsif step == 2 %>
+        <h3 class="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">Campaign Field Configuration</h3>
+        <p class="mt-2 max-w-4xl text-sm text-white">
+        Define the specific fields required for your campaign. 
+        Ensure you carefully select and configure each field, as this will guide the interaction with both sources and buyers throughout the campaign.
+        </p>
+    <% elsif step == 3 %>
+        <h3 class="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">Connect a Source</h3>
+        <p class="mt-2 max-w-4xl text-sm text-white">
+            Integrate your data sources. By adding your source here, you'll enable a smooth flow of data into the campaign. Ensure that you provide accurate details for precise and consistent data transfer.
+        </p>
+    <% elsif step == 4 %>
+        <h3 class="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">Connect a Distribution</h3>
+        <p class="mt-2 max-w-4xl text-sm text-white">
+            Choose an existing distribution or create a new one to determine how leads will flow through your campaign. Ensure you pick the right distribution to maximize the success of your campaign efforts.
+        </p>
+
+    <% elsif step == 5 %>
+        <h3 class="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">Field Mapping</h3>
+        <p class="mt-2 max-w-4xl text-sm text-white">
+            Map your fields to ensure that the data flows correctly. Field mapping is a crucial step that allows you to align data points from your sources to your campaign. By specifying how source data should correspond with your campaign's requirements, you ensure consistent and accurate data intake.
+        </p>
+    <% elsif step == 6 %>
+        <h3 class="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">Review Campaign</h3>
+    <% else %>
+
+    <% end %>
+
+
+    
+</div>

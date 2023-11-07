@@ -1,65 +1,50 @@
-<div class="bg-white rounded-lg shadow flex-1 overflow-y-auto"> 
-
-  <div class="border-b border-gray-200 bg-white p-3" data-controller="slideover"
-    data-slideover-invisible-class="translate-x-full,opacity-0"
-    data-slideover-visible-class="translate-x-0,opacity-100"
-    data-slideover-entering-class=""
-    data-slideover-enter-timeout="300,300"
-    data-slideover-leaving-class=""
-    data-slideover-leave-timeout="300,300"
-    data-slideover-active-target="#slideover-target">
-
-    <div class="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
-        <div class="ml-4 mt-2">
-          <h3 class="text-base font-semibold leading-6 text-gray-900"></h3>
+<div class="bg-gray-800 pt-10 rounded-lg shadow">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+          <div class="sm:flex-auto">
+            <h1 class="text-base font-semibold leading-6 text-white">Campaings</h1>
+            <p class="mt-2 text-sm text-gray-300  max-w-3xl">A consolidated view of active campaigns, showcasing essential information including campaign name, status, lead distribution method, partners, and performance metrics for efficient management and analysis.</p>
+          </div>
+          <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+            <%= link_to "New Campaign", new_campaign_path, class: "block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" %>
+          </div>
         </div>
-        <div class="ml-4 mt-2 flex-shrink-0">
-          <button data-action="click->slideover#_show" class="rounded-md bg-indigo-500 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-          <span>New Campaign</span>
-        </button>
-        </div>
-      </div>
-        <%= render 'slideover', campaign: @campaign %>
-
-    </div>
-      <div class="overflow-hidden">
-          <% if @campaigns.exists? %>
-            <div class="bg-white shadow sm:rounded-b-lg">
-              <div class="w-full overflow-x-scroll">
-                  <table class="min-w-full divide-y divide-gray-200">
-                      <thead class="bg-gray-50">
-                          <tr>
-                          <th class="sticky left-0 z-10 w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-r border-gray-200">Campaigns</th>
-                          <!-- Other column headers -->
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Delivery</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Primary vertical</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Secondary vertical</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Strategy</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Budget</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Inbound</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Outbound</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Results</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cost per result</th>
-                          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount spent</th>                          
-                          <!-- Add more column headers as needed -->
-                          </tr>
-                      </thead>
-                      <tbody class="bg-white divide-y divide-gray-200">
-                      <% if @campaigns.present? %>
+        <div class="mt-8 flow-root">
+          <div class="-mx-4 -my-2 overflow-x-hidden hover:overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle">
+              <table class="min-w-full divide-y divide-gray-700">
+                <thead>
+                  <tr>
+                    <th scope="col" class="bg-gray-800 border-r border-gray-700 sticky left-0 z-10 w-48 py-3.5 px-6 text-left text-sm font-semibold text-white">Name</th>
+                    <th scope="col" class="px-6 py-3.5 text-left text-sm font-semibold text-white">Status</th>
+                    <th scope="col" class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Leads</th>
+                    <th scope="col" class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Acceptance Rate</th>
+                    <th scope="col" class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Sources</th>
+                    <th scope="col" class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Distributions</th>
+                    <th scope="col" class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Revenue</th>
+                    <th scope="col" class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Profit</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-800">
+                  <% if @campaigns.present? %>
                           <% @campaigns.each do |campaign| %>
                           <tr>
-                          <td class="sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-white border-r border-gray-200"><%= link_to campaign.name, campaign_path(campaign) %></td>
+                          <td class="rounded-b-lg sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-white bg-gray-800 border-r border-gray-700"><%= link_to campaign.name, campaign_path(campaign) %></td>
                           <!-- Other row cells -->
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><span class="inline-flex items-center rounded-md <%= status_color_class(campaign.status) %> px-2 py-1 text-xs font-medium ring-1 ring-inset"><%= campaign.status.titleize %></span></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= campaign.vertical.primary_category.gsub('_', ' ').titleize %></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= campaign.vertical.secondary_category %></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= campaign.campaign_type.titleize %></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= campaign.api_pings.count %></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= campaign.outbound_pings.count %></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>
-                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"></td>                  
+                          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <div class="flex items-center justify-end gap-x-2 sm:justify-start">
+                              <div class="flex-none rounded-full p-1 <%= status_color_class(campaign.status) %>">
+                                <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+                              </div>
+                              <div class="hidden text-white sm:block"><%= campaign.status.titleize %></div>
+                            </div>
+                          </td>
+                          <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= campaign.leads.count %></td>
+                          <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= @campaign.lead_acceptance_rate.round(2) %>%</td>
+                          <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= campaign.sources.count %></td>
+                          <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= campaign.distributions.count %></td>
+                          <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300">$<%= @campaign.total_revenue %></td>
+                          <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300">$<%= @campaign.total_profit %></td>                  
                           <!-- Add more row cells as needed -->
                           </tr>
                           <% end %>
@@ -68,19 +53,14 @@
                               <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
                           </div>
                       <% end %>
-                          <!-- Add more rows as needed -->
-                      </tbody>
-                  </table>
-              </div>
+
+                  <!-- More people... -->
+                </tbody>
+              </table>
             </div>
-              
-          <% else %>
-            <div class="text-center p-8">
-              <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
-            </div>
-        <% end %>
+          </div>
+        </div>
       </div>
-    </div>
 </div>
 
 

@@ -42,8 +42,13 @@ Rails.application.routes.draw do
       resource :auth
       resource :me, controller: :me
       resource :password
-      resources :accounts
-      resources :campaigns
+      resources :accounts do 
+        resources :campaigns do
+          resources :leads, only: [:create] do
+            post 'ping', on: :member, to: 'leads#ping'
+          end
+        end
+      end
       resources :users
       resources :notification_tokens, only: :create
       resources :affiliates
@@ -71,17 +76,39 @@ Rails.application.routes.draw do
 
   resources :announcements, only: [:index, :show]
   resources :api_tokens
-  resources :affiliate_tokens
+  resources :source_tokens
 
   resources :campaigns do 
     collection do
       get :field
     end
-    get :inbound
-    get :outbound
-    get :connections
-    get :settings
-    post :create_source, on: :member
+    member do
+      get :logs
+    end
+    resources :sources
+    resources :distributions
+    resources :campaign_fields, path: :fields do 
+      member do 
+        patch :move
+      end
+    end
+    resources :build, controller: 'campaigns/build'
+  end
+
+  resources :distributions do
+    resources :campaign_distributions, only: [:show, :edit, :update], path: :field_mappings
+
+    collection do
+      get :header
+    end
+  end
+
+  resources :campaign_fields, path: :fields do
+    resources :validations do 
+      collection do
+        get :options
+      end
+    end
   end
 
   resources :verticals do 
@@ -98,22 +125,25 @@ Rails.application.routes.draw do
     collection do
       get "contact_field"
     end
+    member do
+      get :settings
+    end
     resources :contacts
     resources :sources
     resources :distributions
-    get :settings
-
   end
 
-  resources :sources
-  resources :campaign_sources, only: [:destroy]
-  resources :campaign_distributions, only: [:destroy]
+  resources :sources, only: [:index]
+  resources :campaign_distributions, only: [:destroy] do
+    collection do
+      get :mapped_field
+    end
+  end
 
   resources :accounts do
     member do
       patch :switch
     end
-
     resource :transfer, module: :accounts
     resources :account_users, path: :members
     resources :account_invitations, path: :invitations, module: :accounts do
@@ -122,6 +152,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
   resources :account_invitations
 
   # Payments

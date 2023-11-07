@@ -8,6 +8,7 @@
 #  city              :string
 #  currency          :string
 #  name              :string
+#  notes             :text
 #  payment_terms     :string
 #  payment_threshold :integer
 #  state             :string

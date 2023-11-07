@@ -2,6 +2,7 @@
 // https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
+const { getUltimateTurboModalPath } = require('ultimate_turbo_modal/gemPath');
 
 /** @type {import('tailwindcss').Config */
 module.exports = {
@@ -19,6 +20,7 @@ module.exports = {
     './app/views/**/*.slim',
     './lib/jumpstart/app/views/**/*.erb',
     './lib/jumpstart/app/helpers/**/*.rb',
+    getUltimateTurboModalPath()
   ],
 
   // All the default values will be compiled unless they are overridden below

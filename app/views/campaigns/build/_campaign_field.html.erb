@@ -1,0 +1,26 @@
+<%= fields_for "campaign[campaign_fields_attributes][#{ Time.now.to_i }]", campaign_field do |ff| %>
+    <tr id="field_<%= Time.now.to_i %>" data-fields-target="field" data-controller="fields">
+        <%= ff.hidden_field :id %>     <!-- Odd row -->
+        <td class="whitespace-nowrap py-2 text-sm font-medium text-white"  >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </td> 
+        <td class="whitespace-nowrap pr-3 py-2 text-sm text-gray-500" data-controller="field-name">
+            <%= ff.text_field :name, 
+                data: { action: "keyup->field-name#validate", field_name_target: "input" },
+                class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "field_name" %>
+                <div data-field-name-target="error" class="hidden text-red-500 mt-2 w-36"></div>
+        </td>
+        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><%= ff.select :data_type, CampaignField.data_types.keys.map { |type| [type.titleize, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "Data Type" %></td>
+        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><div class="flex items-center justify-center "><%= ff.check_box :post_required, class: "mx-auto h-4 w-4 rounded border-gray-300 text-red-500 focus:ring-indigo-600" %></div></td>
+        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><div class="flex items-center justify-center "><%= ff.check_box :post_only, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" %></div></td>
+        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
+                <button class="rounded-full border border-gray-400 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="button" data-action="click->fields#removeField" data-field-id="<%= Time.now.to_i %>">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-2 w-2 text-gray-200">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                    </svg>
+                </button>
+        </td>
+    </tr>
+<% end %>

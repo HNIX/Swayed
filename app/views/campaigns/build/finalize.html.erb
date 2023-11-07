@@ -1,0 +1,168 @@
+<div class="mx-auto">
+  <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+    <div class="lg:col-span-12">
+      <!--- START CAMPAIGN SETTINGS --->
+      <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8 bg-gray-800 rounded-lg shadow">
+
+        <%= render 'builder_header', step: 6 %>
+
+        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-3 mt-6">
+                <div class="px-4 sm:px-0">
+                    <h3 class="text-base font-semibold leading-7 text-white">Campaign Information</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-400"><%= @campaign.name %></p>
+                </div>
+                <div class="mt-6 border-t border-white/10">
+                    <dl class="divide-y divide-white/10">
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-white">Vertical</dt>
+                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0"><%= @campaign.vertical.name %></dd>
+                    </div>
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-white">Type</dt>
+                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0"><%= @campaign.campaign_type.titleize %></dd>
+                    </div>
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm font-medium leading-6 text-white">Distribution Method</dt>
+                        <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0"><%= @campaign.distribution_method.titleize %></dd>
+                    </div>
+                    <% if @campaign.description.present? %>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                            <dt class="text-sm font-medium leading-6 text-white">Description</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-400 sm:col-span-2 sm:mt-0"><%= @campaign.description %></dd>
+                        </div>
+                    <% end %>
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dd class="text-sm text-white sm:col-span-full">
+                            <div class="mx-auto">
+                                <div class="sm:flex sm:items-center">
+                                    <div class="sm:flex-auto">
+                                        <h1 class="text-sm font-medium leading-6 text-white">Campaign Fields</h1>
+                                    </div>
+                                </div>
+                                <div class="mt-4 flow-root">
+                                    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                                        <table class="min-w-full divide-y divide-gray-700">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">Name</th>
+                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Data type</th>
+                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Required</th>
+                                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Send on</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-800">
+                                                <% @campaign.campaign_fields.each do |field| %>
+                                                    <tr>
+                                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"><%= field.name %></td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300"><%= field.data_type %></td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                                                            <% if field.post_required? %>
+                                                                <div class="flex-none h-4 w-4 rounded-full p-1 text-red-500 bg-red-100/10">
+                                                                    <div class="h-2 w-2 rounded-full bg-current"></div>
+                                                                </div>
+                                                            <% end %>
+                                                        </td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
+                                                            <% if field.post_only? %>
+                                                                Post
+                                                            <% else %>
+                                                                Ping / Post
+                                                            <% end %>
+                                                        </td>
+                                                    </tr>
+                                                <% end %>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </dd>
+                    </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="sm:col-span-3 mt-6">
+                <div class="sm:ml-12 mb-6">
+                    <div class="bg-gray-700 rounded-lg">
+                        <div class="mx-auto max-w-7xl">
+                            <div class="py-6">
+                            <div class="px-4 sm:px-6 lg:px-8">
+                                <div class="sm:flex sm:items-center">
+                                    <div class="sm:flex-auto">
+                                        <h1 class="text-base font-semibold leading-6 text-white">Connected Distributions</h1>
+                                        <p class="mt-2 text-sm text-gray-300">A list of all the distributions in your campaign.</p>
+                                    </div>
+                                </div>
+                                <div class="flow-root">
+                                    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                                        <table class="min-w-full divide-y divide-gray-700">
+                                            <tbody class="divide-y divide-gray-600">
+                                                <% @campaign.distributions.each do |dist| %>
+                                                    <tr>
+                                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"><%= dist.name %></td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300"><%= dist.request_method&.upcase %></td>
+                                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300"><%= dist.endpoint&.downcase %></td>
+                                                    </tr>
+                                                <% end %>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sm:ml-12">
+                    <div class="bg-gray-700 rounded-lg">
+                        <div class="mx-auto max-w-7xl">
+                            <div class="py-6">
+                            <div class="px-4 sm:px-6 lg:px-8">
+                                <div class="sm:flex sm:items-center">
+                                <div class="sm:flex-auto">
+                                    <h1 class="text-base font-semibold leading-6 text-white">Connected Sources</h1>
+                                    <p class="mt-2 text-sm text-gray-300">A list of all the sources in your campaign.</p>
+                                </div>
+                                </div>
+                                <div class="flow-root">
+                                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                                    <table class="min-w-full divide-y divide-gray-700">
+                                        <tbody class="divide-y divide-gray-600">
+                                            <% @campaign.sources.each do |source| %>
+                                            <tr>
+                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-0"><%= source.name %></td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300"><%= source.integration_type&.titleize %></td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-300"><%= source.integration_type == 'affiliate' ? source.company&.name&.titleize : source.landing_page_url %></td>
+                                            </tr>
+                                            <% end %>
+
+                                        <!-- More people... -->
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+
+        
+      </div>
+      <!--- END CAMPAIGN SETTINGS --->
+    </div>
+  </div>
+</div>
+

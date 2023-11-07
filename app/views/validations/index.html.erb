@@ -1,0 +1,18 @@
+<%= render 'campaigns/header', campaign: @field.campaign %>
+
+    
+<div class="bg-gray-800 rounded-lg shadow py-4 mt-6">
+    <%= render 'campaign_fields/header', field: @field %>
+
+  <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+    <div class="lg:col-span-12 ">
+      <div class="mx-auto swiper-container ">
+        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none ">
+
+              <%= render 'table', validations: @field.validations %>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

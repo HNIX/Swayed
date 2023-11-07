@@ -1,0 +1,66 @@
+<%= form_with(model: distribution, html: { class: 'space-y-4', id: 'new_form' }) do |form| %>
+
+  <div class="space-y-6 divide-y divide-white/5" data-controller="companies" >
+    <%= render "shared/error_messages", resource: form.object %>
+
+      <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-3">
+        <div class="sm:col-span-3">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Name</label>
+          <div class="mt-2">
+              <%= form.text_field :name, placeholder: true, id: "name_field", class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", data: { companies_target: 'sourceNameField' } %>
+          </div>
+        </div>
+        
+        
+        <div class="sm:col-span-3">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Request URL</label>
+          <div class="mt-2">
+              <%= form.text_field :endpoint, placeholder: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          </div>
+        </div>
+
+       
+        <div class="sm:col-span-3">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Request Method</label>
+          <div class="mt-2">
+              <%= form.select :request_method, Distribution.request_methods.keys.map { |type| [type.upcase, type] }, { selected: 'post' }, include_blank: 'Select a method', class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"  %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Request Format</label>
+          <div class="mt-2">
+            <%= form.select :request_format, Distribution.request_formats.keys.map { |type| [type.upcase, type] }, { selected: 'json' }, include_blank: 'Select a format', class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"  %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-4">
+          <% if distribution.persisted? %>
+                <label for="about" class="block text-sm font-medium leading-6 text-white">Company</label>
+                <div class="mt-2">
+                  <div class="px-3 block w-full rounded-md border-0 bg-white/5 py-1.5 text-gray-500 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"><%= @distribution.company.name %></div>
+                </div>
+          <% else %>
+                <turbo-frame id="companies" class="sm:col-span-2">
+                    <div  data-controller="companies">
+                        <label for="vertical" class="block text-sm font-medium leading-6 text-white">Select a partner</label>
+                        <div class="mt-2 h-full">
+                          <%= form.select :company_id, Company.all.pluck(:name, :id), { prompt: "Start typing" }, data: { companies_target: 'companyField' } %>
+                        </div>
+                    </div>
+                </turbo-frame>
+                
+                <p class="mt-1 text-sm leading-6 text-gray-300">or start typing to create a new partner</p>
+
+          <% end %>
+        </div>
+      </div>
+   
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", campaign_distributions_path(@campaign), class: "text-sm font-semibold leading-6 text-white" %>
+    <%= form.submit 'Add Distribution', class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+  </div>
+<% end %>
+

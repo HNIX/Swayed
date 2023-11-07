@@ -10,15 +10,23 @@ controllers.forEach((controller) => {
 })
 
 import { Dropdown, Modal, Tabs, Popover, Toggle, Slideover } from "tailwindcss-stimulus-components"
+import Sortable from 'stimulus-sortable'
+import Flatpickr from 'stimulus-flatpickr'
+import setupUltimateTurboModal from "ultimate_turbo_modal";
+setupUltimateTurboModal(application);
+
 application.register('dropdown', Dropdown)
 application.register('modal', Modal)
 application.register('tabs', Tabs)
 application.register('popover', Popover)
 application.register('toggle', Toggle)
 application.register('slideover', Slideover)
-
-import Flatpickr from 'stimulus-flatpickr'
+application.register('sortable', Sortable)
 application.register('flatpickr', Flatpickr)
 
 //import Carousel from 'stimulus-carousel'
 //application.register('carousel', Carousel)
+
+
+
+

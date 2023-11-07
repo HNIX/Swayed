@@ -3,10 +3,7 @@
 # Table name: campaign_distributions
 #
 #  id              :bigint           not null, primary key
-#  daily_limit     :integer
 #  field_mapping   :jsonb
-#  monthly_limit   :integer
-#  weekly_limit    :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  campaign_id     :bigint           not null
@@ -27,14 +24,24 @@ class CampaignDistribution < ApplicationRecord
 
   belongs_to :campaign
   belongs_to :distribution
+  has_many :mapped_fields, dependent: :destroy
 
-  has_many :outbound_pings
-  has_many :leads, through: :outbound_pings
+  accepts_nested_attributes_for :mapped_fields, allow_destroy: true, :reject_if => :all_blank
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :campaign_distributions, partial: "campaign_distributions/index", locals: {campaign_distribution: self} }
   after_update_commit -> { broadcast_replace_later_to self }
   after_destroy_commit -> { broadcast_remove_to :campaign_distributions, target: dom_id(self, :index) }
+
+  def fully_mapped?
+    return false unless field_mapping
+
+    campaign.campaign_fields.each do |field|
+      return false unless field_mapping.key?(field.name) && field_mapping[field.name].present?
+    end
+
+    true
+  end
 
   private
 
@@ -42,6 +49,7 @@ class CampaignDistribution < ApplicationRecord
     self.field_mapping ||= {}
   end
 
+  #move to service
   def over_outbound_ping_limit?(campaign_distribution)
     daily_limit = campaign_distribution.daily_limit
     weekly_limit = campaign_distribution.weekly_limit

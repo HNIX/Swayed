@@ -23,6 +23,7 @@ class CompaniesController < ApplicationController
       if @company.save  
         respond_to do |format|
           format.html { redirect_to @company, notice: t(".created") }
+          format.json { render json: @company }
           format.turbo_stream
         end
       else
@@ -62,7 +63,7 @@ class CompaniesController < ApplicationController
     end
   
     def company_params
-      params.require(:company).permit(:name, :address, :city, :state, :zip_code, :billing_cycle, :payment_terms, :currency, contacts_attributes: [:first_name, :last_name, :email, :id, :phone])
+      params.require(:company).permit(:name, :address, :city, :state, :zip_code, :billing_cycle, :notes, :payment_terms, :currency, contacts_attributes: [:first_name, :last_name, :email, :id, :phone])
     end
 
     def paginate_companies

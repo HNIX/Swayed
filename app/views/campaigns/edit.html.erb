@@ -1,9 +1,18 @@
+<%= render 'header', campaign: @campaign %>
 
-<!-- Profile section -->
-<div class="hidden" data-tabs-target="panel">
-  <%= render 'fields_form', campaign: @campaign %>
+<div class="mx-auto  mt-6">
+  <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+    <div class="lg:col-span-12">
+      <!--- START CAMPAIGN SETTINGS --->
+      <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8 bg-gray-800 rounded-lg shadow">
+
+        <%= render 'form', campaign: @campaign %>
+      </div>
+      <!--- END CAMPAIGN SETTINGS --->
+    </div>
+  </div>
 </div>
-       
+
            
 
 

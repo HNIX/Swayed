@@ -7,38 +7,38 @@
     <div class="lg:p-10 p-4 bg-white rounded-lg border border-gray-200">
       <div class="sm:flex justify-between items-center mb-5">
         <div class="flex items-center">
-          <h1 class="h3 mb-2"><%= @affiliate_token.name %></h1>
+          <h1 class="h3 mb-2"><%= @source_token.name %></h1>
         </div>
 
         <div class="flex-shrink-0">
-          <%= link_to t(".edit"), edit_affiliate_token_path(@affiliate_token), class: "btn btn-light-gray" %>
-          <%= link_to t(".revoke"), @affiliate_token, class: "btn btn-light-gray", data: { turbo_method: :delete, turbo_confirm: t(".confirm") } %>
+          <%= link_to t(".edit"), edit_source_token_path(@source_token), class: "btn btn-light-gray" %>
+          <%= link_to t(".revoke"), @source_token, class: "btn btn-light-gray", data: { turbo_method: :delete, turbo_confirm: t(".confirm") } %>
         </div>
       </div>
 
       <div class="mb-4">
-        <div class="mb-2 text-gray-600 text-xs uppercase font-bold"><%= AffiliateToken.human_attribute_name(:token) %></div>
-        <%= tag.span @affiliate_token.token, class: "font-mono cursor-pointer whitespace-pre-wrap", data: { controller: "clipboard tooltip", tooltip_content_value: t(".click_to_copy"), clipboard_text: @affiliate_token.token } %>
+        <div class="mb-2 text-gray-600 text-xs uppercase font-bold"><%= SourceToken.human_attribute_name(:token) %></div>
+        <%= tag.span @source_token.token, class: "font-mono cursor-pointer whitespace-pre-wrap", data: { controller: "clipboard tooltip", tooltip_content_value: t(".click_to_copy"), clipboard_text: @source_token.token } %>
       </div>
 
       <div class="mb-4">
-        <div class="mb-2 text-gray-600 text-xs uppercase font-bold"><%= AffiliateToken.human_attribute_name(:created_at) %></div>
-        <%= @affiliate_token.created_at.strftime("%b %e, %Y") %>
+        <div class="mb-2 text-gray-600 text-xs uppercase font-bold"><%= SourceToken.human_attribute_name(:created_at) %></div>
+        <%= @source_token.created_at.strftime("%b %e, %Y") %>
       </div>
 
       <div class="mb-4">
-        <div class="mb-2 text-gray-600 text-xs uppercase font-bold"><%= AffiliateToken.human_attribute_name(:last_used_at) %></div>
-        <%= @affiliate_token.last_used_at? ? local_time_ago(@affiliate_token.last_used_at) : "—" %>
+        <div class="mb-2 text-gray-600 text-xs uppercase font-bold"><%= SourceToken.human_attribute_name(:last_used_at) %></div>
+        <%= @source_token.last_used_at? ? local_time_ago(@source_token.last_used_at) : "—" %>
       </div>
 
       <div>
         <div class="mb-4 text-gray-600 text-xs uppercase font-bold"><%= t(".auth_header") %></div>
         <pre class="whitespace-pre-wrap"><code>GET /api/v1/me.json
-Authorization: Bearer <%= @affiliate_token.token %></code></pre>
+Authorization: Bearer <%= @source_token.token %></code></pre>
 
         <pre class="whitespace-pre-wrap"><code>curl <%= api_v1_me_url(format: :json) %>
 -H "Accept: application/json"
--H "Authorization: Bearer <%= @affiliate_token.token %>"</code></pre>
+-H "Authorization: Bearer <%= @source_token.token %>"</code></pre>
       </div>
 
     </div>

@@ -1,0 +1,60 @@
+<div class="bg-gray-800 pt-10 rounded-lg shadow">
+    <div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6 text-white">Campaign Distributions</h1>
+        <p class="mt-2 text-sm text-gray-300  max-w-3xl">The sources table displays the sources associated with each campaign, offering a comprehensive overview of lead acquisition channels and their respective settings for effective campaign optimization.</p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <%= link_to 'Add New Distribution', new_campaign_distribution_path(@campaign), class: "block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" %>
+        </div>
+    </div>
+    <div class="mt-8 flow-root">
+        <div class="overflow-x-hidden hover:overflow-x-auto">
+        <div class="inline-block min-w-full py-2 align-middle">
+            <table class="min-w-full divide-y divide-gray-700">
+            <thead>
+                <tr>
+                <th class="bg-gray-800 border-r border-gray-700 sticky left-0 z-10 w-48 py-3.5 px-6 text-left text-sm font-semibold text-white">Distribution</th>
+                <!-- Other column headers -->
+                <th class="px-6 py-3.5 text-left text-sm font-semibold text-white">Status</th>
+                <th class="px-6 py-3.5 text-left text-sm font-semibold text-white">Endpoint</th>
+                <th class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Response Format</th>
+                <th class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Leads</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800">
+                <% if distributions.present? %>
+                    <% distributions.each do |distribution| %>
+                        <tr>
+                            <td class="rounded-b-lg sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-white bg-gray-800 border-r border-gray-700">
+                            <%= link_to distribution.company.name, campaign_distribution_path(@campaign, distribution) %></td>
+                            <!-- Other row cells -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                <div class="flex items-center justify-end gap-x-2 sm:justify-start">
+                                    <div class="flex-none rounded-full p-1 <%= status_color_class(distribution.status) %>">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+                                    </div>
+                                    <div class="hidden text-white sm:block"><%= distribution.status&.titleize %></div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= distribution.endpoint %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= distribution.response_format %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= distribution.leads.count %></td>
+                        <!-- Add more row cells as needed -->
+                        </tr>
+                        <% end %>
+                    <% else %>
+                        <div class="text-center p-8">
+                            <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+                        </div>
+                    <% end %>
+
+                <!-- More people... -->
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>

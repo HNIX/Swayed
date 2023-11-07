@@ -1,0 +1,53 @@
+    <%= render 'campaigns/header', campaign: @campaign_distribution.campaign %>
+
+    
+    <div class="bg-gray-800 rounded-lg shadow py-4 mt-6">
+      <%= render 'distributions/header' %>
+
+      <!-- Activity list -->
+      <div class="border-t border-white/10 pt-11">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h2 class="px-4 text-base font-semibold leading-7 text-white sm:px-6 lg:px-8">Field Mapping</h2>
+                <p class="mt-2 text-sm text-gray-300  max-w-3xl sm:px-6 lg:px-8">The campaign fields table provides an organized view of the custom fields and their configurations within each campaign, facilitating tailored lead data collection and integration.</p>
+            </div>
+            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none sm:px-6 lg:px-8">
+               <%= link_to 'Edit Mapping', edit_distribution_campaign_distribution_path(@distribution, @campaign_distribution), class: "block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" %>
+            </div>
+        </div>
+        <table class="mt-6 w-full whitespace-nowrap text-left">
+          <colgroup>
+            <col class="w-full sm:w-4/12">
+            <col class="lg:w-4/12">
+            <col class="lg:w-2/12">
+            <col class="lg:w-1/12">
+            <col class="lg:w-1/12">
+          </colgroup>
+          <thead class="border-b border-white/10 text-sm leading-6 text-white">
+            <tr>
+              <th scope="col" class="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">Campaign Field</th>
+              <th scope="col" class="hidden py-2 pl-0 pr-8 font-semibold sm:table-cell">Mapped Field</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <% @campaign_distribution.field_mapping.each do |key, value| %>
+                <tr>
+                    <td class="py-4 pl-4 pr-8 sm:pl-6 lg:pl-8">
+                        <div class="flex items-center gap-x-4">
+                        <div class="truncate text-sm font-medium leading-6 text-white"><%= key %></div>
+                        </div>
+                    </td>
+                    <td class="hidden py-4 pl-0 pr-4 sm:table-cell sm:pr-8">
+                        <div class="flex gap-x-3">
+                        <div class="font-mono text-sm leading-6 text-gray-400"><%= value %></div>
+                        </div>
+                    </td>
+                </tr>
+            <% end %>
+            
+
+            <!-- More items... -->
+          </tbody>
+        </table>
+      </div>
+    </div>

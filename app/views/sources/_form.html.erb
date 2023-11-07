@@ -1,0 +1,178 @@
+<%= form_with(model: [@campaign, @source]) do |form| %>
+  <div class="space-y-6 divide-y divide-white/5" data-controller="companies" >
+    <%= render "shared/error_messages", resource: form.object %>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Source Details</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Basic details about the source, including its name and current status.</p>
+      </div>
+      
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Source Name</label>
+          <div class="mt-2">
+              <%= form.text_field :name, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", data: { companies_target: 'sourceNameField' } %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Status</label>
+          <div class="mt-2">
+                <%= form.select(:status, Source.statuses.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-4">
+          <% if @source.persisted? %>
+                <label for="about" class="block text-sm font-medium leading-6 text-white">Company</label>
+                <div class="mt-2">
+                  <div class="px-3 block w-full rounded-md border-0 bg-white/5 py-1.5 text-gray-500 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"><%= @source.company.name %></div>
+                </div>
+          <% else %>
+                <label for="about" class="block text-sm font-medium leading-6 text-white">Select a Company</label>
+
+                <%= form.select(:company_id, options_for_select(@companies.map{ |c| [c.name, c.id] }), {include_blank: true}, id: 'company_name', class: 'block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black', data: { companies_target: 'companySelectField' }) %>
+                
+                <p class="mt-1 text-sm leading-6 text-gray-300">or start typing to create a new company</p>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Offer Details</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Information about the type of offer, payout, margin, budget, and minimum bid for the source.</p>
+      </div>
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Offer Type</label>
+          <div class="mt-2">
+                <%= form.select(:offer_type, Source.offer_types.keys.map { |type| [type.upcase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Payout</label>
+          <div class="mt-2">
+            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">$</span>
+              <%= form.number_field :payout, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Margin</label>
+          <div class="mt-2">
+            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+              <%= form.number_field :margin, class: "flex-1 border-0 bg-transparent py-1.5 pr-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
+              <span class="flex select-none items-center pr-3 text-gray-400 sm:text-sm">%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Total Budget</label>
+          <div class="mt-2">
+            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">$</span>
+              <%= form.number_field :budget, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Minimum Acceptable Bid</label>
+          <div class="mt-2">
+            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">$</span>
+              <%= form.number_field :minimum_acceptable_bid, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Payout Configuration</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Configuration settings for the source's payout method and payment terms.</p>
+      </div>
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Payout Method</label>
+          <div class="mt-2">
+                <%= form.select(:payout_method, Source.payout_methods.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Payment Terms</label>
+          <div class="mt-2">
+                <%= form.select(:terms, Source.terms.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Integration Details</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Specify how the source is integrated, including URLs and postback settings.</p>
+      </div>
+
+       <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Integration Type</label>
+          <div class="mt-2">
+                <%= form.select(:integration_type, Source.integration_types.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Landing Page URL</label>
+          <div class="mt-2">
+            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">http://</span>
+              <%= form.text_field :landing_page_url, autofocus: true, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Privacy Policy URL</label>
+          <div class="mt-2">
+            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">http://</span>
+              <%= form.text_field :privacy_policy_url, autofocus: true, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
+            </div>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Postback URL</label>
+          <div class="mt-2">
+            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">http://</span>
+              <%= form.text_field :postback_url, autofocus: true, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", campaign_path(@campaign), class: "text-sm font-semibold leading-6 text-white" %>
+    <%= form.submit 'Add Source', class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+  </div>
+<% end %>

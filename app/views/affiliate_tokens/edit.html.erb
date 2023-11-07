@@ -6,14 +6,14 @@
   <div class="w-full lg:w-3/4 lg:p-4">
     <div class="lg:p-10 p-4 bg-white rounded-lg border border-gray-200">
       <h1 class="h3 mb-4">
-        <%= link_to @affiliate_token.name, @affiliate_token %>
+        <%= link_to @source_token.name, @source_token %>
         <%= render_svg "icons/cheveron-right", styles: "fill-current icon-sm text-gray-600 inline-block" %>
         <%= t(".title") %>
       </h1>
 
-      <%= render "form", affiliate_token: @affiliate_token %>
+      <%= render "form", source_token: @source_token %>
 
-      <%= link_to t("back"), @affiliate_token %>
+      <%= link_to t("back"), @source_token %>
     </div>
   </div>
 </div>

@@ -8,6 +8,7 @@
 #  city              :string
 #  currency          :string
 #  name              :string
+#  notes             :text
 #  payment_terms     :string
 #  payment_threshold :integer
 #  state             :string
@@ -26,19 +27,11 @@ class Company < ApplicationRecord
   acts_as_tenant :account
 
   has_many :contacts, dependent: :destroy
-  has_many :affiliate_tokens, dependent: :destroy
 
   has_many :sources
-  has_many :campaign_sources, through: :sources
-  has_many :campaigns, through: :campaign_sources
+  has_many :campaigns, through: :sources
   has_many :distributions
-  has_many :campaign_distributions, through: :distributions
   
-  has_many :verticals, through: :campaigns
-  has_many :api_pings, through: :campaign_sources
-  has_many :outbound_pings, through: :campaign_distributions
-  has_many :leads, through: :api_pings
-
   CYCLE = %w[monthly weekly daily quarterly]
   CURRENCY = %w[US CAD EUR GBP AUD JPY CHF]
 
@@ -48,14 +41,18 @@ class Company < ApplicationRecord
   after_update_commit -> { broadcast_replace_later_to self }
   after_destroy_commit -> { broadcast_remove_to :companies, target: dom_id(self, :index) }
 
-  accepts_nested_attributes_for :contacts
-  accepts_nested_attributes_for :sources
-  accepts_nested_attributes_for :distributions
-
   scope :sorted, -> { order("created_at DESC") }
+
+  accepts_nested_attributes_for :contacts
 
   validates :name, presence: true
   validates_uniqueness_to_tenant :name
+
+  # Format Validations
+  validates :name, format: { with: /\A[a-zA-Z0-9_\- ]+\z/, message: "can only be alphanumeric with spaces, underscores, and hyphens" }
+
+  # Length Validations
+  validates :name, length: { minimum: 2, maximum: 100 }
 
   def initials
     name.split.map { |word| word[0] }.join

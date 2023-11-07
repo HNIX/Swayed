@@ -42,13 +42,11 @@
                           <div class="flex items-center gap-x-2">
                             <div class="hidden sm:flex sm:flex-col">
                               <p class="text-sm leading-6 text-gray-600 font-medium">Inbound</p>
-                              <p class="mt-1 text-xs leading-5 text-gray-500"><% if company.api_pings.blank? %> No inbound pings <% else %> Last ping <%= time_ago_in_words(company.api_pings.maximum(:created_at)) %> ago <% end %></p>
                             </div>
                           </div>
                           <div class="flex items-center gap-x-4">
                             <div class="hidden sm:flex sm:flex-col">
                               <p class="text-sm leading-6 text-gray-600 font-medium">Outbound</p>
-                              <p class="mt-1 text-xs leading-5 text-gray-500"><% if company.outbound_pings.blank? %> No outbound pings <% else %> Last ping <%= time_ago_in_words(company.outbound_pings.maximum(:created_at)) %> ago <% end %></p>
                             </div>
                           </div>
                           <div class="flex items-center gap-x-4 text-gray-500">

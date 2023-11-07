@@ -1,0 +1,45 @@
+<div class="bg-gray-800 pt-10 rounded-lg shadow">
+    <div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6 text-white">Field Validations</h1>
+        <p class="mt-2 text-sm text-gray-300  max-w-3xl">The campaign fields table provides an organized view of the custom fields and their configurations within each campaign, facilitating tailored lead data collection and integration.</p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <%= link_to 'Add New Validation', new_campaign_field_validation_path(@field), class: "block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" %>
+        </div>
+    </div>
+    <div class="mt-8 flow-root">
+        <div class="overflow-x-hidden hover:overflow-x-auto">
+        <div class="inline-block min-w-full py-2 align-middle">
+            <% if validations.present? %>
+            <table class="min-w-full divide-y divide-gray-700">
+            <thead>
+                <tr>
+                <th class="bg-gray-800 border-r border-gray-700 sticky left-0 z-10 w-48 py-3.5 px-6 text-left text-sm font-semibold text-white">Validation</th>
+                <!-- Other column headers -->
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800">
+                    <% validations.each do |validation| %>
+                        <tr>
+                            <td class="rounded-b-lg sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-white bg-gray-800 border-r border-gray-700">
+                                <%= link_to validation.display_name, campaign_field_validation_path(@field, validation) %>
+                            </td>
+                        <!-- Add more row cells as needed -->
+                        </tr>
+                        <% end %>
+
+                <!-- More people... -->
+            </tbody>
+            </table>
+             <% else %>
+                        <div class="text-center p-8">
+                            <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+                        </div>
+                    <% end %>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>

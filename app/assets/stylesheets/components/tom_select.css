@@ -1,0 +1,58 @@
+@import "../../../../node_modules/tom-select/dist/css/tom-select.css";
+
+.ts-wrapper {
+  @apply w-full !ml-0;
+}
+
+.ts-control>input {
+  @apply w-full
+}
+
+.ts-wrapper.multi .ts-control>div {
+  @apply z-0 rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black;
+}
+
+.ts-control {
+  @apply z-0 block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black;
+}
+
+.full .ts-control {
+  @apply bg-white/5
+}
+
+.ts-control, .ts-wrapper.single.input-active .ts-control {
+  @apply z-0 block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black;
+}
+
+.ts-dropdown .active.create {
+  @apply text-white;
+}
+
+.ts-dropdown .create {
+  @apply text-white;
+}
+
+.ts-control *, .ts-wrapper.single.input-active .ts-control * {
+  @apply text-white;
+}
+
+.ts-dropdown {
+  @apply z-0 rounded-md border border-solid border-t border-gray-600 bg-gray-900 text-gray-200 shadow-md sm:text-xs sm:leading-6 [&_*]:text-white;
+}
+
+.ts-dropdown [data-selectable].option:first-child {
+  @apply rounded-t-md;
+}
+
+.ts-dropdown [data-selectable].option:last-child {
+  @apply rounded-b-md;
+}
+
+.ts-dropdown .create:hover, .ts-dropdown .option:hover{
+  @apply bg-gray-700 text-white;
+}
+
+.ts-dropdown .active {
+  @apply bg-gray-700 text-white;
+}
+

@@ -2,68 +2,114 @@
 <%= render 'header', campaign: @campaign %>
     
 <div class="mx-auto  mt-6">
-    <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
+    <div class="lg:grid lg:grid-cols-12">
         
 
-<div class="lg:col-span-12">
-          <!---- START CAMPAIGN SETUP ---->
-          <div class="bg-white px-4 sm:px-6 rounded-lg shadow">
-        <div class="relative isolate overflow-hidden">
-    <!-- Secondary navigation -->
-    <header class="pb-4 pt-6 sm:pb-6">
-      <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
-        <h1 class="text-base font-semibold leading-7 text-gray-900">Lead Flow</h1>
-        <div class="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
-          <a href="#" class="text-indigo-600">Last 7 days</a>
-          <a href="#" class="text-gray-700">Last 30 days</a>
-          <a href="#" class="text-gray-700">All-time</a>
+  <div class="lg:col-span-12">
+    <!---- START CAMPAIGN SETUP ---->
+    <div class="bg-gray-800 px-4 sm:px-6 rounded-lg shadow">
+      <div class="relative isolate overflow-hidden" data-controller="tabs" data-tabs-active-tab="-mb-px transition text-indigo-400">
+        <!-- Secondary navigation -->
+        <header class="pb-4 pt-6 sm:pb-6">
+          <div class="flex max-w-7xl flex-wrap gap-6 sm:flex-nowrap">
+            <h1 class="text-base font-semibold leading-7 text-gray-200">Lead Flow</h1>
+            <div class="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
+              <a href="#" class="text-gray-200" data-tabs-target="tab" data-action="click->tabs#change:prevent">Last 7 days</a>
+              <a href="#" class="text-gray-200" data-tabs-target="tab" data-action="click->tabs#change:prevent">Last 30 days</a>
+              <a href="#" class="text-gray-200" data-tabs-target="tab" data-action="click->tabs#change:prevent">All-time</a>
+            </div>
+            
+          </div>
+        </header>
+
+      
+
+        <!-- Stats -->
+        <div class="hidden border-b border-b-gray-100/5 lg:border-t lg:border-t-gray-100/5" data-tabs-target="panel">
+          <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-100/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Leads</dt>
+              <%= percentage_change(@leads_prior_7_days, @total_leads_7_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200"><%= @total_leads_7_days %></dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-100/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Acceptance Rate</dt>
+              <%= percentage_change(@acceptance_rate_prior_7_days, @acceptance_rate_7_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200"><%= @acceptance_rate_7_days %>%</dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-100/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 lg:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Revenue</dt>
+              <%= percentage_change(@total_revenue_prior_7_days, @total_revenue_7_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200">$<%= @total_revenue_7_days %></dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-100/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Profit</dt>
+              <%= percentage_change(@total_profit_prior_7_days, @total_profit_7_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200">$<%= @total_profit_7_days %></dd>
+            </div>
+          </dl>
         </div>
-        
+
+        <div class="hidden border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5" data-tabs-target="panel">
+          <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Leads</dt>
+              <%= percentage_change(@leads_prior_30_days, @total_leads_30_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200"><%= @total_leads_30_days %></dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Acceptance Rate</dt>
+              <%= percentage_change(@acceptance_rate_prior_30_days, @acceptance_rate_30_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200"><%= @acceptance_rate_30_days %>%</dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 lg:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Revenue</dt>
+              <%= percentage_change(@total_revenue_prior_30_days, @total_revenue_30_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200">$<%= @total_revenue_30_days %></dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Profit</dt>
+              <%= percentage_change(@total_profit_prior_30_days, @total_profit_30_days) %>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200">$<%= @total_profit_30_days %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="hidden border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5" data-tabs-target="panel">
+          <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Leads</dt>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200"><%= @total_leads_all_time %></dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Acceptance Rate</dt>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200"><%= @acceptance_rate_all_time %>%</dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 lg:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Revenue</dt>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200">$<%= @total_revenue_all_time %></dd>
+            </div>
+            <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-8 py-10 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+              <dt class="text-sm font-medium leading-6 text-gray-200">Profit</dt>
+              <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-200">$<%= @total_profit_all_time %></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50" aria-hidden="true">
+          <div class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#73E22B] to-[#9089FC]" style="clip-path: polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)"></div>
+        </div>
       </div>
-    </header>
-
-    
-
-    <!-- Stats -->
-    <div class="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
-      <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
-        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8">
-          <dt class="text-sm font-medium leading-6 text-gray-500">Inbound</dt>
-          <dd class="text-xs font-medium text-green-700"><%= @mom_inbound %> Accepted </dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900"><%= @current_month_inbound %></dd>
-        </div>
-        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 sm:border-l">
-          <dt class="text-sm font-medium leading-6 text-gray-500">Outbound</dt>
-          <dd class="text-xs font-medium text-rose-600">+54.02%</dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900"><%= @current_month_outbound %></dd>
-        </div>
-        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 lg:border-l">
-          <dt class="text-sm font-medium leading-6 text-gray-500">Sales</dt>
-          <dd class="text-xs font-medium text-gray-700">-1.39%</dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">$245,988</dd>
-        </div>
-        <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 sm:border-l">
-          <dt class="text-sm font-medium leading-6 text-gray-500">Profit</dt>
-          <dd class="text-xs font-medium text-rose-600">+10.18%</dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">$30,156</dd>
-        </div>
-      </dl>
-    </div>
-
-    <div class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50" aria-hidden="true">
-      <div class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#73E22B] to-[#9089FC]" style="clip-path: polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)"></div>
     </div>
   </div>
-        </div>
-        </div>
 
 
         <div class="mt-6 lg:col-span-12">
           <!---- START CAMPAIGN SETUP ---->
-          <div class=" mb-3 bg-white px-4 py-5 sm:px-6 rounded-lg shadow">
-            <h2 class="text-base font-semibold leading-6 text-gray-900">Complete Your Campaign Setup</h2>
-            <p class="mt-1 text-sm text-gray-500">Get started by adding sources and distributions or start from an empty campaign.</p>
-            <ul role="list" class="list-none mt-6 divide-y divide-gray-200 border-t border-gray-200">
+          <div class=" mb-3 bg-gray-800 px-4 py-5 sm:px-6 rounded-lg shadow">
+            <h2 class="text-base font-semibold leading-6 text-gray-200">Quick Actions</h2>
+            <p class="mt-1 text-sm text-gray-200">Add lead sources, set up distribution endpoints, and fine-tune bid strategies.</p>
+            <ul role="list" class="list-none mt-6 divide-y divide-gray-700 border-t border-gray-700">
               <li>
                 <div class="group relative flex items-start space-x-3 py-4">
                   <div class="flex-shrink-0">
@@ -77,12 +123,12 @@
                   <div class="min-w-0 flex-1">
                     <div class="text-sm font-medium text-gray-900">
                       <a href="#">
-                      <%= link_to campaign_connections_path(@campaign, anchor: "sources") do %>
+                      <%= link_to campaign_sources_path(@campaign) do %>
                         <span class="absolute inset-0" aria-hidden="true"></span>
                         Add Sources
                       <% end %>
                     </div>
-                    <p class="text-sm text-gray-500">Add or manage sources for your campaign to organize where your leads are coming from.</p>
+                    <p class="text-sm text-gray-300">Add or manage sources for your campaign to organize where your leads are coming from.</p>
                   </div>
                   <div class="flex-shrink-0 self-center">
                     <svg class="h-5 w-5 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -103,12 +149,12 @@
                   </div>
                   <div class="min-w-0 flex-1">
                     <div class="text-sm font-medium text-gray-900">
-                      <%= link_to campaign_connections_path(@campaign, anchor: "distributions") do %>
+                      <%= link_to campaign_distributions_path(@campaign) do %>
                         <span class="absolute inset-0" aria-hidden="true"></span>
                         Configure Distributions
                       <% end %>
                     </div>
-                    <p class="text-sm text-gray-500">Define and manage how your leads are distributed to buyers or other destinations.</p>
+                    <p class="text-sm text-gray-300">Define and manage how your leads are distributed to buyers or other destinations.</p>
                   </div>
                   <div class="flex-shrink-0 self-center">
                     <svg class="h-5 w-5 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -130,12 +176,12 @@
                   </div>
                   <div class="min-w-0 flex-1">
                     <div class="text-sm font-medium text-gray-900">
-                      <%= link_to campaign_settings_path(@campaign) do %>
+                      <%= link_to edit_campaign_path(@campaign) do %>
                         <span class="absolute inset-0" aria-hidden="true"></span>
-                        Finalize Settings
+                        Fine-tune Settings
                       <% end %>
                     </div>
-                    <p class="text-sm text-gray-500">Review and confirm all of your campaign settings before launching.</p>
+                    <p class="text-sm text-gray-300">Review and confirm all of your campaign settings before launching.</p>
                   </div>
                   <div class="flex-shrink-0 self-center">
                       <svg class="h-5 w-5 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

@@ -16,7 +16,7 @@ gem "pg"
 gem "puma", "~> 6.0"
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails", "~> 1.0", ">= 1.0.1"
+gem "turbo-rails"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails", "~> 1.0", ">= 1.0.2"
@@ -43,6 +43,16 @@ gem "image_processing", "~> 1.12"
 gem "nokogiri", ">= 1.12.5"
 
 gem 'phonelib'
+
+gem 'rack-attack'
+
+gem 'rules', github: 'HNIX/rules'
+
+gem 'wicked'
+
+gem 'acts_as_list'
+
+#gem "ultimate_turbo_modal", "~> 1.2.0"
 
 group :development, :test do
   # Optional debugging tools

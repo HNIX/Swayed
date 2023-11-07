@@ -4,6 +4,7 @@
 #
 #  id                 :bigint           not null, primary key
 #  archived           :boolean
+#  base               :boolean          default(FALSE)
 #  description        :text
 #  primary_category   :integer
 #  secondary_category :string
@@ -21,7 +22,7 @@
 #
 class Vertical < ApplicationRecord
   acts_as_tenant :account
-
+  
   has_many :campaigns
   has_many :fields, dependent: :destroy
   has_many :companies, through: :campaigns

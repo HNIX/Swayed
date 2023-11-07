@@ -10,27 +10,27 @@
         <h1 class="h3 flex-1"><%= t(".title") %></h1>
 
         <div>
-          <%= link_to t(".create"), new_affiliate_token_path, class: "btn btn-primary" %>
+          <%= link_to t(".create"), new_source_token_path, class: "btn btn-primary" %>
         </div>
       </div>
 
-      <% if @affiliate_tokens.exists? %>
+      <% if @source_tokens.exists? %>
         <table class="table text-left text-sm">
           <thead class="bg-gray-100">
             <tr>
-              <th class="p-3 uppercase text-left text-xs text-gray-500"><%= AffiliateToken.human_attribute_name(:name) %></th>
-              <th class="p-3 uppercase text-left text-xs text-gray-500"><%= AffiliateToken.human_attribute_name(:last_used_at) %></th>
-              <th class="hidden sm:table-cell p-3 uppercase text-left text-xs text-gray-500"><%= AffiliateToken.human_attribute_name(:created_at) %></th>
+              <th class="p-3 uppercase text-left text-xs text-gray-500"><%= SourceToken.human_attribute_name(:name) %></th>
+              <th class="p-3 uppercase text-left text-xs text-gray-500"><%= SourceToken.human_attribute_name(:last_used_at) %></th>
+              <th class="hidden sm:table-cell p-3 uppercase text-left text-xs text-gray-500"><%= SourceToken.human_attribute_name(:created_at) %></th>
               <th class="p-3 uppercase text-left text-xs text-gray-500"></th>
             </tr>
           </thead>
           <tbody>
-            <% @affiliate_tokens.each do |affiliate_token| %>
+            <% @source_tokens.each do |source_token| %>
               <tr class="group border-t border-gray-200 hover:bg-gray-50">
-                <td class="p-3 font-medium"><%= link_to affiliate_token.name, affiliate_token %></td>
-                <td class="p-3"><%= affiliate_token.last_used_at? ? local_time_ago(affiliate_token.last_used_at) : "—" %></td>
-                <td class="hidden sm:table-cell p-3"><%= affiliate_token.created_at.strftime("%b %e, %Y") %></td>
-                <td class="p-3 font-medium text-sm text-right"><%= link_to t(".view"), affiliate_token %></td>
+                <td class="p-3 font-medium"><%= link_to source_token.name, source_token %></td>
+                <td class="p-3"><%= source_token.last_used_at? ? local_time_ago(source_token.last_used_at) : "—" %></td>
+                <td class="hidden sm:table-cell p-3"><%= source_token.created_at.strftime("%b %e, %Y") %></td>
+                <td class="p-3 font-medium text-sm text-right"><%= link_to t(".view"), source_token %></td>
               </tr>
             <% end %>
           </tbody>

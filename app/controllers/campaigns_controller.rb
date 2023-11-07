@@ -1,8 +1,6 @@
 class CampaignsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_campaign, only: [:show, :edit, :update, :destroy]
-  before_action :set_campaign_id, only: [:inbound, :outbound, :connections, :settings]
-  before_action :count_pings, only: [:show, :inbound, :outbound]
+  before_action :set_campaign, only: [:show, :edit, :update, :destroy, :logs]
 
   ITEMS_PER_PAGE = 7
 
@@ -19,7 +17,8 @@ class CampaignsController < ApplicationController
   def create
     @campaign = Campaign.new(campaign_params)
     if @campaign.save
-      redirect_to campaign_path(@campaign), notice: t(".created")
+      session[:campaign_id] = @campaign.id
+      redirect_to campaign_build_path(@campaign, :data_config)
     else
       render :new, status: :unprocessable_entity
     end
@@ -45,39 +44,31 @@ class CampaignsController < ApplicationController
   end
 
   def show
-  end
+    time_periods = [7, 30]
 
-  def connections
-    @companies = Company.all
-    @sources = Source.all #- form.object.sources
-    @distributions = Distribution.all
-    @verticals = Vertical.all
-  end
-
-  def inbound
-    paginate_api_pings
-    @permitted_params = params.permit(:current_page)
-  end
-
-  def outbound
-    paginate_outbound_pings
-    @permitted_params = params.permit(:current_page)
-  end
-
-  def settings
-
-  end
-
-  def create_source
-    @campaign = Campaign.find(params[:id])
-    @source = Source.new(source_params)
-    
-    if @source.save
-      @campaign.sources << @source
-      redirect_to campaign_path(@campaign), notice: 'Source created and associated successfully.'
-    else
-      render 'campaigns/show'
+    time_periods.each do |days|
+      instance_variable_set("@total_leads_#{days}_days", @campaign.total_leads_last_n_days(days))
+      instance_variable_set("@leads_prior_#{days}_days", @campaign.total_leads_last_n_days(days * 2) - instance_variable_get("@total_leads_#{days}_days"))
+      
+      instance_variable_set("@acceptance_rate_#{days}_days", @campaign.acceptance_rate_last_n_days(days))
+      instance_variable_set("@acceptance_rate_prior_#{days}_days", @campaign.acceptance_rate_last_n_days(days * 2) - instance_variable_get("@acceptance_rate_#{days}_days"))
+      
+      instance_variable_set("@total_revenue_#{days}_days", @campaign.total_revenue_last_n_days(days))
+      instance_variable_set("@total_revenue_prior_#{days}_days", @campaign.total_revenue_last_n_days(days * 2) - instance_variable_get("@total_revenue_#{days}_days"))
+      
+      instance_variable_set("@total_profit_#{days}_days", @campaign.total_profit_last_n_days(days))
+      instance_variable_set("@total_profit_prior_#{days}_days", @campaign.total_profit_last_n_days(days * 2) - instance_variable_get("@total_profit_#{days}_days"))
     end
+
+    @total_leads_all_time = @campaign.leads.count
+    @acceptance_rate_all_time = @campaign.lead_acceptance_rate
+    @total_revenue_all_time = @campaign.total_revenue
+    @total_profit_all_time = @campaign.total_profit
+  end
+
+  def logs
+    paginate_api_requests
+    @permitted_params = params.permit(:current_page)
   end
 
   private
@@ -86,48 +77,25 @@ class CampaignsController < ApplicationController
     @campaign = Campaign.find(params[:id])
   end
 
-  def set_campaign_id
-    @campaign = Campaign.find(params[:campaign_id])
-  end
-
   def campaign_params
-    params.require(:campaign).permit(:name, :vertical_id, campaign_fields_attributes: [:name, :label, :data_type, :id, :ping_required, :post_required], campaign_sources_attributes: [:id, :source_id, :_destroy, :daily_limit, :weekly_limit, :monthly_limit], campaign_distributions_attributes: [:id, :distribution_id, :_destroy, field_mapping: params[:campaign][:campaign_distributions_attributes]&.each_value&.map { |cd| cd[:field_mapping]&.keys }&.flatten])
+    params.require(:campaign).permit(:name, :status, :campaign_type, :description, :distribution_schedule_enabled, 
+    :distribution_method, :distribution_schedule_start_time, :distribution_schedule_end_time, :vertical_id, 
+    campaign_fields_attributes: [:position, :name, :label, :data_type, :id, :ping_required, :post_required, :_destroy], 
+    sources_attributes: [:id, :company_id, :budget, :description, :integration_type, :landing_page_url, :margin, :minimum_acceptable_bid, :name, :offer_type, :payout, :payout_method, :postback_url, :privacy_policy_url, :status, :terms], 
+    campaign_distributions_attributes: [:id, :distribution_id, :_destroy, field_mapping: params[:campaign][:campaign_distributions_attributes]&.each_value&.map { |cd| cd[:field_mapping]&.keys }&.flatten],
+    distribution_schedule_days: [], 
+    distribution_ids: [], 
+    distributions_attributes: [:id, :endpoint, :key, :name, :request_method, :request_format, :company_id]
+    )
   end
 
-  def source_params
-    params.require(:source).permit(:name, :vertical_id, :offer_type, :postback_url, :landing_page_url, :budget, :payout, :company_id)
-  end
-
-  def count_pings
-    current_month_start = Date.today.beginning_of_month
-    previous_month_start = current_month_start - 1.month
-  
-    @current_month_inbound = @campaign.api_pings.where('api_pings.created_at >= ?', current_month_start).count
-    @previous_month_inbound = @campaign.api_pings.where('api_pings.created_at >= ? AND api_pings.created_at < ?', previous_month_start, current_month_start).count
-
-    @current_month_outbound = @campaign.outbound_pings.where('outbound_pings.created_at >= ?', current_month_start).count
-    @previous_month_outbound = @campaign.outbound_pings.where('outbound_pings.created_at >= ? AND outbound_pings.created_at < ?', previous_month_start, current_month_start).count
-
-    @mom_inbound = @current_month_inbound - @previous_month_inbound
-    @mom_outbound = @current_month_outbound - @previous_month_outbound
-  end
-
-  def paginate_api_pings
-    total_pages = (@campaign.api_pings.count / ITEMS_PER_PAGE.to_f).ceil
-    current_page = (params[:api_pings_page] || 1).to_i
+  def paginate_api_requests
+    total_pages = (@campaign.api_requests.count / ITEMS_PER_PAGE.to_f).ceil
+    current_page = (params[:api_requests_page] || 1).to_i
     current_page = [1, [current_page, total_pages].min].max
 
-    @api_pings = @campaign.api_pings.order(created_at: :desc).offset((current_page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
-    @api_pings_pagination = { current_page: current_page, total_pages: total_pages }
-  end
-
-  def paginate_outbound_pings
-    total_pages = (@campaign.outbound_pings.count / ITEMS_PER_PAGE.to_f).ceil
-    current_page = (params[:outbound_page] || 1).to_i
-    current_page = [1, [current_page, total_pages].min].max
-
-    @outbound_pings = @campaign.outbound_pings.order(created_at: :desc).offset((current_page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
-    @outbound_pagination = { current_page: current_page, total_pages: total_pages }
+    @api_requests = @campaign.api_requests.order(created_at: :desc).offset((current_page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
+    @api_requests_pagination = { current_page: current_page, total_pages: total_pages }
   end
 
 end

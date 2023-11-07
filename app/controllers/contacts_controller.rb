@@ -1,15 +1,15 @@
 class ContactsController < ApplicationController
     before_action :authenticate_user!
+    before_action :get_company
     before_action :set_contact, only: [:show, :edit, :update, :destroy]
 
     def create
-      @company = Company.find(params[:company_id])
       @contact = @company.contacts.build(contact_params)
-  
+
       if @contact.save
-        redirect_to @company, notice: 'Contact was successfully created.'
+        redirect_to company_path(@company), notice: 'Contact was successfully created.'
       else
-        redirect_to @company, alert: 'Failed to create contact. Please check the input.'
+        render :new, status: :unprocessable_entity
       end
     end
   
@@ -18,7 +18,7 @@ class ContactsController < ApplicationController
   
     def update
       if @contact.update(contact_params)
-        redirect_to company_path(@contact.company), notice: t(".updated")
+        redirect_to company_path(@company), notice: t(".updated")
       else
         render :edit, status: :unprocessable_entity
       end
@@ -26,10 +26,14 @@ class ContactsController < ApplicationController
   
     def destroy
       @contact.destroy
-      redirect_to contacts_path, status: :see_other, notice: t(".destroyed")
+      redirect_to company_path(@company), status: :see_other, notice: t(".destroyed")
     end
   
     private
+
+    def get_company
+      @company = Company.find(params[:company_id])
+    end
   
     def set_contact
       @contact = Contact.find(params[:id])

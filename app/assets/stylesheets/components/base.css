@@ -10,7 +10,7 @@ body {
 }
 
 a {
-  @apply text-blue-600;
+  @apply text-indigo-400;
 
   &:hover,
   &:focus {

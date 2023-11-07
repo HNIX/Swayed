@@ -1,0 +1,28 @@
+<%= form_with(model: [@distribution, @campaign_distribution]) do |form| %>
+  <div class="space-y-6 divide-y divide-white/5" data-controller="companies" >
+    <%= render "shared/error_messages", resource: form.object %>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Field Mapping</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Basic details about the source, including its name and current status.</p>
+      </div>
+      
+    
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+            <% @campaign_distribution.campaign.campaign_fields.each do |field| %>
+                <div class="sm:col-span-2">
+                    <%= form.label field.name, class: "block text-sm font-medium leading-6 text-white" %>
+                    <%= form.text_field "field_mapping['#{field.name}']", value: field.name, placeholder: "Enter buyer's field name", class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+                </div>
+            <% end %>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", campaign_distribution_path(@campaign_distribution.campaign, @distribution), class: "text-sm font-semibold leading-6 text-white" %>
+    <%= form.submit 'Update Field Mapping', class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+  </div>
+<% end %>

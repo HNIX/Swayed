@@ -26,7 +26,7 @@
 #
 require "test_helper"
 
-class AffiliateTokenTest < ActiveSupport::TestCase
+class SourceTokenTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

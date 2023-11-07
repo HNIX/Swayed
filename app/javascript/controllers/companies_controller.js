@@ -2,55 +2,48 @@ import { Controller } from "@hotwired/stimulus"
 import Rails from '@rails/ujs';
 import TomSelect from "tom-select"
 
-
 export default class extends Controller {
-  static targets = [ 'sourceSelectField', 'companySelectField', 'newSourceForm', 'newCompanyForm', 'newCSForm', 'sourceNameField', 'companyNameField' ];
+  static targets = [ 'companyField' ];
   
   connect() {
-    if (this.hasSourceSelectFieldTarget) {
-      this.enableSourceTS();
-    }
-    if (this.hasCompanySelectFieldTarget) {
-      this.enableCompanyTS();
+    if (this.hasCompanyFieldTarget) {
+      this.enableTS();
     }
   }
 
   disconnect() {
-    const myModalEl = document.getElementById('company-modal');
-    myModal.hide();
-    const sourceForm = document.getElementById("new_source");
-    myModalEl.addEventListener('hidden.bs.modal', function (event) {
-    sourceForm.reset();
-      Rails.enableElement(sourceForm);
-    });
+   
   }
 
-  enableSourceTS() {
-    const targets = this;
+  enableTS() {
+    new TomSelect(this.companyFieldTarget, {
+      plugins: {
+        remove_button:{
+          title:'Remove this item',
+        }
+      },
+  		onItemAdd:function(){
+  			this.setTextboxValue('');
+  			this.refreshOptions();
+  		},
+      persist: false,
+      create: async function(input, callback) {
+        const data = { company: { name: input } }
+        let response = await fetch('/companies', {
+          method: 'POST',
+          headers:  {
+            "X-CSRF-Token": Rails.csrfToken(),
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(data)
+        })
+        let newCompany = await response.json();
 
-    new TomSelect(this.sourceSelectFieldTarget, {
-      create: function(input, _callback) {
-        console.log(input);
-        console.log(this);
-        
-        targets.newCSFormTarget.classList.toggle('hidden');
-        targets.newSourceFormTarget.classList.toggle('hidden');
-
-        targets.sourceNameFieldTarget.value = input;
+        return await callback({ value: newCompany.id, text: newCompany.name })
       }
-    });
-  }
+    })
 
-  enableCompanyTS() {
-    const targets = this;
-
-    new TomSelect(this.companySelectFieldTarget, {
-      create: function(input, _callback) {
-        targets.newSourceFormTarget.classList.toggle('hidden');
-        targets.newCompanyFormTarget.classList.toggle('hidden');
-
-        targets.companyNameFieldTarget.value = input;
-      }
-    });
+    
   }
 }

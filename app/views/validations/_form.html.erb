@@ -1,0 +1,90 @@
+<%= form_with(model: [@field, @validation]) do |form| %>
+  <div class="space-y-6 divide-y divide-white/5">
+    <%= render "shared/error_messages", resource: form.object %>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Validation Details</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Basic details about the source, including its name and current status.</p>
+      </div>
+      
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2" data-controller="dynamic_select" }>
+          <div class="sm:col-span-5">
+            <%= form.label :validation_type, class: "block text-sm font-medium leading-6 text-white" %>
+            <%= form.select :validation_type, @validation_types.keys.map { |type| [type.humanize, type] }, { prompt: "Select a validation type" }, { class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", data: { action: "change->dynamic_select#change" } } %>   
+          </div>
+        
+          <%= field_set_tag "Operator", disabled: !@validation.operator_validation?, class: "sm:col-span-4 block text-sm font-medium leading-6 text-white disabled:hidden", id: form.field_id(:validation_type, :number_value, :fieldset), name: form.field_name(:validation_type, :number_value, :fieldset) do %>
+            <div class="mt-2">
+              <%= form.select(:operator, Validation.operators.keys.map { |type| [type.humanize, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+            </div>
+          <% end %>           
+
+          <%= field_set_tag "True/False", disabled: !@validation.presence?, class: "sm:col-span-4 block text-sm font-medium leading-6 text-white disabled:hidden", id: form.field_id(:validation_type, :presence, :fieldset), name: form.field_name(:validation_type) do %>
+              <div class="mt-2">
+                <%= form.select(:value_boolean, {"True" => true, "False" => false}, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+              </div>
+          <% end %> 
+
+          <%= field_set_tag "Date", disabled: !@validation.date?, class: "sm:col-span-4 block text-sm font-medium leading-6 text-white disabled:hidden", id: form.field_id(:validation_type, :date, :fieldset), name: form.field_name(:validation_type) do %>
+              <%= form.date_field :value_date, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          <% end %> 
+
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Start Date</label>
+          <div class="mt-2">
+              <%= form.date_field :value_date_start, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">End Date</label>
+          <div class="mt-2">
+              <%= form.date_field :value_date_end, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Text Value</label>
+          <div class="mt-2">
+              <%= form.text_field :value_text, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Value</label>
+          <div class="mt-2">
+              <%= form.number_field :value_integer, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Min Value</label>
+          <div class="mt-2">
+              <%= form.number_field :min_value, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Max Value</label>
+          <div class="mt-2">
+              <%= form.number_field :max_value, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6" %>
+          </div>
+        </div>
+      
+      </div>
+      <div class="md:col-span-3 mt-6 flex items-center justify-end gap-x-6">
+        <% if @validation.persisted? %>
+          <%= link_to "Cancel", campaign_field_validation_path(@field, @validation), class: "text-sm font-semibold leading-6 text-white" %>
+        <% else %>
+          <%= link_to "Cancel", campaign_field_validations_path(@field), class: "text-sm font-semibold leading-6 text-white" %>
+        <% end %>
+        <%= form.submit 'Add Validation', class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+      </div>
+    </div>
+  </div>
+
+  
+<% end %>

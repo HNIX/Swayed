@@ -154,6 +154,11 @@ en:
       revoke: "Revoke Token"
       confirm: "Are you sure you want to revoke this API token?"
       auth_header: "Authenticate using Header"
+  sources:
+    new:
+      title: "New Source"
+    edit: 
+      title: "Edit Source"
   
   campaigns:
     created: "Successfully created campaign"

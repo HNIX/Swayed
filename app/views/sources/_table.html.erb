@@ -1,45 +1,64 @@
-<div class="overflow-hidden bg-white shadow sm:rounded-b-lg">
-    <div class="w-full overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+<div class="bg-gray-800 pt-10 rounded-lg shadow">
+    <div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6 text-white">Campaign Sources</h1>
+        <p class="mt-2 text-sm text-gray-300  max-w-3xl">The sources table displays the sources associated with each campaign, offering a comprehensive overview of lead acquisition channels and their respective settings for effective campaign optimization.</p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <%= link_to 'Add New Source', new_campaign_source_path(@campaign), class: "block rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500" %>
+        </div>
+    </div>
+    <div class="mt-8 flow-root">
+        <div class="overflow-x-hidden hover:overflow-x-auto">
+        <div class="inline-block min-w-full py-2 align-middle">
+            <table class="min-w-full divide-y divide-gray-700">
+            <thead>
                 <tr>
-                <th class="sticky left-0 z-10 w-48 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-white border-r border-gray-200">Partner</th>
+                <th class="bg-gray-800 border-r border-gray-700 sticky left-0 z-10 w-48 py-3.5 px-6 text-left text-sm font-semibold text-white">Source</th>
                 <!-- Other column headers -->
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Primary Vertical</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Secondary Vertical</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source Page</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Column 3</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Column 3</th>
-                
-                <!-- Add more column headers as needed -->
+                <th class="px-6 py-3.5 text-left text-sm font-semibold text-white">Status</th>
+                <th class="px-6 py-3.5 text-left text-sm font-semibold text-white">Affiliate</th>
+                <th class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Integration</th>
+                <th class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Offer</th>
+                <th class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Payout</th>
+                <th class="text-center px-3 py-3.5 text-left text-sm font-semibold text-white">Budget</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-            <% if sources.present? %>
-                <% sources.each do |source| %>
-                <tr>
-                <%= link_to company_path(source.company) do %>
-                    <td class="sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-white border-r border-gray-200"><%= source.company.name %></td>
-                <% end %>
-                <!-- Other row cells -->
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source&.vertical&.primary_category&.titleize %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source&.vertical&.secondary_category&.titleize  %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source.landing_page_url %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= source.updated_at.strftime("%b %e, %Y") %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Row 1, Column 6</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Row 1, Column 7</td>
-        
-                <!-- Add more row cells as needed -->
-                </tr>
-                <% end %>
-            <% else %>
-                <div class="text-center p-8">
-                    <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
-                </div>
-            <% end %>
-                <!-- Add more rows as needed -->
+            <tbody class="divide-y divide-gray-800">
+                <% if sources.present? %>
+                    <% sources.each do |source| %>
+                        <tr>
+                            <td class="rounded-b-lg sticky left-0 z-10 w-48 px-6 py-4 whitespace-nowrap text-sm text-white bg-gray-800 border-r border-gray-700">
+                            <%= link_to source.name&.titleize, campaign_source_path(@campaign, source) %></td>
+                            <!-- Other row cells -->
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                <div class="flex items-center justify-end gap-x-2 sm:justify-start">
+                                    <div class="flex-none rounded-full p-1 <%= status_color_class(source.status) %>">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+                                    </div>
+                                    <div class="hidden text-white sm:block"><%= source.status.titleize %></div>
+                                </div>
+                            </td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= source.company.name %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= source.integration_type&.upcase %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300"><%= source.offer_type.upcase %></td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300">$<%= source.payout %> per lead</td>
+                            <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-300">$<%= source.budget %></td>
+                        <!-- Add more row cells as needed -->
+                        </tr>
+                        <% end %>
+                    <% else %>
+                        <div class="text-center p-8">
+                            <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+                        </div>
+                    <% end %>
+
+                <!-- More people... -->
             </tbody>
-        </table>
+            </table>
+        </div>
+        </div>
     </div>
     </div>
+</div>

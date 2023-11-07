@@ -1,0 +1,87 @@
+<%= form_with(model: distribution, html: { class: 'space-y-4', id: 'new_form' }) do |form| %>
+
+  <div class="space-y-6 divide-y divide-white/5" data-controller="companies" >
+    <%= render "shared/error_messages", resource: form.object %>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Distributions Details</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Basic details about the source, including its name and current status.</p>
+      </div>
+      
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+        <div class="sm:col-span-5">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">Distribution Endpoint</label>
+          <div class="mt-2">
+              <%= form.text_field :endpoint, placeholder: true, autofocus: true, id: "name_field", class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", data: { companies_target: 'sourceNameField' } %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">API Key</label>
+          <div class="mt-2">
+                <%= form.text_field :key, placeholder: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="website" class="block text-sm font-medium leading-6 text-white">API Key</label>
+          <div class="mt-2">
+                <%= form.select :response_format, [['JSON', 'json'], ['XML', 'xml'], ['Params', 'params']], {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+          </div>
+        </div>
+
+        <div class="sm:col-span-4">
+          <% if distribution.persisted? %>
+                <label for="about" class="block text-sm font-medium leading-6 text-white">Company</label>
+                <div class="mt-2">
+                  <div class="px-3 block w-full rounded-md border-0 bg-white/5 py-1.5 text-gray-500 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"><%= @distribution.company.name %></div>
+                </div>
+          <% else %>
+                <label for="about" class="block text-sm font-medium leading-6 text-white">Select a Company</label>
+
+                <%= form.select(:company_id, options_for_select(@companies.map{ |c| [c.name, c.id] }), {include_blank: true}, id: 'company_name', class: 'block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black', data: { companies_target: 'companySelectField' }) %>
+                
+                <p class="mt-1 text-sm leading-6 text-gray-300">or start typing to create a new company</p>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-white">Mapping</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-400">Information about the type of offer, payout, margin, budget, and minimum bid for the source.</p>
+      </div>
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+        <div class="sm:col-span-4">
+            <div>
+            <%= form.label "response_mapping[bid]", "Bid Mapping", class: "block text-sm font-medium leading-6 text-white" %>
+            <%= form.text_field "response_mapping[bid]", value: form.object.response_mapping['bid'], class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+            </div>
+        </div>
+        <div class="sm:col-span-4">
+            <div>
+            <%= form.label "response_mapping[status]", "Status Mapping", class: "block text-sm font-medium leading-6 text-white"  %>
+            <%= form.text_field "response_mapping[status]", value: form.object.response_mapping['status'], class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+            </div>
+        </div>
+        <div class="sm:col-span-4">
+            <div>
+            <%= form.label "response_mapping[message]", "Message Mapping", class: "block text-sm font-medium leading-6 text-white"  %>
+            <%= form.text_field "response_mapping[message]", value: form.object.response_mapping['message'], class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <%= link_to "Cancel", campaign_distributions_path(@campaign), class: "text-sm font-semibold leading-6 text-white" %>
+    <%= form.submit 'Add Distribution', class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+  </div>
+<% end %>
