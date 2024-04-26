@@ -79,9 +79,7 @@ class FieldsController < ApplicationController
     end
   
     def field_params
-      params.require(:field).permit(:name, :data_type, :default_value)
-      # Add other field attributes as needed
-
+      params.require(:field).permit(:name, :data_type, :default_value,
         :position, :post_only, :hide, :is_pii, 
         :example_value, :value_acceptance, :default_value, :notes, :phone_format, :min_value, :max_value, 
         :required, list_values: [], list_values_attributes: [:list_value, :id, :_destroy])
