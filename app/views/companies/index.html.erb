@@ -1,84 +1,20 @@
- <div class="flex-1 overflow-y-auto" data-controller="slideover"
-      data-slideover-invisible-class="translate-x-full,opacity-0"
-      data-slideover-visible-class="translate-x-0,opacity-100"
-      data-slideover-entering-class=""
-      data-slideover-enter-timeout="300,300"
-      data-slideover-leaving-class=""
-      data-slideover-leave-timeout="300,300"
-      data-slideover-active-target="#slideover-target">
-  <!-- Primary column -->
-  <section aria-labelledby="primary-heading" class="flex h-full min-w-0 flex-1 flex-col lg:order-last">
-
-    
-      <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6 rounded-t-lg">
-        <div class="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <div class="ml-4 mt-2">
-            <h3 class="text-base font-semibold leading-6 text-gray-900">Partners</h3>
-          </div>
-          <div class="ml-4 mt-2 flex-shrink-0">
-            <button data-action="click->slideover#_show" class="rounded-md bg-indigo-500 py-2 px-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-              <span>New Partner</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="overflow-hidden bg-white shadow sm:rounded-b-lg">
-          <% if @companies.exists? %>
-            <ul role="list" class="divide-y divide-gray-200 list-none">
-              <% @companies.each do |company| %>
-                <li>
-                  <%= link_to company, class: "block hover:bg-gray-50" do %>
-                    <div class="flex items-center px-4 py-4 sm:px-6">
-                      <div class="flex min-w-0 flex-1 items-center">
-                        <div class="min-w-0 flex-1 px-2 md:grid md:grid-cols-4 md:gap-4">
-                          
-                         
-                          <div>
-                            <p class="truncate text-sm font-medium text-indigo-700"><%= company.name %></p>
-                            <p class="mt-2 flex items-center text-sm text-gray-500">
-                              <span class="truncate">Updated <%= company.updated_at.strftime("%b %e, %Y") %></span>
-                            </p>
-                          </div>
-                          <div class="flex items-center gap-x-2">
-                            <div class="hidden sm:flex sm:flex-col">
-                              <p class="text-sm leading-6 text-gray-600 font-medium">Inbound</p>
-                            </div>
-                          </div>
-                          <div class="flex items-center gap-x-4">
-                            <div class="hidden sm:flex sm:flex-col">
-                              <p class="text-sm leading-6 text-gray-600 font-medium">Outbound</p>
-                            </div>
-                          </div>
-                          <div class="flex items-center gap-x-4 text-gray-500">
-                            <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
-                  <% end %>
-                </li>
-              <% end %>
-              </ul>
-               <%= render partial: 'shared/pagination_controls', locals: { pagination: @companies_pagination, page_param: :companies_page } if @companies.present? %>
-              
-          <% else %>
-            <div class="text-center p-8">
-              <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
-            </div>
-
-
-        <% end %>
+ <div class="card-panel">
+  <div class="sm:flex justify-between items-center p-6 bg-slate-800">
+    <h1 class="text-base font-semibold leading-7 text-gray-200">All companies</h1>
+    <div class="mt-4 lg:mt-0">
+      <%= link_to "Add a company", new_company_path, { data: {turbo_frame: "modal"}, class: "btn btn-small btn-primary btn-outline mr-2"} %>
     </div>
+  </div>
 
-  </section>
-
-  <%= render 'new_partner', company: @company %>
-
+  <div class="card-inner pt-3">
+    <% if @companies %>
+      <%= render 'company_list' %>
+    <% else %>
+      <div class="text-center p-8">
+        <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 

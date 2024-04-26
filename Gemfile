@@ -1,10 +1,11 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "~> 3.2"
+# Bundler 2.4.19 introduced `file: ".ruby-version"` option, but Heroku does not support the latest Bundler yet.
+ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "~> 7.0.0"
+gem "rails", "~> 7.1.1"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails", ">= 3.4.1"
@@ -25,13 +26,13 @@ gem "stimulus-rails", "~> 1.0", ">= 1.0.2"
 gem "jbuilder", github: "excid3/jbuilder", branch: "partial-paths" # "~> 2.11"
 
 # Use Redis adapter to run Action Cable in production
-gem "redis", "~> 4.8"
+gem "redis", "~> 5.0"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data"
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", require: false
@@ -44,17 +45,29 @@ gem "nokogiri", ">= 1.12.5"
 
 gem 'phonelib'
 
-gem 'rack-attack'
-
 gem 'rules', github: 'HNIX/rules'
 
 gem 'wicked'
 
 gem 'acts_as_list'
 
-#gem "ultimate_turbo_modal", "~> 1.2.0"
+gem 'faker'
+
+gem 'kaminari'
+
+gem 'dentaku'
+
+#gem "meilisearch-rails", "~> 0.10.1"
+gem 'pg_search', "~> 2.3"
+
+gem 'draper'
+
+gem "ultimate_turbo_modal", "~> 1.6"
 
 group :development, :test do
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[mri windows]
+
   # Optional debugging tools
   # gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   # gem "pry-rails"
@@ -81,13 +94,14 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara", ">= 3.26"
-  gem "selenium-webdriver"
-  gem "webdrivers"
+  gem "capybara", ">= 3.39"
+  gem "selenium-webdriver", ">= 4.11.0"
   gem "webmock"
 end
 

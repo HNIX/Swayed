@@ -17,23 +17,25 @@
 #  payout_structure       :integer
 #  postback_url           :string
 #  privacy_policy_url     :string
+#  secure_token           :string
 #  shared                 :boolean
 #  status                 :integer          default("active")
 #  success_redirect_url   :string
 #  terms                  :string
-#  timeout                :integer
+#  timeout                :integer          default(15000)
 #  tracking_url           :string
 #  traffic_sources        :integer
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  campaign_id            :bigint           not null
-#  company_id             :bigint           not null
+#  company_id             :bigint
 #  unique_source_id       :string
 #
 # Indexes
 #
-#  index_sources_on_campaign_id  (campaign_id)
-#  index_sources_on_company_id   (company_id)
+#  index_sources_on_campaign_id   (campaign_id)
+#  index_sources_on_company_id    (company_id)
+#  index_sources_on_secure_token  (secure_token) UNIQUE
 #
 # Foreign Keys
 #

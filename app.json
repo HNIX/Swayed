@@ -21,13 +21,13 @@
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "free"
+      "size": "basic"
     }
   },
   "image": "heroku/ruby",
   "addons": [
-    "heroku-postgresql:hobby-dev",
-    "heroku-redis:hobby-dev",
+    "heroku-postgresql:mini",
+    "heroku-redis:mini",
     "scheduler:standard"
   ],
   "buildpacks": [

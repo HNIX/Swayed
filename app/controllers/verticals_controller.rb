@@ -38,6 +38,7 @@ class VerticalsController < ApplicationController
   end
   
   def field
+    @target_element_id = params[:target_element_id]
   end
   
   def archive
@@ -59,6 +60,9 @@ class VerticalsController < ApplicationController
   end
 
   def vertical_params
-    params.require(:vertical).permit(:name, :primary_category, :secondary_category, fields_attributes: [:name, :label, :data_type, :id, :ping_required, :post_required])
+    params.require(:vertical).permit(:name, :primary_category, :secondary_category, 
+      fields_attributes: [:name, :label, :data_type, :id, :ping_required, :post_required],
+      calculated_fields_attributes: [:id, :name, :formula, :_destroy]
+    )
   end
 end

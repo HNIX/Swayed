@@ -18,7 +18,7 @@
 #
 #  index_source_tokens_on_account_id  (account_id)
 #  index_source_tokens_on_name        (name) UNIQUE
-#  index_source_tokens_on_source_id   (source_id)
+#  index_source_tokens_on_source_id   (source_id) UNIQUE
 #  index_source_tokens_on_token       (token) UNIQUE
 #
 # Foreign Keys
@@ -29,8 +29,8 @@
 class SourceToken < ApplicationRecord
   acts_as_tenant :account
 
-  DEFAULT_NAME = I18n.t("source_tokens.default")
-  APP_NAME = I18n.t("source_tokens.app")
+  DEFAULT_NAME = I18n.t("api_tokens.default")
+  APP_NAME = I18n.t("api_tokens.app")
 
   belongs_to :source
 
@@ -67,5 +67,9 @@ class SourceToken < ApplicationRecord
       self.token = SecureRandom.hex(16)
       break unless SourceToken.where(token: token).exists?
     end
+  end
+
+  def refresh_token!
+    update(token: SecureRandom.hex(10), last_used_at: nil)
   end
 end

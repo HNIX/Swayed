@@ -5,7 +5,7 @@
 #  id             :bigint           not null, primary key
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  api_request_id :uuid             not null
+#  api_request_id :uuid
 #  lead_id        :bigint           not null
 #
 # Indexes
@@ -15,7 +15,6 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (api_request_id => api_requests.id)
 #  fk_rails_...  (lead_id => leads.id)
 #
 class ApiRequestLead < ApplicationRecord

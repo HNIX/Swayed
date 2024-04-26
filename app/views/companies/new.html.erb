@@ -1,0 +1,13 @@
+  <div class="card-panel">
+    <div class="card-inner border-b border-slate-800">
+      <h1 class="flex gap-x-3 text-base leading-7">
+        <span class="font-semibold text-white">Add a new company</span>
+      </h1>
+    </div>
+
+    <div class="card-inner pt-0">
+      <%= modal(padding: @padding, advance: @override_url || @advance, title: @modal_title) do %>
+        <%= render "form", company: @company %>
+      <% end %>
+    </div>
+  </div>

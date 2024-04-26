@@ -1,0 +1,31 @@
+# == Schema Information
+#
+# Table name: list_values
+#
+#  id                :bigint           not null, primary key
+#  list_value        :string
+#  value_type        :integer          default("string")
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  campaign_field_id :bigint           not null
+#
+# Indexes
+#
+#  index_list_values_on_campaign_field_id  (campaign_field_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (campaign_field_id => campaign_fields.id)
+#
+
+one:
+  integer_value: 1
+  string_value: MyString
+  value_type: 1
+  campaign_field: one
+
+two:
+  integer_value: 1
+  string_value: MyString
+  value_type: 1
+  campaign_field: two

@@ -1,9 +1,8 @@
 
 * Ruby 3.0 or higher
 * Node.js v18
-* bundler - `gem install bundler`
+* PostgreSQL 12 or higher - `brew install postgresql`
 * Redis - For ActionCable support (and Sidekiq, caching, etc)
-* PostgreSQL - `brew install postgresql`
 * Libvips or Imagemagick - `brew install vips imagemagick`
 * Yarn - `npm install --global yarn` [Install Yarn](https://yarnpkg.com/en/docs/install)
 * [Overmind](https://github.com/DarthSim/overmind) or Foreman - `brew install tmux overmind` or `gem install foreman` - helps run all your processes in development

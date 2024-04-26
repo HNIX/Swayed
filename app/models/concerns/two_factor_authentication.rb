@@ -11,7 +11,7 @@ module TwoFactorAuthentication
   included do
     # Per discussion, serialize with text column
     # when rails 7 comes out encryption should be trivial
-    serialize :otp_backup_codes, Array
+    serialize :otp_backup_codes, coder: YAML, type: Array
   end
 
   def set_otp_secret!
@@ -60,9 +60,9 @@ module TwoFactorAuthentication
     codes
   end
 
-  def two_factor_otp_qr_code
+  def two_factor_otp_qr_code(**)
     qrcode = RQRCode::QRCode.new(otp.provisioning_uri(email))
-    qrcode.as_svg(module_size: 4)
+    qrcode.as_svg(**)
   end
 
   private

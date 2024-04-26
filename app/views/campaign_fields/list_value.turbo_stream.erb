@@ -1,0 +1,3 @@
+<%= turbo_stream.append "list_values" do %>
+    <%= render partial: "list_value", locals: { list_value: ListValue.new } %>
+<% end %>

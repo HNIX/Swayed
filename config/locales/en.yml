@@ -1,6 +1,6 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
 #
 # To use the locales, use `I18n.t`:
 #
@@ -16,18 +16,16 @@
 #
 # This would use the information in config/locales/es.yml.
 #
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
 #
-# true, false, on, off, yes, no
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
 #
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
+#     en:
+#       "yes": yup
+#       enabled: "ON"
 #
 # https://mikerogers.io/2016/01/10/i18n-rails-internationalisation-i18n-cheatsheet.html
 
@@ -283,27 +281,27 @@ en:
       confirm: "Are you sure you want to revoke this Vertical?"
       auth_header: "Authenticate using Header"
   
-  affiliate_tokens:
-    created: "Successfully created Affiliate token"
-    updated: "Successfully updated Affiliate token"
-    destroyed: "Your Affiliate token has been revoked"
-    all: "All Affiliate Tokens"
+  source_tokens:
+    created: "Successfully created source token"
+    updated: "Successfully updated source token"
+    destroyed: "Your source token has been revoked"
+    all: "All Source Tokens"
     default: "Default"
     app: "App"
 
     index:
-      title: "Affiliate Tokens"
-      create: "Create an Affiliate Token"
+      title: "Source Tokens"
+      create: "Create a Source Token"
       view: "View"
     new:
-      title: "New Affiliate Token"
+      title: "New Source Token"
     edit:
       title: "Edit"
     show:
       edit: "Edit Token"
       click_to_copy: "Click to copy"
       revoke: "Revoke Token"
-      confirm: "Are you sure you want to revoke this Affiliate token?"
+      confirm: "Are you sure you want to revoke this Source token?"
       auth_header: "Authenticate using Header"
 
   payment_methods:
@@ -367,7 +365,7 @@ en:
       billing: "Billing"
       accounts: "Accounts"
       api_tokens: "API"
-      affiliate_tokens: "Affiliate Tokens"
+      source_tokens: "Source Tokens"
     header:
       profile: "Profile"
       password: "Password"
@@ -375,7 +373,7 @@ en:
       billing: "Billing"
       accounts: "Accounts"
       api_tokens: "API"
-      affiliate_tokens: "Affiliate Tokens"
+      source_tokens: "Source Tokens"
     flash:
       confirm_payment: "Confirm your latest payment"
     navbar:
@@ -384,7 +382,7 @@ en:
       connected_accounts: "Connected Accounts"
       billing: "Billing"
       api_tokens: "API"
-      affiliate_tokens: "Affiliate Tokens"
+      source_tokens: "Source Tokens"
       campaigns: "Campaigns"
       accounts: "Accounts"
       admin: "Admin"
@@ -398,7 +396,7 @@ en:
       connected_accounts: "Connected Accounts"
       billing: "Billing"
       api_tokens: "API"
-      affiliate_tokens: "Affiliate Tokens"
+      source_tokens: "Source Tokens"
       campaigns: "Campaigns"
       accounts: "Accounts"
       admin: "Admin"
@@ -614,6 +612,11 @@ en:
           enable: "Enable two-factor authentication"
           disable: "Disable two-factor authentication"
 
+  themes:
+    system: "Sync with system"
+    light: "Light"
+    dark: "Dark"
+
   users:
     agreements:
       show:
@@ -658,13 +661,13 @@ en:
         cancel: "Cancel"
         next: "Next"
       verify:
-        header: "Scan this barcode with your app."
-        subheader: "Scan the image above with the two-factor authentication app on your phone."
+        header: "Scan this code with your app."
+        subheader: "Scan the QR code with the two-factor authentication app on your phone."
         instructions_1_html: "Install Authy: %{ios} or %{android}"
         instructions_2: "In the app, select \"Add account\""
         instructions_3: "Choose \"Scan QR Code\""
         verify_header: "Enter the six-digit code from the application"
-        verify_description: "After scanning the barcode image, the app will display a code that you can enter below."
+        verify_description: "After scanning the QR code, the app will display a code that you can enter to continue."
         cancel: "Cancel"
         verify: "Verify"
 
@@ -690,11 +693,13 @@ en:
       api_token:
         last_used_at: "Last Used"
         created_at: "Created"
-      affiliate_token:
+      source_token:
         last_used_at: "Last Used"
         created_at: "Created"
       account:
         name_on_card: "Name on Card"
+      user:
+        theme: "Color theme"
 
     errors:
       models:
@@ -740,7 +745,7 @@ en:
         billing_email: "account@example.com"
       api_token:
         name: "Token Name"
-      affiliate_token:
+      source_token:
         name: "Token Name"
       user:
         name: "Steve Jobs"

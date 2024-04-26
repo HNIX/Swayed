@@ -14,9 +14,6 @@ module Jumpstart
   autoload :SubscriptionExtensions, "jumpstart/subscription_extensions"
   autoload :AdministrateHelpers, "jumpstart/administrate_helpers"
 
-  mattr_accessor :config
-  @@config = {}
-
   def self.restart
     run_command "rails restart"
   end
@@ -47,10 +44,12 @@ module Jumpstart
 
   # Commands to be run after bundle install
   def self.post_install
-    run_command("solargraph bundle") if config.solargraph?
-
-    if JobProcessor.delayed_job? && !ActiveRecord::Base.connection.table_exists?("delayed_jobs")
+    if JobProcessor.delayed_job? && Dir[Rails.root.join("db/migrate/**/*delayed_jobs*")].any?
       run_command("rails generate delayed:migration")
+      run_command("rails db:migrate")
+    end
+    if JobProcessor.good_job? && Dir[Rails.root.join("db/migrate/**/*good_jobs*")].any?
+      run_command("rails generate good_job:install")
       run_command("rails db:migrate")
     end
   end

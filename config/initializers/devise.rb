@@ -1,13 +1,19 @@
 # frozen_string_literal: true
 
-# class TurboFailureApp < Devise::FailureApp
-#   include Turbo::Native::Navigation
+class TurboFailureApp < Devise::FailureApp
+  # Compatibility for Turbo::Native::Navigation
+  class << self
+    def helper_method(name)
+    end
+  end
 
-#   # Turbo Native requests that require authentication should return 401s to trigger the login modal
-#   def http_auth?
-#     turbo_native_app? || super
-#   end
-# end
+  include Turbo::Native::Navigation
+
+  # Turbo Native requests that require authentication should return 401s to trigger the login modal
+   def http_auth?
+     turbo_native_app? || super
+   end
+end
 
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others

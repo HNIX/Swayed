@@ -25,7 +25,9 @@
 @import "components/trix";
 @import "components/typography";
 @import "components/util";
+@import "components/braintree";
 @import "components/tom_select";
+@import "components/theme";
 
 @import "tailwindcss/utilities";
 

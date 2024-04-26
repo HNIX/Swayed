@@ -1,0 +1,124 @@
+<div class="card-panel">
+  <div>
+    <%= render 'campaigns/header', campaign: @campaign %>
+
+   
+
+  </div>
+  <div class="sm:flex justify-between items-center py-6 px-4 sm:px-6 lg:px-8 bg-gray-700/10 border-t border-t-slate-100/5">
+        <h1 class="text-base font-semibold leading-7 text-gray-200">Campaign Data</h1>
+        <%= link_to "Calculated fields", campaign_calculated_fields_path(@campaign), class: "btn btn-primary btn-small" %>
+
+    </div>
+
+  <div class="card-inner pt-0">
+    <%= form_with(model: @campaign, class: "space-y-4") do |form| %>
+            <% if @campaign.errors.any? %>
+                <div style="color: red">
+                <h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+
+                <ul>
+                    <% @campaign.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                    <% end %>
+                </ul>
+                </div>
+            <% end %>
+
+            <div class="py-2">            
+                <div class="overflow-x-auto">
+                    <div class="inline-block min-w-full align-middle">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="py-2 text-left text-sm font-semibold text-white sm:pl-0"></th>
+                                    <th scope="col" class="pr-3 py-2 text-left text-sm font-semibold text-white">Field Name</th>
+                                    <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-white">Data Type</th>
+                                    <th scope="col" class="px-3 py-2 text-center text-sm font-semibold text-white">Required</th>
+                                    <th scope="col" class="px-3 py-2 text-center text-sm font-semibold text-white">Post Only</th>
+                                    <th scope="col" class="px-3 py-2 text-left text-sm font-semibold text-white"></th>
+                                </tr>
+                            </thead> 
+                            <tbody id="fields" data-controller="drag" data-drag-url="/campaigns/:campaign_id/fields/:id/move">     
+                                <%= form.fields_for :campaign_fields do |ff| %>
+                                    <tr id="field_<%= ff.object.id %>" data-campaign-id="<%= @campaign.id %>" data-id="<%= ff.object.id %>" data-fields-target="field" data-controller="fields" >
+                                        <%= ff.hidden_field :id %>  
+                                        <td class="whitespace-nowrap py-2 text-sm font-medium text-white"  >
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                            </svg>
+                                        </td> 
+                                        <td class="whitespace-nowrap pr-3 py-2 text-sm text-gray-500" data-controller="field-name">
+                                            <%= ff.text_field :name, 
+                                                data: { action: "keyup->field-name#validate", field_name_target: "input" },
+                                                class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "field_name" %>
+                                                <div data-field-name-target="error" class="hidden text-red-500 mt-2 w-36"></div>
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><%= ff.select :data_type, CampaignField.data_types.keys.map { |type| [type.titleize, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "Data Type" %></td>
+                                        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><div class="flex items-center justify-center "><%= ff.check_box :required, class: "mx-auto h-4 w-4 rounded border-gray-300 text-red-500 focus:ring-indigo-600" %></div></td>
+                                        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500"><div class="flex items-center justify-center "><%= ff.check_box :post_only, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" %></div></td>
+                                        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
+                                            <% if ff.object.persisted? %>
+                                                <%= ff.hidden_field :_destroy, data: { fields_target: "delete" }, campaign_field_id: ff.object.id %>
+                                                <%= button_tag(type: 'button', data: { action: "click->fields#deleteField", field_id: ff.object.id }, class: "rounded-full border border-gray-400 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600") do %>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-2 w-2 text-gray-200">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                                    </svg>
+                                                <% end %>
+                                            <% end %>
+                                        </td>
+
+                                        <!--
+                                        <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
+                                            <%= link_to field_campaigns_path(target_element_id: "field_#{ ff.object.id }"), method: :post, data: { turbo_stream: true } do %>  
+                                                <button class= "rounded-full border border-gray-400 p-2 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" > 
+                                    
+                              
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-3 w-3 text-gray-200">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                    </svg>
+
+                                                </button>
+                                            <% end %>
+                                        </td>
+                                        -->
+
+                                    </tr>
+                                
+                                <% end %>
+                            <!-- More people... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pb-3">            
+                <%= link_to field_campaigns_path, data: { turbo_stream: true }, class: "btn btn-small btn-primary mr-2" do %>
+                    <div class="flex justify-middle">
+                        <svg class="h-4 w-4 text-white mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                        </svg>
+                        <p class="text-xs">Add a field</p>
+                    </div>
+                <% end %> 
+            </div>
+            
+            <div class="flex items-center justify-end gap-x-6 border-t border-gray-500 pt-6">
+                <%= form.submit 'Save', class: "btn btn-secondary mr-2" %>
+            </div>
+        <% end %>
+  </div>
+</div>
+  
+  
+  
+  
+
+           
+
+
+
+
+
+

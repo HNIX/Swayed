@@ -1,0 +1,119 @@
+
+
+.card-panel {
+   @apply divide-y divide-gray-800/10 dark:divide-slate-800  lg:rounded-lg bg-white text-gray-600 shadow dark:text-gray-200 dark:bg-slate-950/30 dark:ring-1 dark:ring-white/10 dark:backdrop-blur;
+}
+
+.card-panel-settings {
+  @apply p-4 lg:rounded-lg bg-white text-gray-600 shadow dark:text-gray-200 dark:bg-slate-950/30 dark:ring-1 dark:ring-white/10 dark:backdrop-blur lg:p-10
+}
+
+.card-header {
+    @apply px-4 py-5 sm:px-6;
+}
+
+.card-inner {
+    @apply py-6 px-4 sm:px-6 lg:px-8;
+}
+
+
+.nav-link-inactive  {
+    @apply text-gray-200; 
+
+    &:hover { 
+        @apply text-white bg-slate-700 dark:bg-slate-900;
+    }
+}
+
+.nav-link-active  {
+    @apply text-white bg-slate-700 dark:bg-slate-900; 
+
+    &:hover {
+        @apply text-white;
+    }
+}
+
+.sidebar-main {
+
+}
+
+#modal-content {
+    @apply bg-slate-900 w-full text-white;
+}
+
+#modal-overlay {
+    @apply bg-opacity-80;
+}
+
+#modal-title-h {
+    @apply text-white;
+}
+
+#modal-header {
+    @apply bg-gray-700/20 mb-6;
+}
+
+.valid { @apply text-green-500; }
+.invalid { @apply text-red-500; }
+
+/* Trix attachment formatting */
+.attachment--preview {
+  @apply w-full text-center my-0.5 mx-0
+}
+.attachment {
+  @apply inline-block relative max-w-full m-0 p-0;
+}
+
+.tribute-container {
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 0 4px rgba(0,0,0,0.1), 0 5px 20px rgba(0,0,0,0.05);
+  position: absolute;
+  z-index: 9999;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    background: #fff;
+    padding: 0.2em 1em;
+    min-width: 15em;
+    max-width: 100%;
+  }
+
+  .highlight {
+    background: #1b6ac9;
+    color: #fff;
+
+    span {
+      font-weight: bold;
+    }
+  }
+}
+
+.ss-main {
+  @apply w-full rounded-md border-0 bg-white/5 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black !important;
+}
+
+.ss-placeholder {
+  @apply text-white !important;
+}
+
+.ss-content {
+  @apply p-1.5 bg-slate-800 text-white rounded-md shadow-sm border border-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 !important; 
+}
+
+.ss-option {
+  @apply text-white !important;
+}
+
+.ss-search input {
+  @apply w-full rounded-md border-0 bg-white/5 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black !important;
+}
+
+.ss-open-below {
+  @apply mt-2 !important;
+}

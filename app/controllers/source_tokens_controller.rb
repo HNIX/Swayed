@@ -1,6 +1,6 @@
 class SourceTokensController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_source_token, only: [:show, :edit, :update, :destroy]
+  before_action :set_source_token, only: [:show, :edit, :update, :destroy, :refresh_token]
 
   def index
     @source_tokens = SourceToken.all.sorted
@@ -34,6 +34,12 @@ class SourceTokensController < ApplicationController
   def destroy
     @source_token.destroy
     redirect_to source_tokens_path, status: :see_other, notice: t(".destroyed")
+  end
+
+  # POST /source_tokens/:id/refresh_token
+  def refresh_token
+    @source_token.refresh_token!
+    redirect_to campaign_sources_path(@source_token.source.campaign), notice: 'Source token has been refreshed successfully.'
   end
 
   private

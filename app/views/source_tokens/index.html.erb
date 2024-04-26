@@ -1,0 +1,49 @@
+<div class="flex flex-wrap">
+  <div class="w-full mb-4 lg:w-1/4 lg:pr-4">
+    <%= render partial: "shared/account_navbar" %>
+  </div>
+
+  <div class="w-full lg:w-3/4 lg:pl-4">
+    <div class="card-panel-settings">
+
+      <div class="sm:flex justify-between items-center mb-3">
+        <h1 class="h3 flex-1"><%= t(".title") %></h1>
+
+        <div>
+          <%= link_to t(".create"), new_source_token_path, class: "btn btn-primary" %>
+        </div>
+      </div>
+
+      <% if @source_tokens.exists? %>
+        <table class="table text-left text-sm">
+          <thead class="bg-gray-100 dark:bg-slate-900/5">
+            <tr>
+              <th class="p-3 uppercase text-left text-xs text-gray-500 dark:text-white"><%= SourceToken.human_attribute_name(:source) %></th>
+              <th class="p-3 uppercase text-left text-xs text-gray-500 dark:text-white"><%= SourceToken.human_attribute_name(:name) %></th>
+              <th class="p-3 uppercase text-left text-xs text-gray-500 dark:text-white"><%= SourceToken.human_attribute_name(:last_used_at) %></th>
+              <th class="hidden sm:table-cell p-3 uppercase text-left text-xs text-gray-500 dark:text-white"><%= SourceToken.human_attribute_name(:created_at) %></th>
+              <th class="p-3 uppercase text-left text-xs text-gray-500 dark:text-white"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @source_tokens.each do |source_token| %>
+              <tr class="group border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800">
+                <td class="p-3 font-medium"><%= source_token.source&.name %></td>
+                <td class="p-3 font-medium"><%= link_to source_token.name, source_token %></td>
+                <td class="p-3"><%= source_token.last_used_at? ? local_time_ago(source_token.last_used_at) : "—" %></td>
+                <td class="hidden sm:table-cell p-3"><%= source_token.created_at.strftime("%b %e, %Y") %></td>
+                <td class="p-3 font-medium text-sm text-right"><%= link_to t(".view"), source_token %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+      <% else %>
+        <div class="text-center p-8">
+          <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

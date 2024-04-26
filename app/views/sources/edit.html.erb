@@ -1,17 +1,14 @@
-<%= render 'campaigns/header', campaign: @campaign %>
-
-<div class="bg-gray-800 rounded-t-lg shadow py-4 mt-6">
-    <%= render 'header' %>
-</div>
-
-
-
-<div class="flex flex-wrap">
-  <div class="w-full">
-    <div class="bg-gray-800 rounded-b-lg">
-     
-      <%= render "form" %>
-
-    </div>
+<div class="card-panel">
+  <div class="card-inner">
+    <h1 class="flex gap-x-3 text-base leading-7">
+      <span class="font-semibold text-white">Edit source</span>
+    </h1>
+  </div>
+  <div class="pt-6">
+    <%= modal(padding: @padding, advance: @override_url || @advance, title: @modal_title) do %>
+      <div class="card-inner pt-0 border-t-0">
+        <%= render "form_update", source: @source %>
+      </div>
+    <% end %>
   </div>
 </div>

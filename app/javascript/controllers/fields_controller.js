@@ -4,6 +4,8 @@ export default class extends Controller {
   static targets = ['field', 'delete']
 
   removeField(event) {    
+    event.preventDefault();
+    event.stopPropagation();
     this.fieldTarget.remove();
   }
 

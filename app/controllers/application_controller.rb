@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
   # To add extra fields to Devise registration, add the attribute names to `extra_keys`
   def configure_permitted_parameters
-    extra_keys = [:avatar, :name, :time_zone, :preferred_language]
+    extra_keys = [:avatar, :name, :time_zone, :preferred_language, :theme]
     signup_keys = extra_keys + [:terms_of_service, :invite, owned_accounts_attributes: [:name]]
     devise_parameter_sanitizer.permit(:sign_up, keys: signup_keys)
     devise_parameter_sanitizer.permit(:account_update, keys: extra_keys)
@@ -48,6 +48,12 @@ class ApplicationController < ActionController::Base
     unless current_account_admin?
       redirect_to root_path, alert: t("must_be_an_admin")
     end
+  end
+
+  def set_modal_properties
+    @padding = !(params[:padding] == "0")
+    @advance = params[:advance] == "1"
+    @override_url = "/custom-advance-history-url" if @advance
   end
 
   private

@@ -2,7 +2,7 @@
   <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
     <div class="lg:col-span-12">
       <!--- START CAMPAIGN SETTINGS --->
-      <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8 bg-gray-800 rounded-lg shadow">
+      <div class="mx-auto px-4 py-6 sm:px-6 lg:px-8 bg-slate-900 rounded-lg shadow">
 
         <%= render 'builder_header', step: 1 %>
         
@@ -86,7 +86,7 @@
                       <div class="sm:col-span-2">
                         <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Distribution Schedule</label>
                         <div class="mt-2 h-full">
-                          <%= form.select :distribution_schedule_days, Campaign.days.keys.map { |type| [type.titleize, type] }, {}, { multiple: true, class: "h-36 block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-white" } %>
+                          <%= form.select :distribution_schedule_days, Campaign::DAYS_OPTIONS, {}, { multiple: true, class: "h-36 block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-white" } %>
                         </div>
                       </div>
 

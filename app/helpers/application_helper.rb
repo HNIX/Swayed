@@ -1,6 +1,16 @@
 module ApplicationHelper
   include Pagy::Frontend
 
+  def sort_link_to(name, column, **options)
+    if params[:sort] == column.to_s
+      direction = params[:direction] == "asc" ? "desc" : "asc"
+    else
+      direction = "asc"
+    end
+
+    link_to name, request.params.merge(sort: column, direction: direction), **options
+  end
+
   # Generates button tags for Turbo disable with
   # Preserve opacity-25 opacity-75 during purge
   def button_text(text = nil, disable_with: t("processing"), &block)
@@ -58,5 +68,18 @@ module ApplicationHelper
 
   def first_page?
     @pagy.page == 1
+  end
+
+  def page_header
+    case controller_name
+    when 'campaigns'
+      action_name == 'show' ? 'Campaign Details' : 'Campaigns'
+    when 'sources'
+      action_name == 'show' ? 'Source Details' : 'Sources'
+    when 'distributions'
+      action_name == 'show' ? 'Distribution Details' : 'Distributions'
+    else
+      'Swayed LDX'
+    end
   end
 end

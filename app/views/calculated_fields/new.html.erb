@@ -1,0 +1,16 @@
+<div class="card-panel">
+  <div class="card-inner">
+    <h1 class="flex gap-x-3 text-base leading-7">
+      <span class="font-semibold text-white">New calculated field</span>
+    </h1>
+  </div>
+  <div class="pt-6">
+    <%= modal(padding: @padding, advance: @override_url || @advance, title: @modal_title) do %>
+      <div class="card-inner pt-0 border-t-0">
+        <%= render "form", calculated_field: @calculated_field %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+

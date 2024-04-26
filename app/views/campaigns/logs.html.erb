@@ -1,86 +1,286 @@
-<%= render 'header', campaign: @campaign %>
-    
-<div class="mx-auto mt-6">
-  <div class="lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
-    <div class="lg:col-span-12">
-      <div data-controller="drawers">
-        <div class="mt-6 flow-root">
-          <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-300">
-                  <thead class="bg-gray-50">
-                    <tr>
-                      <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Ping ID</th>
-                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Source</th>
-                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Payout</th>
-                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Response</th>
-                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Date</th>
-                      <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                        <span class="sr-only">More Info</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-gray-200 bg-white">
-                    <% if @api_pings.present? %>
-                      <% @api_pings.each do |ping| %>
-                        <tr data-drawers-target="tab" data-action="click->drawers#change" >
-                          <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"><%= ping.id %></td>
-                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.source.company.initials %>: <%= ping.campaign_source.source.landing_page_url %></td>
-                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.status.titleize %></td>
-                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.price %></td>
-                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">Duplicate</td>
-                          <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= ping.created_at.strftime("%b %e, %Y") %></td>
-                          <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <div>
-                              <svg data-drawers-target="open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class=" h-5 w-5 text-gray-400">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                              </svg>
+<div class="card-panel">
+  <div>
+    <% if @campaign %>
+      <%= render 'header', campaign: @campaign %>
+    <% end %>
 
-                              <svg data-drawers-target="close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-5 w-5 text-gray-400">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                              </svg>
+      <%= render 'filter_nav' %>
+  </div>
 
-                            </div>
-                          </td>
-                        </tr>
-                        <tr data-drawers-target="panel" class="hidden bg-gray-200 h-36">
-                          <td colspan="8">
-                            <div class="overflow-hidden p-6">
-                              <div class="px-4 pb-5 sm:px-6">
-                                <h3 class="text-base font-semibold leading-6 text-gray-900">Ping Information</h3>
-                              </div>
-                              <div class="border-t border-gray-200 px-4 sm:px-6">
-                                <dl class="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-4">
-                                  <div class="sm:col-span-1">
-                                    <dt class="text-sm font-medium text-gray-500">Host</dt>
-                                    <dd class="mt-1 text-sm text-gray-900"><%= ping.host %></dd>
-                                  </div>
-                                  <div class="sm:col-span-2">
-                                    <dt class="text-sm font-medium text-gray-500">Request Body</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">
-                                      <%= ping.request_body %>
-                                    </dd>
-                                  </div>
-                                </dl>
-                              </div>
-                            </div>
-                        
-                          </td>
-                        </tr>
-                      <% end %>
-                    <% else %>
-                      <tr>
-                        <td colspan="8" class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">No inbound pings found</td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-                <%= render partial: 'shared/pagination_controls', locals: { pagination: @api_pings_pagination, page_param: :api_pings_page } if @inbound_pings.present? %>
+
+  <div class="card-inner pt-0">
+    <div>
+      <div>
+        <!--
+          Mobile filter dialog
+
+          Off-canvas filters for mobile, show/hide based on off-canvas filters state.
+        -->
+        <div class="relative z-40 lg:hidden" role="dialog" aria-modal="true">
+          <!--
+            Off-canvas menu backdrop, show/hide based on off-canvas menu state.
+
+            Entering: "transition-opacity ease-linear duration-300"
+              From: "opacity-0"
+              To: "opacity-100"
+            Leaving: "transition-opacity ease-linear duration-300"
+              From: "opacity-100"
+              To: "opacity-0"
+          -->
+          <div class="fixed inset-0 bg-black bg-opacity-25"></div>
+
+          <div class="fixed inset-0 z-40 flex">
+            <!--
+              Off-canvas menu, show/hide based on off-canvas menu state.
+
+              Entering: "transition ease-in-out duration-300 transform"
+                From: "translate-x-full"
+                To: "translate-x-0"
+              Leaving: "transition ease-in-out duration-300 transform"
+                From: "translate-x-0"
+                To: "translate-x-full"
+            -->
+            <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+              <div class="flex items-center justify-between px-4">
+                <h2 class="text-lg font-medium text-gray-900">Filters</h2>
+                <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400">
+                  <span class="sr-only">Close menu</span>
+                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
+
+              <!-- Filters -->
+              <form class="mt-4 border-t border-gray-200">
+                <h3 class="sr-only">Categories</h3>
+                <ul role="list" class="px-2 py-3 font-medium text-gray-900">
+                  <li>
+                    <a href="#" class="block px-2 py-3">Totes</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-2 py-3">Backpacks</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-2 py-3">Travel Bags</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-2 py-3">Hip Bags</a>
+                  </li>
+                  <li>
+                    <a href="#" class="block px-2 py-3">Laptop Sleeves</a>
+                  </li>
+                </ul>
+
+                <div class="border-t border-gray-200 px-4 py-6">
+                  <h3 class="-mx-2 -my-3 flow-root">
+                    <!-- Expand/collapse section button -->
+                    <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-0" aria-expanded="false">
+                      <span class="font-medium text-gray-900">Color</span>
+                      <span class="ml-6 flex items-center">
+                        <!-- Expand icon, show/hide based on section open state. -->
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                        </svg>
+                        <!-- Collapse icon, show/hide based on section open state. -->
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                    </button>
+                  </h3>
+                  <!-- Filter section, show/hide based on section state. -->
+                  <div class="pt-6" id="filter-section-mobile-0">
+                    <div class="space-y-6">
+                      <div class="flex items-center">
+                        <input id="filter-mobile-color-0" name="color[]" value="white" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-color-0" class="ml-3 min-w-0 flex-1 text-gray-500">White</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-color-1" name="color[]" value="beige" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-color-1" class="ml-3 min-w-0 flex-1 text-gray-500">Beige</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-color-2" name="color[]" value="blue" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-color-2" class="ml-3 min-w-0 flex-1 text-gray-500">Blue</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-color-3" name="color[]" value="brown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-color-3" class="ml-3 min-w-0 flex-1 text-gray-500">Brown</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-color-4" name="color[]" value="green" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-color-4" class="ml-3 min-w-0 flex-1 text-gray-500">Green</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-color-5" name="color[]" value="purple" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-color-5" class="ml-3 min-w-0 flex-1 text-gray-500">Purple</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="border-t border-gray-200 px-4 py-6">
+                  <h3 class="-mx-2 -my-3 flow-root">
+                    <!-- Expand/collapse section button -->
+                    <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-1" aria-expanded="false">
+                      <span class="font-medium text-gray-900">Category</span>
+                      <span class="ml-6 flex items-center">
+                        <!-- Expand icon, show/hide based on section open state. -->
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                        </svg>
+                        <!-- Collapse icon, show/hide based on section open state. -->
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                    </button>
+                  </h3>
+                  <!-- Filter section, show/hide based on section state. -->
+                  <div class="pt-6" id="filter-section-mobile-1">
+                    <div class="space-y-6">
+                      <div class="flex items-center">
+                        <input id="filter-mobile-category-0" name="category[]" value="new-arrivals" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-category-0" class="ml-3 min-w-0 flex-1 text-gray-500">New Arrivals</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-category-1" name="category[]" value="sale" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-category-1" class="ml-3 min-w-0 flex-1 text-gray-500">Sale</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-category-2" name="category[]" value="travel" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-category-2" class="ml-3 min-w-0 flex-1 text-gray-500">Travel</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-category-3" name="category[]" value="organization" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-category-3" class="ml-3 min-w-0 flex-1 text-gray-500">Organization</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-category-4" name="category[]" value="accessories" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-category-4" class="ml-3 min-w-0 flex-1 text-gray-500">Accessories</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="border-t border-gray-200 px-4 py-6">
+                  <h3 class="-mx-2 -my-3 flow-root">
+                    <!-- Expand/collapse section button -->
+                    <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500" aria-controls="filter-section-mobile-2" aria-expanded="false">
+                      <span class="font-medium text-gray-900">Size</span>
+                      <span class="ml-6 flex items-center">
+                        <!-- Expand icon, show/hide based on section open state. -->
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                        </svg>
+                        <!-- Collapse icon, show/hide based on section open state. -->
+                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                    </button>
+                  </h3>
+                  <!-- Filter section, show/hide based on section state. -->
+                  <div class="pt-6" id="filter-section-mobile-2">
+                    <div class="space-y-6">
+                      <div class="flex items-center">
+                        <input id="filter-mobile-size-0" name="size[]" value="2l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-size-0" class="ml-3 min-w-0 flex-1 text-gray-500">2L</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-size-1" name="size[]" value="6l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-size-1" class="ml-3 min-w-0 flex-1 text-gray-500">6L</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-size-2" name="size[]" value="12l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-size-2" class="ml-3 min-w-0 flex-1 text-gray-500">12L</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-size-3" name="size[]" value="18l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-size-3" class="ml-3 min-w-0 flex-1 text-gray-500">18L</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-size-4" name="size[]" value="20l" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-size-4" class="ml-3 min-w-0 flex-1 text-gray-500">20L</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-mobile-size-5" name="size[]" value="40l" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-mobile-size-5" class="ml-3 min-w-0 flex-1 text-gray-500">40L</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
+        </div>
+
+        <div>
+
+          <section aria-labelledby="products-heading" class="pb-24 pt-4">
+            <h2 id="products-heading" class="sr-only">API Requests</h2>
+
+            <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+             
+
+              <!-- Product grid -->
+              <div class="lg:col-span-4">
+                <div class="overflow-hidden">
+                    <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
+                                                <%= turbo_frame_tag "logs" do %>
+
+                      <table class="w-full text-left">
+                        <thead class="sr-only">
+                          <tr>
+                            <th>Amount</th>
+                            <th class="hidden sm:table-cell">Client</th>
+                            <th>More details</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/10">
+                          <% if @api_requests.present? %>
+                            <% @api_requests.each do |ping| %>
+                              <tr>
+                                <td class="relative py-5 pr-6">
+                                  <div class="flex gap-x-6">
+                                    <svg class="hidden h-6 w-5 flex-none text-gray-300 sm:block" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.75-4.75a.75.75 0 001.5 0V8.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0L6.2 9.74a.75.75 0 101.1 1.02l1.95-2.1v4.59z" clip-rule="evenodd" />
+                                    </svg>
+                                    <div class="flex-auto">
+                                      <div class="flex items-start gap-x-3">
+                                        <div class="text-sm font-medium leading-6 text-white"><%= ping.direction %></div>
+                                        <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20"><%= ping.status.titleize %></div>
+                                      </div>
+                                      <div class="mt-1 text-xs leading-5 text-gray-400">Request id <span class="text-gray-300"><%= ping.id %></span></div>
+                                    </div>
+                                  </div>
+                                </td>
+                                
+                                <td class="py-5 text-right">
+                                  <div class="flex justify-end">
+                                    <a href="#" class="text-sm font-medium leading-6 text-indigo-400 hover:text-gray-300">View<span class="hidden sm:inline"> request</span></a>
+                                  </div>
+                                  <div class="mt-1 text-xs leading-5 text-gray-400">Request time <span class="text-gray-300"><%= ping.request_time.to_fs(:long) %></span></div>
+                                </td>
+                              </tr>
+                            <% end %>
+                          <% else %>
+                            <tr>
+                                <td colspan="8" class="py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">No requests found</td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                      <% end %>
+                      <div class="p-6">
+                        <% if @pagy.pages > 1 %>
+                            <%= pagy_nav(@pagy).html_safe %>
+                        <% end %>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </div>

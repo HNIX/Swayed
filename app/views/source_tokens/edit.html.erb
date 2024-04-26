@@ -1,0 +1,19 @@
+<div class="flex flex-wrap">
+  <div class="w-full mb-4 lg:w-1/4 lg:p-r4">
+    <%= render partial: "shared/account_navbar" %>
+  </div>
+
+  <div class="w-full lg:w-3/4 lg:pl-4">
+    <div class="card-panel-settings">
+      <h1 class="h3 mb-4">
+        <%= link_to @source_token.name, @source_token %>
+        <%= render_svg "icons/cheveron-right", styles: "fill-current icon-sm text-gray-600 inline-block" %>
+        <%= t(".title") %>
+      </h1>
+
+      <%= render "form", source_token: @source_token %>
+
+      <%= link_to t("back"), @source_token %>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,8 @@
 #
 #  id              :bigint           not null, primary key
 #  field_mapping   :jsonb
+#  template        :text
+#  use_template    :boolean
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  campaign_id     :bigint           not null

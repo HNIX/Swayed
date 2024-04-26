@@ -15,7 +15,7 @@
 #  response_format           :string
 #  response_mapping          :jsonb
 #  select_fields             :boolean
-#  status                    :integer
+#  status                    :integer          default("draft")
 #  template                  :jsonb
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
@@ -36,14 +36,20 @@ class Distribution < ApplicationRecord
   
   has_many :campaign_distributions
   has_many :campaigns, through: :campaign_distributions
-  has_many :api_requests
-  has_many :leads, through: :api_requests  
+  has_many :api_requests, as: :requestable
+  has_many :leads, through: :api_requests, source: :lead 
   has_many :headers, dependent: :destroy
+  has_and_belongs_to_many :distribution_filters
 
   accepts_nested_attributes_for :headers, allow_destroy: true, :reject_if => :all_blank
 
   enum request_method: { get: 0, post: 1, put: 2, patch: 3 }
   enum request_format: { form: 0, json: 1, xml: 2 }
+  enum status: { draft: 0, active: 1, paused: 2, archived: 3 }
+
+  scope :active, -> { where(status: ['active', 'paused']) }
+  scope :paused, -> { where(status: 'paused') }
+  scope :archived, -> { where(status: 'archived') }
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :distributions, partial: "distributions/index", locals: {distribution: self} }
@@ -62,10 +68,44 @@ class Distribution < ApplicationRecord
 
   # Length Validations
   validates :name, length: { minimum: 3, maximum: 100 }
+ 
+   # Uniqueness Validations
+   validates :name, uniqueness: { case_sensitive: false, message: "This distribution name is already in use." }
+ 
+   # Format Validations
+   validates :name, format: { with: /\A[a-zA-Z0-9_\- ]+\z/, message: "can only be alphanumeric with spaces, underscores, and hyphens" }
+   validates :endpoint, format: { with: URI::regexp(%w[http https]), message: "is not a valid URL" }
+
+   # Custom Validations
+   # For instance, ensuring a buyer's endpoint is reachable (though this might be better done asynchronously in the real world)
+   #validate :endpoint_reachable
+ 
+ 
+  def last_api_request_time
+    api_requests.last&.created_at
+  end
+
+  def total_revenue
+    leads.sum(:revenue_cents)/100
+  end
+
+  def total_profit
+    leads.sum(:profit_cents)/100
+  end
 
   private
 
   def set_default_response_mapping
     self.response_mapping ||= {}
   end
+
+  def endpoint_reachable
+    response = Faraday.head(endpoint_url)
+    unless response.success?
+      errors.add(:endpoint_url, "is not reachable or didn't respond successfully.")
+    end
+  rescue Faraday::ConnectionFailed
+    errors.add(:endpoint_url, "is not reachable.")
+  end
+
 end

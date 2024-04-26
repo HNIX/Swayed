@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full antialiased" lang="<%= I18n.locale %>">
+<html class="<%= class_names("h-full antialiased", "dark": current_user&.dark_theme?) %>" lang="<%= I18n.locale %>">
   <head>
     <title>
       <% if content_for?(:title) %>
@@ -7,41 +7,59 @@
       <% end %>
       <%= Jumpstart.config.application_name %>
     </title>
-
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= viewport_meta_tag %>
-
+    <% if current_user&.system_theme? %><script>document.documentElement.classList.toggle("dark", window.matchMedia('(prefers-color-scheme: dark)').matches)</script><% end %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "https://unpkg.com/slim-select@latest/dist/slimselect.css", "data-turbo-track": "reload" %>
+
 
     <%# Be sure to add your own custom favicons %>
     <%= render "shared/favicons" %>
     <%= render "shared/payments_dependencies" %>
-
     <%# Replace this with your FontAwesome Pro Kit code %>
     <script defer src="https://kit.fontawesome.com/0e5ab6a736.js" crossorigin="anonymous"></script>
-
+    <script src="https://unpkg.com/idiomorph"></script>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-
     <%= yield :head %>
   </head>
 
-  <body class="bg-gray-600" data-controller="toggle" >
+  <body class="bg-gray-200 dark:bg-slate-900 relative" data-controller="toggle" >
       <%= turbo_frame_tag "modal" %>
-      
-      <div class="fixed h-full inset-0 bg-circuit-pattern w-full opacity-4 -z-50" ></div>
       <%= render partial: "shared/sidebar" %>
 
       <div class='<%= "lg:pl-64" if user_signed_in? %> h-screen flex flex-col'>
+        
+        
         <%= render partial: "shared/header" %>
         <%= render partial: "shared/flash" %>
 
 
         <!-- Main content -->
 
-        <main class="p/'-4 lg:p-8 mb-auto">
-          <div class="mx-auto max-w-8xl ">
+        <main class="p/'-4 lg:px-8 mb-auto">
+          <div class="mx-auto max-w-8xl prose-invert">
+              <div class="absolute inset-0 -z-10 mx-0 max-w-none overflow-hidden">
+                <div class="absolute left-1/2 top-0 ml-[-38rem] h-[25rem] w-[81.25rem] dark:[mask-image:linear-gradient(white,transparent)]">
+                  <div class="absolute inset-0 bg-gradient-to-r from-[#36b49f] to-[#DBFF75] opacity-40 [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-[#36b49f]/30 dark:to-[#DBFF75]/30 dark:opacity-100">
+                    <svg aria-hidden="true" class="absolute inset-x-0 inset-y-[-50%] h-[200%] w-full skew-y-[-18deg] fill-black/40 stroke-black/50 mix-blend-overlay dark:fill-white/2.5 dark:stroke-white/5">
+                      <defs>
+                        <pattern id=":S1:" width="72" height="56" patternUnits="userSpaceOnUse" x="-12" y="4"><path d="M.5 56V.5H72" fill="none"></path>
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" stroke-width="0" fill="url(#:S1:)"></#rect>
+                      <svg x="-12" y="4" class="overflow-visible">
+                        <rect stroke-width="0" width="73" height="57" x="288" y="168"></rect>
+                        <rect stroke-width="0" width="73" height="57" x="144" y="56"></rect>
+                        <rect stroke-width="0" width="73" height="57" x="504" y="168"></rect>
+                        <rect stroke-width="0" width="73" height="57" x="720" y="336"></rect>
+                      </svg>
+                    </svg>
+                  </div>
+                </div>        
+              </div>
             <!-- Your content -->
             <%= yield %>
           </div>

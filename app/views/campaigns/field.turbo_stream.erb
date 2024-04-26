@@ -1,3 +1,9 @@
-<%= turbo_stream.append "fields" do %>
-    <%= render partial: "campaigns/build/campaign_field", locals: { campaign_field: CampaignField.new } %>
+<% if @target_element_id %>
+    <%= turbo_stream.after @target_element_id do %>
+        <%= render partial: "campaigns/build/campaign_field", locals: { campaign_field: CampaignField.new } %>
+    <% end %>
+<% else %>
+    <%= turbo_stream.append "fields" do %>
+        <%= render partial: "campaigns/build/campaign_field", locals: { campaign_field: CampaignField.new } %>
+    <% end %>
 <% end %>

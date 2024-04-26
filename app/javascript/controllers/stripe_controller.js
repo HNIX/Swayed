@@ -10,9 +10,10 @@ export default class extends Controller {
 
   connect() {
     this.stripe = Stripe(this.stripeKey)
+    let theme = document.documentElement.classList.contains("dark") ? "night" : "stripe";
     this.elements = this.stripe.elements({
       appearance: {
-        theme: "stripe",
+        theme: theme,
         variables: {
           fontSizeBase: "14px"
         }
@@ -44,7 +45,6 @@ export default class extends Controller {
 
   async submit(event) {
     event.preventDefault()
-    Rails.disableElement(this.formTarget)
 
     // Payment Intents
     if (this.clientSecretValue.startsWith("pi_")) {
@@ -70,9 +70,6 @@ export default class extends Controller {
 
   showError(error) {
     this.errorTarget.textContent = error.message
-    setTimeout(() => {
-      Rails.enableElement(this.formTarget)
-    }, 100)
   }
 
   get stripeKey() {

@@ -2,12 +2,13 @@ class CampaignsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_campaign, only: [:show, :edit, :update, :destroy, :logs]
 
-  ITEMS_PER_PAGE = 7
-
   def index
-    @campaigns = Campaign.all.sorted
-    @verticals = Vertical.all
-    @campaign = Campaign.new
+    @campaigns = Campaign.all
+    @campaigns = @campaigns.search(params[:query]) if params[:query].present?
+    @pagy, @campaigns = pagy(apply_sorting(@campaigns), items: params.fetch(:count, 5))
+
+    # Decorate the campaigns collection
+    @campaigns = @campaigns.decorate
   end
 
   def new
@@ -29,7 +30,12 @@ class CampaignsController < ApplicationController
 
   def update
     if @campaign.update(campaign_params)
-      redirect_to campaign_path(@campaign, anchor: params[:button]), notice: t(".updated")
+      if nested_campaign_fields_present?
+        redirect_to data_campaign_path(@campaign), notice: 'Campaign fields were successfully updated.'
+      else
+        redirect_to campaign_path(@campaign), notice: t(".updated")
+      end
+
     else
       render :edit, status: :unprocessable_entity
     end
@@ -41,61 +47,61 @@ class CampaignsController < ApplicationController
   end
   
   def field
+    @target_element_id = params[:target_element_id]
   end
 
   def show
-    time_periods = [7, 30]
-
-    time_periods.each do |days|
-      instance_variable_set("@total_leads_#{days}_days", @campaign.total_leads_last_n_days(days))
-      instance_variable_set("@leads_prior_#{days}_days", @campaign.total_leads_last_n_days(days * 2) - instance_variable_get("@total_leads_#{days}_days"))
-      
-      instance_variable_set("@acceptance_rate_#{days}_days", @campaign.acceptance_rate_last_n_days(days))
-      instance_variable_set("@acceptance_rate_prior_#{days}_days", @campaign.acceptance_rate_last_n_days(days * 2) - instance_variable_get("@acceptance_rate_#{days}_days"))
-      
-      instance_variable_set("@total_revenue_#{days}_days", @campaign.total_revenue_last_n_days(days))
-      instance_variable_set("@total_revenue_prior_#{days}_days", @campaign.total_revenue_last_n_days(days * 2) - instance_variable_get("@total_revenue_#{days}_days"))
-      
-      instance_variable_set("@total_profit_#{days}_days", @campaign.total_profit_last_n_days(days))
-      instance_variable_set("@total_profit_prior_#{days}_days", @campaign.total_profit_last_n_days(days * 2) - instance_variable_get("@total_profit_#{days}_days"))
-    end
-
-    @total_leads_all_time = @campaign.leads.count
-    @acceptance_rate_all_time = @campaign.lead_acceptance_rate
-    @total_revenue_all_time = @campaign.total_revenue
-    @total_profit_all_time = @campaign.total_profit
+    @latest_requests = @campaign.api_requests.order(request_time: :desc).limit(6)
+    @inbound_requests_count = @campaign.api_requests.where(direction: 'inbound').count
+    @accepted_ping_count = @campaign.api_requests.where(direction: 'inbound', status: 'accepted').count
   end
 
   def logs
-    paginate_api_requests
-    @permitted_params = params.permit(:current_page)
+    search_api_requests
   end
 
   private
 
   def set_campaign
-    @campaign = Campaign.find(params[:id])
+    @campaign = Campaign.find(params[:id]).decorate
   end
 
   def campaign_params
     params.require(:campaign).permit(:name, :status, :campaign_type, :description, :distribution_schedule_enabled, 
     :distribution_method, :distribution_schedule_start_time, :distribution_schedule_end_time, :vertical_id, 
-    campaign_fields_attributes: [:position, :name, :label, :data_type, :id, :ping_required, :post_required, :_destroy], 
-    sources_attributes: [:id, :company_id, :budget, :description, :integration_type, :landing_page_url, :margin, :minimum_acceptable_bid, :name, :offer_type, :payout, :payout_method, :postback_url, :privacy_policy_url, :status, :terms], 
-    campaign_distributions_attributes: [:id, :distribution_id, :_destroy, field_mapping: params[:campaign][:campaign_distributions_attributes]&.each_value&.map { |cd| cd[:field_mapping]&.keys }&.flatten],
+    campaign_fields_attributes: [:position, :name, :label, :data_type, :id, :ping_required, :post_required, :post_only, :_destroy],
     distribution_schedule_days: [], 
-    distribution_ids: [], 
-    distributions_attributes: [:id, :endpoint, :key, :name, :request_method, :request_format, :company_id]
-    )
+    distribution_ids: [])
   end
 
-  def paginate_api_requests
-    total_pages = (@campaign.api_requests.count / ITEMS_PER_PAGE.to_f).ceil
-    current_page = (params[:api_requests_page] || 1).to_i
-    current_page = [1, [current_page, total_pages].min].max
-
-    @api_requests = @campaign.api_requests.order(created_at: :desc).offset((current_page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
-    @api_requests_pagination = { current_page: current_page, total_pages: total_pages }
+  def nested_campaign_fields_present?
+    params[:campaign][:campaign_fields_attributes].present?
   end
+
+  def apply_sorting(campaigns)
+    sort_column = %w{name status campaign_type}.include?(params[:sort]) ? params[:sort] : "name"
+    sort_direction = %w{asc desc}.include?(params[:direction]) ? params[:direction] : "asc"
+    campaigns.reorder("#{sort_column} #{sort_direction}")
+  end
+
+
+  def search_api_requests
+    # Ensure you have pagination set up, e.g., using kaminari or will_paginate gem
+    @api_requests = @campaign.api_requests
+    @api_requests = @api_requests.search_by_terms(params[:query]) if params[:query].present?
+    @api_requests = @api_requests.where(source_id: params[:source_id]) if params[:source_id].present?
+    @api_requests = @api_requests.where(distribution_id: params[:distribution_id]) if params[:distribution_id].present?
+    @api_requests = @api_requests.where(direction: params[:direction]) if params[:direction].present?
+    @api_requests = @api_requests.where(status: params[:status]) if params[:status].present?
+
+    if params[:start_date].present? && params[:end_date].present?
+      @api_requests = @api_requests.where('created_at >= ? AND created_at <= ?', params[:start_date], params[:end_date])
+    end
+
+    # Use Pagy for pagination
+    @pagy, @api_requests = pagy(@api_requests, items: 10) # Adjust the number of items per page as needed
+
+  end
+  
 
 end

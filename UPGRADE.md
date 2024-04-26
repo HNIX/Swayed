@@ -2,6 +2,27 @@
 
 This file includes notes on major changes that might affect your application and require changes from you to update.
 
+### August 15, 2023
+
+TailwindCSS Stimulus Components has been updated to v4 which greatly improves animation support.
+We've also introduced UI components for modals, slideovers and tabs to make it easier to render them with the proper markup. We recommend switching modals and tabs over to the new components to automatically be updated to stay in sync with any future JavaScript changes.
+
+### July 21, 2023
+
+We've made a few gems optional, but still integrated in Jumpstart Pro:
+
+* ActsAsTenant
+* Oj
+* Whenever
+
+If you wish to continue using the gems, enable them in the Jumpstart Pro config at `http://localhost:3000/jumpstart#dependencies`
+
+`pg_search` has been removed to make Jumpstart Pro more compatible with MySQL and SQLite. Add pg_search to your Gemfile to continue using it.
+
+The `solargraph` configuration option was also removed. We now recommend [Ruby LSP](https://github.com/Shopify/ruby-lsp) which is zero-dependency in VS Code.
+
+We've added an example rack-attack configuration. We recommend using rack-attack for blocking malicious users and bots from overwhelming your application.
+
 ### July 6, 2023
 
 `Gemfile.jumpstart` now replaces `config/jumpstart/Gemfile`. We no longer rewrite `config/jumpstart/Gemfile` each time the Jumpstart Pro configuration changes to keep things simpler and easier to work with.

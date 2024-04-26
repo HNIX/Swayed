@@ -10,6 +10,7 @@ Jumpstart::Engine.routes.draw do
     get :deploying
     get :screencasts
 
+    # Backend
     get :action_cable
     get :action_mailbox
     get :action_text
@@ -33,19 +34,28 @@ Jumpstart::Engine.routes.draw do
     get :accounts
     get :users
 
-    get :alerts
+    # Frontend
     get :branding
-    get :buttons
-    get :cards
-    get :forms
-    get :icons
     get :javascript
-    get :pagination
-    get :pills
     get :tailwind
     get :typography
+
+    # Components
+    get :alerts
+    get :buttons
+    get :cards
+    get :clipboard
+    get :forms
+    get :icons
+    get :modals
+    get :pagination
+    get :pills
+    get :tabs
+    get :tooltips
+    get :slideover
     get :wells
 
+    get :business
     get :existing_apps
     get :integrations
   end

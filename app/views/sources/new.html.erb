@@ -1,28 +1,16 @@
-<%= render 'campaigns/header', campaign: @campaign %>
-
-<div class="bg-gray-800 rounded-t-lg shadow py-4 mt-6">
-      <header>
-        <!-- Heading -->
-        <div class="flex flex-col items-start justify-between gap-x-8 gap-y-4 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8 border-b border-white/10">
-          <div>
-            <div class="flex items-center gap-x-3">
-              <h1 class="flex gap-x-3 text-base leading-7">
-                <span class="font-semibold text-white">Create a new source</span>
-              </h1>
-            </div>
-          </div>
-        </div>
-    </header>
-</div>
-
-
-
-<div class="flex flex-wrap">
-  <div class="w-full">
-    <div class="bg-gray-800 rounded-b-lg">
-     
-      <%= render "form", vertical: @vertical %>
-
-    </div>
+<div class="card-panel">
+  <div class="card-inner">
+    <h1 class="flex gap-x-3 text-base leading-7">
+      <span class="font-semibold text-white">New source</span>
+    </h1>
+  </div>
+  <div class="pt-6">
+    <%= modal(padding: @padding, advance: @override_url || @advance, title: @modal_title) do %>
+      <div class="card-inner pt-0 border-t-0">
+        <%= render "form", source: @source %>
+      </div>
+    <% end %>
   </div>
 </div>
+
+

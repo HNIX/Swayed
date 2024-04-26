@@ -15,7 +15,7 @@
 #  response_format           :string
 #  response_mapping          :jsonb
 #  select_fields             :boolean
-#  status                    :integer
+#  status                    :integer          default("draft")
 #  template                  :jsonb
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null

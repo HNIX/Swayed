@@ -2,21 +2,22 @@
 #
 # Table name: campaign_fields
 #
-#  id            :bigint           not null, primary key
-#  data_type     :integer
-#  example_value :string
-#  hide          :boolean
-#  is_pii        :boolean
-#  label         :string
-#  name          :string
-#  ping_required :boolean
-#  position      :integer
-#  post_only     :boolean          default(FALSE)
-#  post_required :boolean
-#  validated     :boolean
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  campaign_id   :bigint           not null
+#  id               :bigint           not null, primary key
+#  data_type        :integer
+#  default_value    :string
+#  example_value    :string
+#  hide             :boolean
+#  is_pii           :boolean
+#  max_value        :decimal(, )
+#  min_value        :decimal(, )
+#  name             :string
+#  position         :integer
+#  post_only        :boolean          default(FALSE)
+#  required         :boolean          default(FALSE)
+#  value_acceptance :integer
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  campaign_id      :bigint           not null
 #
 # Indexes
 #

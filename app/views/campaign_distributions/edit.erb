@@ -1,17 +1,120 @@
-<%= render 'campaigns/header', campaign: @campaign_distribution.campaign %>
+<div class="card-panel">
+  <div>
+    <%= render 'campaigns/header', campaign: @campaign_distribution.campaign %>
 
-<div class="bg-gray-800 rounded-t-lg shadow py-4 mt-6">
-      <%= render 'distributions/header' %>
-</div>
+    <div class="sm:flex justify-between items-center py-6 px-4 sm:px-6 lg:px-8 bg-gray-700/10 border-t border-t-slate-100/5">
+      <% if @campaign_distribution.campaign %>  
+        <h1 class="text-base font-semibold leading-7 text-gray-200"><%= @distribution.name %> / <%= @distribution.company.name %></h1>
+      <% end %>
+      
+      <%# <%= form_with model: [@campaign_distribution.distribution, @campaign_distribution], data: { controller: 'autosave' } do |f| %>
+        <%# <fieldset>
+          <div class="space-y-5">
+            <div class="relative flex items-start">
+              <div class="flex h-6 items-center">
+                <%= f.check_box :use_template, data: { action: 'autosave#save' }, class: "h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" %>
+              <%# </div>
+              <div class="ml-3 text-sm leading-6">
+                <label for="comments" class="font-medium text-gray-200">Use custom JSON template</label>
+              </div>
+            </div>
+          </div> %>
+        <%# </fieldset>
+      <%# end %> 
+      <% if @campaign_distribution.distribution.json? %>
+        <div data-controller="modals" data-action="keydown.esc->modals#close" tabindex="-1">
+    
+          <button class="btn btn-white btn-small" data-action="click->modals#open:prevent">View instructions</button>
 
 
 
-<div class="flex flex-wrap">
-  <div class="w-full">
-    <div class="bg-gray-800 rounded-b-lg">
-     
-      <%= render "form" %>
 
+          <div class="hidden fixed inset-0 bg-gray-900 bg-opacity-80 overflow-y-auto flex items-center justify-center backdrop-blur-sm dark:bg-gray-800 dark:bg-opacity-80 pb-12" data-modals-target="background" data-action="click-&gt;modals#closeBackground" data-transition-enter="transition ease-in-out duration-200" data-transition-enter-from="bg-opacity-0 backdrop-blur-none" data-transition-enter-to="bg-opacity-80 backdrop-blur-sm" data-transition-leave="transition-all ease-in-out duration-200" data-transition-leave-from="bg-opacity-80 backdrop-blur-sm" data-transition-leave-to="bg-opacity-0 backdrop-blur-none">
+
+            <div class="mt-56 max-w-2xl max-h-screen w-full relative" data-modals-target="container" data-transition-enter="transition ease-in-out duration-200" data-transition-enter-from="opacity-0" data-transition-enter-to="opacity-100" data-transition-leave="transition ease-in-out duration-200" data-transition-leave-from="opacity-100" data-transition-leave-to="opacity-0">
+              <div class="p-6 bg-white rounded shadow-lg dark:bg-gray-900 dark:text-gray-200">
+                  <button type="button" data-action="modals#close:prevent" class="hover:cursor-pointer absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+                    <span class="sr-only">Close</span>
+                  </button>
+
+                    <h2 class="text-base font-semibold leading-7 text-gray-800">Understanding JSON Format</h2>
+                    <ul>
+                        <li class="mt-1 text-sm leading-6 text-gray-700 lg:max-w-2xl">
+                            JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write, and easy for machines to parse and generate.
+                        </li>
+                        <li class="mt-1 text-sm leading-6 text-gray-700 lg:max-w-2xl">
+                            A basic JSON structure is in key-value pairs and looks like this:
+                            <div class="mt-4 bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span><button class="flex gap-1 items-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4C10.8954 4 10 4.89543 10 6H14C14 4.89543 13.1046 4 12 4ZM8.53513 4C9.22675 2.8044 10.5194 2 12 2C13.4806 2 14.7733 2.8044 15.4649 4H17C18.6569 4 20 5.34315 20 7V19C20 20.6569 18.6569 22 17 22H7C5.34315 22 4 20.6569 4 19V7C4 5.34315 5.34315 4 7 4H8.53513ZM8 6H7C6.44772 6 6 6.44772 6 7V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V7C18 6.44772 17.5523 6 17 6H16C16 7.10457 15.1046 8 14 8H10C8.89543 8 8 7.10457 8 6Z" fill="currentColor"></path></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-json"><span class="text-white">{</span>
+                              <span class="text-pink-500">"key"</span><span class="text-white">:</span> <span class="text-green-500">"value"</span><span class="text-white">,</span>
+                              <span class="text-pink-500">"another_key"</span><span class="text-white">:</span> <span class="text-green-500">"another_value"</span>
+                            <span class="text-white">}</span>
+                            </code></div></div>
+                        </li>
+                    </ul>
+                    <h2 class="mt-8 text-base font-semibold leading-7 text-gray-800">Insert Campaign Fields</h2>
+                    <ul>
+                        <li class="mt-1 text-sm leading-6 text-gray-700 lg:max-w-2xl">
+                            You can insert campaign fields into your JSON template using double curly braces {{ }}.
+                        </li>
+                        <li class="mt-1 text-sm leading-6 text-gray-700 lg:max-w-2xl">
+                            For example, if you have a campaign field named email, you can include it in your JSON template like this:
+                            <div class="mt-4 mb-4 bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span><button class="flex gap-1 items-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4C10.8954 4 10 4.89543 10 6H14C14 4.89543 13.1046 4 12 4ZM8.53513 4C9.22675 2.8044 10.5194 2 12 2C13.4806 2 14.7733 2.8044 15.4649 4H17C18.6569 4 20 5.34315 20 7V19C20 20.6569 18.6569 22 17 22H7C5.34315 22 4 20.6569 4 19V7C4 5.34315 5.34315 4 7 4H8.53513ZM8 6H7C6.44772 6 6 6.44772 6 7V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V7C18 6.44772 17.5523 6 17 6H16C16 7.10457 15.1046 8 14 8H10C8.89543 8 8 7.10457 8 6Z" fill="currentColor"></path></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-json"><span class="text-white">{</span>
+                            <span class="text-pink-500">"email"</span><span class="text-white">:</span> <span class="text-green-500">"{{email}}"</span>
+                          <span class="text-white">}</span>
+                          </code></div></div>
+                            This will dynamically replace {{email}} with the actual email value from your campaign data.
+                        </li>
+                      
+                    </ul>
+                    <h2 class="mt-8 text-base font-semibold leading-7 text-gray-800">Creating Nested Structures</h2>
+                    <ul>
+                        <li class="mt-1 text-sm leading-6 text-gray-700 lg:max-w-2xl">
+                            JSON can also contain nested structures. For instance, if you want to group certain fields under a nested object, you can do so like this:
+                            <div class="mt-4 mb-4 bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span><button class="flex gap-1 items-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4C10.8954 4 10 4.89543 10 6H14C14 4.89543 13.1046 4 12 4ZM8.53513 4C9.22675 2.8044 10.5194 2 12 2C13.4806 2 14.7733 2.8044 15.4649 4H17C18.6569 4 20 5.34315 20 7V19C20 20.6569 18.6569 22 17 22H7C5.34315 22 4 20.6569 4 19V7C4 5.34315 5.34315 4 7 4H8.53513ZM8 6H7C6.44772 6 6 6.44772 6 7V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V7C18 6.44772 17.5523 6 17 6H16C16 7.10457 15.1046 8 14 8H10C8.89543 8 8 7.10457 8 6Z" fill="currentColor"></path></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-json"><span class="text-white">{</span>
+                            <span class="text-pink-500">"user_info"</span><span class="text-white">:</span> <span class="text-white">{</span>
+                              <span class="text-pink-500">"name"</span><span class="text-white">:</span> <span class="text-green-500">"{{name}}"</span><span class="text-white">,</span>
+                              <span class="text-pink-500">"age"</span><span class="text-white">:</span> <span class="text-green-500">"{{age}}"</span>
+                            <span class="text-white">}</span>
+                          <span class="text-white">}</span>
+                          </code></div></div>
+                          In this example, name and age are campaign fields that will be replaced with their respective values.          
+                        </li>
+                    </ul>
+                    <h2 class="mt-8 text-base font-semibold leading-7 text-gray-800">Using Arrays</h2>
+                    <ul>
+                        <li class="mt-1 text-sm leading-6 text-gray-700 lg:max-w-2xl">
+                            If you need to include an array in your JSON, you can structure it as follows:
+                            <div class="mt-4 mb-4 bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>json</span><button class="flex gap-1 items-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4C10.8954 4 10 4.89543 10 6H14C14 4.89543 13.1046 4 12 4ZM8.53513 4C9.22675 2.8044 10.5194 2 12 2C13.4806 2 14.7733 2.8044 15.4649 4H17C18.6569 4 20 5.34315 20 7V19C20 20.6569 18.6569 22 17 22H7C5.34315 22 4 20.6569 4 19V7C4 5.34315 5.34315 4 7 4H8.53513ZM8 6H7C6.44772 6 6 6.44772 6 7V19C6 19.5523 6.44772 20 7 20H17C17.5523 20 18 19.5523 18 19V7C18 6.44772 17.5523 6 17 6H16C16 7.10457 15.1046 8 14 8H10C8.89543 8 8 7.10457 8 6Z" fill="currentColor"></path></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-json"><span class="text-white">{</span>
+                              <span class="text-pink-500">"items"</span><span class="text-white">:</span> <span class="text-white">[</span>
+                                <span class="text-green-500">"{{item1}}"</span><span class="text-white">,</span>
+                                <span class="text-green-500">"{{item2}}"</span><span class="text-white">,</span>
+                                <span class="text-green-500">"{{item3}}"</span>
+                              <span class="text-white">]</span>
+                            <span class="text-white">}</span>
+                            </code></div></div>
+                            Replace item1, item2, item3, etc., with your relevant campaign field names.
+                        </li>
+                    </ul>
+                    <h2 class="mt-8 text-base font-semibold leading-7 text-gray-800">Formatting and Validating JSON</h2>
+                    <ul>
+                        <li class="mt-1 text-sm leading-6 text-gray-700 lg:max-w-2xl">
+                            Ensure that your JSON is correctly formatted. Each key and string value should be enclosed in double quotes.
+                        </li>
+                    </ul>
+                  <div class="flex justify-end items-center flex-wrap gap-2 mt-4">
+                        <button class="btn btn-white" data-action="click->modals#close:prevent">Close</button>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
+
+  <div class="card-inner pt-0">
+    <%= render 'form' %>
+  </div>
 </div>
+  

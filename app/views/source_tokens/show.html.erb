@@ -1,0 +1,48 @@
+<div class="flex flex-wrap">
+  <div class="w-full mb-4 lg:w-1/4 lg:pr-4">
+    <%= render partial: "shared/account_navbar" %>
+  </div>
+
+  <div class="w-full lg:w-3/4 lg:pl-4">
+    <div class="card-panel-settings">
+      <%= modal(header: true, padding: true, title: "Posting instructions") do |m| %>
+
+      <div class="sm:flex justify-between items-center mb-5">
+        <div class="flex items-center mr-20">
+          <h1 class="h3 mb-2"><%= @source_token.name %></h1>
+        </div>
+
+        <div class="flex-shrink-0">
+          <%= link_to 'Refresh Token', refresh_token_source_token_path(@source_token), method: :post, data: { confirm: 'Are you sure you want to refresh the token?' }, class: "btn btn-light-gray" %>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="mb-2 text-gray-600 dark:text-gray-300 text-xs uppercase font-bold"><%= SourceToken.human_attribute_name(:token) %></div>
+        <%= tag.span @source_token.token, class: "font-mono cursor-pointer whitespace-pre-wrap", data: { controller: "clipboard tooltip", tooltip_content_value: t(".click_to_copy"), clipboard_text: @source_token.token } %>
+      </div>
+
+      <div class="mb-4">
+        <div class="mb-2 text-gray-600 dark:text-gray-300 text-xs uppercase font-bold"><%= SourceToken.human_attribute_name(:created_at) %></div>
+        <%= @source_token.created_at.strftime("%b %e, %Y") %>
+      </div>
+
+      <div class="mb-4">
+        <div class="mb-2 text-gray-600 dark:text-gray-300 text-xs uppercase font-bold"><%= SourceToken.human_attribute_name(:last_used_at) %></div>
+        <%= @source_token.last_used_at? ? local_time_ago(@source_token.last_used_at) : "—" %>
+      </div>
+
+      <div>
+        <div class="mb-4 text-gray-600 dark:text-gray-300 text-xs uppercase font-bold"><%= t(".auth_header") %></div>
+        <pre class="whitespace-pre-wrap"><code>GET /api/v1/me.json
+Authorization: Bearer <%= @source_token.token %></code></pre>
+
+        <pre class="whitespace-pre-wrap"><code>curl <%= api_v1_me_url(format: :json) %>
+-H "Accept: application/json"
+-H "Authorization: Bearer <%= @source_token.token %>"</code></pre>
+      </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

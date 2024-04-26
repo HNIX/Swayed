@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_02_192322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -86,7 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
+    t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
@@ -135,10 +135,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
   end
 
   create_table "api_request_leads", force: :cascade do |t|
-    t.uuid "api_request_id", null: false
     t.bigint "lead_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "api_request_id"
     t.index ["api_request_id"], name: "index_api_request_leads_on_api_request_id"
     t.index ["lead_id"], name: "index_api_request_leads_on_lead_id"
   end
@@ -154,20 +154,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.boolean "test"
     t.integer "response_code"
     t.bigint "campaign_id", null: false
-    t.bigint "source_id"
-    t.bigint "distribution_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "endpoint"
     t.string "method_type"
     t.string "source_ip"
-    t.text "errors"
+    t.text "request_errors"
     t.string "api_key"
     t.jsonb "headers"
     t.datetime "request_time"
+    t.string "request_body_hash"
+    t.string "requestable_type"
+    t.bigint "requestable_id"
     t.index ["campaign_id"], name: "index_api_requests_on_campaign_id"
-    t.index ["distribution_id"], name: "index_api_requests_on_distribution_id"
-    t.index ["source_id"], name: "index_api_requests_on_source_id"
+    t.index ["request_body_hash"], name: "index_api_requests_on_request_body_hash"
+    t.index ["requestable_type", "requestable_id"], name: "index_api_requests_on_requestable"
   end
 
   create_table "api_tokens", force: :cascade do |t|
@@ -184,23 +185,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.index ["user_id"], name: "index_api_tokens_on_user_id"
   end
 
+  create_table "calculated_fields", force: :cascade do |t|
+    t.string "name"
+    t.string "formula"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 0
+    t.string "clean_formula"
+    t.jsonb "error_log"
+    t.bigint "campaign_id", null: false
+    t.index ["campaign_id"], name: "index_calculated_fields_on_campaign_id"
+  end
+
   create_table "campaign_distributions", force: :cascade do |t|
     t.bigint "campaign_id", null: false
     t.bigint "distribution_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "field_mapping"
+    t.boolean "use_template"
+    t.text "template"
     t.index ["campaign_id"], name: "index_campaign_distributions_on_campaign_id"
     t.index ["distribution_id"], name: "index_campaign_distributions_on_distribution_id"
   end
 
   create_table "campaign_fields", force: :cascade do |t|
     t.string "name"
-    t.string "label"
     t.integer "data_type"
-    t.boolean "validated"
-    t.boolean "post_required"
-    t.boolean "ping_required"
     t.boolean "hide"
     t.bigint "campaign_id", null: false
     t.datetime "created_at", null: false
@@ -209,6 +220,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.string "example_value"
     t.integer "position"
     t.boolean "post_only", default: false
+    t.integer "value_acceptance"
+    t.decimal "min_value"
+    t.decimal "max_value"
+    t.string "default_value"
+    t.boolean "required", default: false
     t.index ["campaign_id"], name: "index_campaign_fields_on_campaign_id"
   end
 
@@ -275,11 +291,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.index ["company_id"], name: "index_contacts_on_company_id"
   end
 
+  create_table "distribution_filters", force: :cascade do |t|
+    t.boolean "apply_to_all"
+    t.jsonb "criteria"
+    t.string "name"
+    t.string "operator"
+    t.integer "status", default: 0
+    t.string "value"
+    t.bigint "campaign_field_id", null: false
+    t.bigint "campaign_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_field_id"], name: "index_distribution_filters_on_campaign_field_id"
+    t.index ["campaign_id"], name: "index_distribution_filters_on_campaign_id"
+  end
+
+  create_table "distribution_filters_distributions", id: false, force: :cascade do |t|
+    t.bigint "distribution_id", null: false
+    t.bigint "distribution_filter_id", null: false
+    t.index ["distribution_filter_id", "distribution_id"], name: "idx_on_distribution_filter_id_distribution_id_d0bd6f68ed"
+    t.index ["distribution_id", "distribution_filter_id"], name: "idx_on_distribution_id_distribution_filter_id_594fe4cc0e"
+  end
+
   create_table "distributions", force: :cascade do |t|
     t.bigint "company_id", null: false
     t.string "endpoint"
     t.string "key"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "response_mapping"
@@ -296,19 +334,33 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.index ["company_id"], name: "index_distributions_on_company_id"
   end
 
+  create_table "field_associations", force: :cascade do |t|
+    t.bigint "field_id", null: false
+    t.string "fieldable_type", null: false
+    t.bigint "fieldable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["field_id"], name: "index_field_associations_on_field_id"
+    t.index ["fieldable_type", "fieldable_id"], name: "index_field_associations_on_fieldable"
+  end
+
   create_table "fields", force: :cascade do |t|
     t.string "name"
-    t.string "label"
     t.string "data_type"
     t.boolean "validated", default: false
-    t.boolean "post_required", default: false
-    t.boolean "ping_required", default: false
     t.boolean "hide", default: false
     t.bigint "vertical_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "example_value"
-    t.index ["label", "vertical_id"], name: "index_fields_on_label_and_vertical_id", unique: true
+    t.string "default_value"
+    t.boolean "is_pii"
+    t.integer "max_value"
+    t.integer "min_value"
+    t.integer "position"
+    t.boolean "post_only", default: false
+    t.boolean "required", default: false
+    t.integer "value_acceptance"
     t.index ["name", "vertical_id"], name: "index_fields_on_name_and_vertical_id", unique: true
     t.index ["vertical_id"], name: "index_fields_on_vertical_id"
   end
@@ -343,6 +395,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.integer "revenue_cents"
     t.integer "profit_cents"
     t.integer "bid_cents"
+    t.uuid "api_request_id"
+    t.index ["api_request_id"], name: "index_leads_on_api_request_id"
+  end
+
+  create_table "list_values", force: :cascade do |t|
+    t.integer "value_type", default: 0
+    t.bigint "campaign_field_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "list_value"
+    t.index ["campaign_field_id"], name: "index_list_values_on_campaign_field_id"
   end
 
   create_table "mapped_fields", force: :cascade do |t|
@@ -498,6 +561,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.index ["rule_set_id"], name: "index_rules_rules_on_rule_set_id"
   end
 
+  create_table "source_filters", force: :cascade do |t|
+    t.jsonb "criteria", default: "{}", null: false
+    t.string "name"
+    t.integer "status", default: 0
+    t.boolean "apply_to_all", default: false
+    t.bigint "campaign_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "operator"
+    t.string "value"
+    t.bigint "campaign_field_id", null: false
+    t.index ["campaign_field_id"], name: "index_source_filters_on_campaign_field_id"
+    t.index ["campaign_id"], name: "index_source_filters_on_campaign_id"
+  end
+
+  create_table "source_filters_sources", id: false, force: :cascade do |t|
+    t.bigint "source_id", null: false
+    t.bigint "source_filter_id", null: false
+    t.index ["source_filter_id"], name: "index_source_filters_sources_on_source_filter_id"
+    t.index ["source_id"], name: "index_source_filters_sources_on_source_id"
+  end
+
   create_table "source_tokens", force: :cascade do |t|
     t.datetime "expires_at"
     t.datetime "last_used_at"
@@ -511,12 +596,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.bigint "source_id"
     t.index ["account_id"], name: "index_source_tokens_on_account_id"
     t.index ["name"], name: "index_source_tokens_on_name", unique: true
-    t.index ["source_id"], name: "index_source_tokens_on_source_id"
+    t.index ["source_id"], name: "index_source_tokens_on_source_id", unique: true
     t.index ["token"], name: "index_source_tokens_on_token", unique: true
   end
 
   create_table "sources", force: :cascade do |t|
-    t.bigint "company_id", null: false
+    t.bigint "company_id"
     t.string "terms"
     t.integer "status", default: 0
     t.string "landing_page_url"
@@ -541,9 +626,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.string "success_redirect_url"
     t.string "failure_redirect_url"
     t.boolean "shared"
-    t.integer "timeout"
+    t.integer "timeout", default: 15000
+    t.string "secure_token"
     t.index ["campaign_id"], name: "index_sources_on_campaign_id"
     t.index ["company_id"], name: "index_sources_on_company_id"
+    t.index ["secure_token"], name: "index_sources_on_secure_token", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -578,6 +665,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
     t.string "otp_secret"
     t.integer "last_otp_timestep"
     t.text "otp_backup_codes"
+    t.jsonb "preferences"
+    t.virtual "name", type: :string, as: "(((first_name)::text || ' '::text) || (last_name)::text)", stored: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"
@@ -623,26 +712,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_07_013914) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "affiliates", "accounts"
   add_foreign_key "affiliates", "users"
-  add_foreign_key "api_request_leads", "api_requests"
   add_foreign_key "api_request_leads", "leads"
   add_foreign_key "api_requests", "campaigns"
-  add_foreign_key "api_requests", "distributions"
-  add_foreign_key "api_requests", "sources"
   add_foreign_key "api_tokens", "users"
+  add_foreign_key "calculated_fields", "campaigns"
   add_foreign_key "campaign_distributions", "campaigns"
   add_foreign_key "campaign_distributions", "distributions"
   add_foreign_key "campaign_fields", "campaigns"
   add_foreign_key "campaigns", "accounts"
   add_foreign_key "campaigns", "verticals"
   add_foreign_key "contacts", "companies"
+  add_foreign_key "distribution_filters", "campaign_fields"
+  add_foreign_key "distribution_filters", "campaigns"
   add_foreign_key "distributions", "companies"
+  add_foreign_key "field_associations", "fields"
   add_foreign_key "fields", "verticals"
   add_foreign_key "headers", "distributions"
+  add_foreign_key "list_values", "campaign_fields"
   add_foreign_key "mapped_fields", "campaign_distributions"
   add_foreign_key "mapped_fields", "campaign_fields"
   add_foreign_key "pay_charges", "pay_customers", column: "customer_id"
   add_foreign_key "pay_payment_methods", "pay_customers", column: "customer_id"
   add_foreign_key "pay_subscriptions", "pay_customers", column: "customer_id"
+  add_foreign_key "source_filters", "campaign_fields"
+  add_foreign_key "source_filters", "campaigns"
   add_foreign_key "source_tokens", "accounts"
   add_foreign_key "source_tokens", "sources"
   add_foreign_key "sources", "campaigns"

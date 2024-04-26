@@ -26,6 +26,7 @@
             <div data-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-0.5 w-36 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-0-button" tabindex="-1">
               <!-- Active: "bg-gray-50", Not Active: "" -->
               <%= link_to "Edit", edit_vertical_path(vertical), class: "block px-3 py-1 text-sm leading-6 text-gray-900" %>
+              <%= link_to "Calculated fields", vertical_calculated_fields_path(vertical), class: "block px-3 py-1 text-sm leading-6 text-gray-900" %>
               <% if @vertical.archived? %>
                 <%= link_to 'Unarchive', unarchive_vertical_path(@vertical), class: "block px-3 py-1 text-sm leading-6 text-gray-900", method: :put %>
               <% else %>

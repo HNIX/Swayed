@@ -1,0 +1,46 @@
+# == Schema Information
+#
+# Table name: distribution_filters
+#
+#  id                :bigint           not null, primary key
+#  apply_to_all      :boolean
+#  criteria          :jsonb
+#  name              :string
+#  operator          :string
+#  status            :integer          default("active")
+#  value             :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  campaign_field_id :bigint           not null
+#  campaign_id       :bigint           not null
+#
+# Indexes
+#
+#  index_distribution_filters_on_campaign_field_id  (campaign_field_id)
+#  index_distribution_filters_on_campaign_id        (campaign_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (campaign_field_id => campaign_fields.id)
+#  fk_rails_...  (campaign_id => campaigns.id)
+#
+
+one:
+  apply_to_all: false
+  criteria: 
+  name: MyString
+  operator: MyString
+  status: 1
+  value: MyString
+  campaign_field: one
+  campaign: one
+
+two:
+  apply_to_all: false
+  criteria: 
+  name: MyString
+  operator: MyString
+  status: 1
+  value: MyString
+  campaign_field: two
+  campaign: two

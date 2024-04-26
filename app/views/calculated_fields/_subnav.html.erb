@@ -1,0 +1,18 @@
+<!-- Secondary navigation -->
+<nav class="flex justify-between overflow-x-auto bg-gray-700/10 py-5 border border-slate-100/5 px-4 sm:px-6 lg:px-8">
+    <ul role="list" class="list-none flex flex-none gap-x-6 text-sm font-semibold leading-6 text-gray-400">
+        <li>
+            <%= nav_link_to campaign_campaign_fields_path(@campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400' do %>
+                    All Fields
+            <% end %>
+        </li>
+        <li>
+        <%= nav_link_to campaign_calculated_fields_path(@campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400' do %>
+            Calculated Fields
+        <% end %>
+        </li>
+    </ul>
+    <div>
+        <%= link_to "New calculated field", new_campaign_calculated_field_path(@campaign), { data: {turbo_frame: "modal"}, class: "btn btn-small btn-primary"} %>
+    </div>
+</nav>

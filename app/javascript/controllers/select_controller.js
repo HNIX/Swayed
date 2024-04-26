@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import Rails from '@rails/ujs';
 import TomSelect from "tom-select"
 
 export default class extends Controller {

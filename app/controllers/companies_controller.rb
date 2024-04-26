@@ -1,15 +1,9 @@
 class CompaniesController < ApplicationController
     before_action :authenticate_user!
     before_action :set_company, only: [:show, :edit, :update, :destroy]
-
-    ITEMS_PER_PAGE = 7
   
     def index
-      @company = Company.new
-      @company.contacts.build
-      
-      paginate_companies
-      @permitted_params = params.permit(:current_page)
+      @pagy, @companies = pagy(Company.all.order('created_at DESC'), items: 6)
     end
   
     def new
@@ -66,13 +60,5 @@ class CompaniesController < ApplicationController
       params.require(:company).permit(:name, :address, :city, :state, :zip_code, :billing_cycle, :notes, :payment_terms, :currency, contacts_attributes: [:first_name, :last_name, :email, :id, :phone])
     end
 
-    def paginate_companies
-      total_pages = (Company.all.count / ITEMS_PER_PAGE.to_f).ceil
-      current_page = (params[:companies_page] || 1).to_i
-      current_page = [1, [current_page, total_pages].min].max
-  
-      @companies = Company.all.order(updated_at: :asc).offset((current_page - 1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE)
-      @companies_pagination = { current_page: current_page, total_pages: total_pages }
-    end
 end
   

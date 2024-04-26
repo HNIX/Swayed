@@ -1,85 +1,55 @@
-<div class="bg-gray-800 rounded-lg shadow py-4">
-  <!-- Heading -->
-  <div class="flex flex-col items-start justify-between gap-x-8 gap-y-4 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
-    <div>
-      <div class="flex justify-between mb-4">
-          <%= link_to "< All Campaigns", campaigns_path, class: "text-sm font-medium text-gray-300 hover:text-gray-700" %>
-      </div>
-      <div class="flex items-center gap-x-3">
-        <div class="flex-none rounded-full bg-green-400/10 p-1 text-green-400">
-          <div class="h-2 w-2 rounded-full bg-current"></div>
-        </div>
-        <h1 class="flex gap-x-3 text-base leading-7">
-          <span class="font-semibold text-white"><%= campaign.name %></span>
-        </h1>
-      </div>
-
-      <div class="mt-3 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-8">
-        <div class="mt-2 flex items-center text-sm text-gray-400">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-.98.626-1.813 1.5-2.122" />
-          </svg>
-
-          <%= campaign.vertical.name %> - <%= campaign.campaign_type.titleize %>
-        </div>
-        <div class="mt-2 flex items-center text-sm text-gray-400">
-          <svg class="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z" clip-rule="evenodd" />
-          </svg>
-          Updated <%= time_ago_in_words(campaign.updated_at) %> ago
-        </div>
-      </div>
-
+<!-- Heading -->
+<div class="flex flex-col items-start justify-between gap-x-8 gap-y-4 px-4 py-4 sm:flex-row sm:items-center sm:px-6 lg:px-8">
+  <div>
+    <div class="flex items-center gap-x-3">
+      <h1 class="flex gap-x-3 text-base leading-7">
+        <span class="font-semibold text-gray-700 dark:text-white"><%= campaign.name %></span>
+      </h1>
     </div>
-    <div class="order-first flex-none rounded-full bg-green-400/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-400/30 sm:order-none">Delivering</div>
+    <p class="mt-2 text-xs leading-6 text-gray-600 dark:text-gray-400">Updated <%= time_ago_in_words(campaign.updated_at) %> ago</p>
   </div>
-
-  <!-- Secondary navigation -->
-  <nav class="flex overflow-x-auto py-4">
-    <ul role="list" class="list-none flex min-w-full flex-none gap-x-6 px-4 text-sm font-semibold leading-6 text-gray-400 sm:px-6 lg:px-8">
-      <li>
-        <%= nav_link_to campaign_path(campaign), class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400' do %>
-          Overview
-        <% end %>
-      </li>
-      <li>
-        <%= nav_link_to campaign_campaign_fields_path(campaign), class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400', contains: ["/fields"] do %>
-          Data
-        <% end %>
-      </li>
-      <li>
-        <%= nav_link_to campaign_sources_path(campaign), class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400', contains: ["/sources"]  do %>
-          Sources
-        <% end %>
-      </li>
-      <li>
-        <%= nav_link_to campaign_distributions_path(campaign), class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400', contains: ["/distributions"]  do %>
-          Distributions
-        <% end %>
-      </li>
-      <li>
-        <%= nav_link_to edit_campaign_path(campaign), class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400' do %>
-          Settings
-        <% end %>
-      </li>
-      <li>
-        <%= nav_link_to '#', class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400' do %>
-          Reports
-        <% end %>
-      </li>
-      <li>
-        <%= nav_link_to logs_campaign_path(campaign), class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400' do %>
-          Logs
-        <% end %>
-      </li>
-      <li>
-        <%= nav_link_to '#', class: "text-sm font-medium pb-2", inactive_class: "text-gray-200 hover:text-white", active_class: 'text-indigo-400 border-b border-indigo-400' do %>
-          Integrations
-        <% end %>
-      </li>
-    </ul>
-  </nav>
+  <div class="order-first flex-none rounded-full <%= status_color_class(campaign.status) %> px-6 py-1 text-xs font-medium dark:ring-1 dark:ring-inset  sm:order-none"><%= campaign.status.titleize %></div>
 </div>
+
+<!-- navigation -->
+<nav class="flex overflow-x-auto pb-4">
+  <ul role="list" class="list-none flex min-w-full flex-none gap-x-6 px-4 text-sm font-semibold leading-6 text-gray-400 sm:px-6 lg:px-8">
+    <li>
+      <%= nav_link_to campaign_path(campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400' do %>
+        Overview
+      <% end %>
+    </li>
+    <li>
+        <%= nav_link_to campaign_campaign_fields_path(campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400', contains: ["/calculated_fields", "/fields"] do %>
+                Fields
+        <% end %>
+    </li>
+    <li>
+      <%= nav_link_to campaign_sources_path(campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400', contains: ["/source"] do %>
+        Sources
+      <% end %>
+    </li>
+    <li>
+      <%= nav_link_to campaign_distributions_path(campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400', contains: ["/distribution"] do %>
+        Distributions
+      <% end %>
+    </li>
+    <li>
+      <%= nav_link_to edit_campaign_path(campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400' do %>
+        Settings
+      <% end %>
+    </li>
+    <li>
+      <%= nav_link_to logs_campaign_path(campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400' do %>
+        Logs
+      <% end %>
+    </li>
+  </ul>
+</nav>
+
+
+
+  
 
 
   

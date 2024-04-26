@@ -2,54 +2,71 @@
 #
 # Table name: api_requests
 #
-#  id              :uuid             not null, primary key
-#  accepted        :boolean
-#  api_key         :string
-#  direction       :integer          default("inbound")
-#  endpoint        :string
-#  errors          :text
-#  headers         :jsonb
-#  lead_posted     :boolean
-#  method_type     :string
-#  price           :integer
-#  request_body    :jsonb
-#  request_time    :datetime
-#  response_body   :jsonb
-#  response_code   :integer
-#  source_ip       :string
-#  status          :integer
-#  test            :boolean
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  campaign_id     :bigint           not null
-#  distribution_id :bigint
-#  source_id       :bigint
+#  id                :uuid             not null, primary key
+#  accepted          :boolean
+#  api_key           :string
+#  direction         :integer          default("inbound")
+#  endpoint          :string
+#  headers           :jsonb
+#  lead_posted       :boolean
+#  method_type       :string
+#  price             :integer
+#  request_body      :jsonb
+#  request_body_hash :string
+#  request_errors    :text
+#  request_time      :datetime
+#  requestable_type  :string
+#  response_body     :jsonb
+#  response_code     :integer
+#  source_ip         :string
+#  status            :integer
+#  test              :boolean
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  campaign_id       :bigint           not null
+#  requestable_id    :bigint
 #
 # Indexes
 #
-#  index_api_requests_on_campaign_id      (campaign_id)
-#  index_api_requests_on_distribution_id  (distribution_id)
-#  index_api_requests_on_source_id        (source_id)
+#  index_api_requests_on_campaign_id        (campaign_id)
+#  index_api_requests_on_request_body_hash  (request_body_hash)
+#  index_api_requests_on_requestable        (requestable_type,requestable_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (campaign_id => campaigns.id)
-#  fk_rails_...  (distribution_id => distributions.id)
-#  fk_rails_...  (source_id => sources.id)
 #
+require 'digest'
+require 'json'
 class ApiRequest < ApplicationRecord
   self.primary_key = 'id' 
+
+  include PgSearch::Model
+
+  pg_search_scope :search_by_terms, 
+    against: [:id, :direction, :status, :created_at],
+    associated_against: {
+      source: [:name], # Assuming Source has a name attribute
+      distribution: [:name] # Assuming Distribution has a name attribute
+    },
+    using: {
+      tsearch: { prefix: true }
+    }
    
+  # Associations
   belongs_to :campaign
-  belongs_to :source, optional: true
-  belongs_to :distribution, optional: true
-  
+  belongs_to :requestable, polymorphic: true
+
+  # Assuming 'direction' attribute determines if the request is inbound or outbound
+  has_one :lead, dependent: :destroy # For inbound requests
+
+  # For the many-to-many relationship with leads for outbound requests
   has_many :api_request_leads
   has_many :leads, through: :api_request_leads
-
+ 
+  # Validations
   validates :direction, presence: true
-  validate :source_presence_for_inbound
-  validate :distribution_presence_for_outbound
+  validate :source_or_distribution_presence
 
   enum status: { pending: 0, accepted: 1, rejected: 2 }
   enum direction: { inbound: 0, outbound: 1 }
@@ -59,28 +76,39 @@ class ApiRequest < ApplicationRecord
   after_update_commit -> { broadcast_replace_later_to self }
   after_destroy_commit -> { broadcast_remove_to :api_requests, target: dom_id(self, :index) }
 
-  def self.duplicate?(request, params, time_frame: 10.minutes)
-    # Check for duplicate Jornaya or Trusted Form IDs
-    if params[:jornaya_id].present? || params[:trusted_form_id].present?
-      duplicate_ping = where(jornaya_id: params[:jornaya_id], trusted_form_id: params[:trusted_form_id]).first
-      return true if duplicate_ping.present?
-    end
+  before_save :hash_request_body
 
-    # Check for exact same ping request body within the given time frame
-    time_range = (Time.now - time_frame)..Time.now
-    duplicate_ping = where(created_at: time_range).find { |ping| ping.request_body == request }
-    duplicate_ping.present?
+  def self.duplicate?(request_body, params, time_frame: 10.minutes)
+    request_body_hash = Digest::SHA256.hexdigest(request_body)
+
+    return true if duplicate_by_ids?(params)
+
+    duplicate_by_request_body_hash?(request_body_hash, time_frame)
   end
 
-  def source_presence_for_inbound
-    if direction == 'inbound' && source.nil?
-      errors.add(:source, "must be present for inbound requests")
+  def self.duplicate_by_ids?(params)
+    where(jornaya_id: params[:jornaya_id], trusted_form_id: params[:trusted_form_id])
+        .exists? if params[:jornaya_id].present? || params[:trusted_form_id].present?
+  end
+
+  def self.duplicate_by_request_body_hash?(request_body_hash, time_frame)
+    time_range = Time.now - time_frame..Time.now
+    where(created_at: time_range, request_body_hash: request_body_hash).exists?
+  end
+
+  private
+
+  def source_or_distribution_presence
+    if direction == 'inbound' && requestable_type != 'Source'
+      errors.add(:requestable, 'must be associated with a source for inbound requests')
+    elsif direction == 'outbound' && requestable_type != 'Distribution'
+      errors.add(:requestable, 'must be associated with a distribution for outbound requests')
     end
   end
 
-  def distribution_presence_for_outbound
-    if direction == 'outbound' && distribution.nil?
-      errors.add(:distribution, "must be present for outbound requests")
+  def hash_request_body
+    if request_body_changed?
+      self.request_body_hash = Digest::SHA256.hexdigest(request_body.to_json)
     end
   end
 end

@@ -1,0 +1,23 @@
+<div class="card-panel">
+  <div>
+    <% if @campaign %>
+      <%= render 'campaigns/header', campaign: @campaign %>
+      <%= render 'subnav' %>
+    <% end %>
+
+  </div>
+
+  <div class="card-inner pt-0">
+    <% if @distribution_filters.present? %>
+      <%= render 'filter_list' %>
+    <% else %>
+      <div class="text-center p-8">
+        <%= image_tag "empty.svg", class: "w-1/3 mb-4 m-auto" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+  
+  
+  
+  

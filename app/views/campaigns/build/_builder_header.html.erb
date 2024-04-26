@@ -2,7 +2,7 @@
     <ol role="list" class="flex items-center space-x-4 list-none">
         <li>
             <div class="flex items-center">
-                <%= link_to "All Campaigns", campaigns_path, class: "text-sm font-medium text-gray-500 hover:text-blue-600" %>
+                <%= link_to "All Campaigns", campaigns_path, class: "text-sm font-medium text-gray-300 hover:text-blue-600" %>
             </div>
         </li>
         <li>
@@ -11,7 +11,7 @@
                     <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
                 </svg>
                 <% if @campaign.persisted? %>
-                    <%= link_to @campaign.name, campaign_path(@campaign), class: "ml-4 text-sm font-medium text-gray-500" %>
+                    <%= link_to @campaign.name, campaign_path(@campaign), class: "ml-4 text-sm font-medium text-gray-300" %>
                 <% else %>
                     <div class="ml-4 text-sm font-medium text-gray-500">New Campaign Builder</div>
                 <% end %>
@@ -29,11 +29,11 @@
             </div>
             <div class="mt-6 hidden grid-cols-6 text-sm font-medium text-gray-500 sm:grid hover:text-gray-600">
                 <%= link_to 'Basic Setup', wizard_path(:basic_setup), class: step >= 1 ? "text-white hover:text-gray-300" : "hover:text-gray-300" %>
-                <%= link_to 'Data', wizard_path(:data_config), class: step >= 2 ? "text-white text-left hover:text-gray-300" : "text-gray-500 text-left hover:text-gray-300" %>
-                <%= link_to 'Sources', wizard_path(:sources), class: step >= 3 ? "text-white text-left hover:text-gray-300" : "text-gray-500 text-left hover:text-gray-300" %>
-                <%= link_to 'Distributions', wizard_path(:distributions), class: step >= 4 ? "text-white text-left hover:text-gray-300" : "text-gray-500 text-left hover:text-gray-300" %>
-                <%= link_to 'Mapping', wizard_path(:mapping), class: step >= 5 ? "text-white text-center hover:text-gray-300" : "text-gray-500 text-center hover:text-gray-300" %>
-                <%= link_to 'Finalize', wizard_path(:finalize), class: step >= 6 ? "text-white text-right hover:text-gray-300" : "text-gray-500 text-right hover:text-gray-300" %>
+                <%= link_to 'Data', wizard_path(:data_config), class: step >= 2 ? "text-white text-left hover:text-gray-300" : "text-gray-400 text-left hover:text-gray-300" %>
+                <%= link_to 'Sources', wizard_path(:sources), class: step >= 3 ? "text-white text-left hover:text-gray-300" : "text-gray-400 text-left hover:text-gray-300" %>
+                <%= link_to 'Distributions', wizard_path(:distributions), class: step >= 4 ? "text-white text-left hover:text-gray-300" : "text-gray-400 text-left hover:text-gray-300" %>
+                <%= link_to 'Mapping', wizard_path(:mapping), class: step >= 5 ? "text-white text-center hover:text-gray-300" : "text-gray-400 text-center hover:text-gray-300" %>
+                <%= link_to 'Finalize', wizard_path(:finalize), class: step >= 6 ? "text-white text-right hover:text-gray-300" : "text-gray-400 text-right hover:text-gray-300" %>
             </div>
         </div>
     </div>

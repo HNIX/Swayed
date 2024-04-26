@@ -1,0 +1,95 @@
+<div class="flow-root">
+    <div class="">
+    <div class="inline-block min-w-full py-2 align-middle">
+        <table class="min-w-full">
+        <colgroup>
+              <col>
+              <col class="w-full sm:w-1/2">
+              <col class="sm:w-1/6">
+              <col class="sm:w-1/12">
+              <col class="sm:w-1/12">
+              <col class="sm:w-1/6">
+              <col>
+        </colgroup>
+        <thead>
+            <tr class="border-b border-slate-100/5">
+                <th colspan="2" class="border-r border-slate-100/5 sticky left-0 w-48 py-3.5 px-0 text-left text-sm font-semibold text-white bg-slate-900">Field name</th>
+                <th class="px-6 py-3.5 text-left text-sm font-semibold text-white">Format</th>
+                <th class="px-3 py-3.5 text-left text-sm font-semibold text-white text-center">Required</th>
+                <th class="px-3 py-3.5 text-left text-sm font-semibold text-white text-center">Post only</th>
+                <th class="px-6 py-3.5 text-left text-sm font-semibold text-white">Permitted values</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100/5" data-controller="drag" data-drag-url="/campaigns/:campaign_id/fields/:id/move">
+                <% fields.each do |field| %>
+                    <tr id="field_<%= field.id %>" data-campaign-id="<%= @context.id %>" data-id="<%= field.id %>">
+                        <td class="whitespace-nowrap py-2 pr-6 text-sm font-medium text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </td> 
+                        <td class="rounded-b-lg sticky left-0 w-48 px-0 py-4 whitespace-nowrap text-sm text-white border-r border-slate-100/5 bg-slate-900">
+                            <%= field.name %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-100"><%= field.format_value %></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <div class="flex items-center justify-center gap-x-2">
+                                <div class="flex-none rounded-full p-1 <% if field.required %>text-green-400 bg-green-400/10<% else %>text-gray-400 bg-gray-400/10<% end %>">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                            <div class="flex items-center justify-center gap-x-2">
+                                <div class="flex-none rounded-full p-1 <% if field.post_only %>text-green-400 bg-green-400/10<% else %>text-gray-400 bg-gray-400/10<% end %>">
+                                    <div class="h-1.5 w-1.5 rounded-full bg-current"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-100 max-w-md"><%= field.enhanced_notes %></td>
+                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 sm:pr-0">
+                            <div class="flex flex-none items-center gap-x-4" data-controller="dropdown">
+                                <div class="relative flex-none">
+                                    <button type="button" data-action="click->dropdown#toggle click@window->dropdown#hide touch->dropdown#toggle touch@window->dropdown#hide" class="-m-2.5 block p-2.5 text-gray-300 hover:text-white" id="options-menu-0-button" aria-expanded="false" aria-haspopup="true">
+                                    <span class="sr-only">Open options</span>
+                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
+                                    </svg>
+                                    </button>
+
+                                    <!--
+                                    Dropdown menu, show/hide based on menu state.
+
+                                    Entering: "transition ease-out duration-100"
+                                        From: "transform opacity-0 scale-95"
+                                        To: "transform opacity-100 scale-100"
+                                    Leaving: "transition ease-in duration-75"
+                                        From: "transform opacity-100 scale-100"
+                                        To: "transform opacity-0 scale-95"
+                                    -->
+                                    <div class="absolute hidden right-0 z-50 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-0-button" tabindex="-1" data-dropdown-target="menu"
+                                            data-transition-enter="transition ease-out duration-200"
+                                            data-transition-enter-from="opacity-0 translate-y-1"
+                                            data-transition-enter-to="opacity-100 translate-y-0"
+                                            data-transition-leave="transition ease-in duration-150"
+                                            data-transition-leave-from="opacity-100 translate-y-0"
+                                            data-transition-leave-to="opacity-0 translate-y-1"
+                                            class="z-20 hidden mt-2 lg:absolute lg:right-0 dropdown-menu">
+                                    <!-- Active: "bg-gray-50", Not Active: "" -->
+                                    <%= link_to "Edit", edit_polymorphic_path([ @context, field ]), { data: {turbo_frame: "modal"}, class: "block px-3 py-1 text-sm leading-6 text-gray-900"} %>
+                                    <%= link_to 'Delete', polymorphic_path([ @context, field ]), data: { confirm: 'Are you sure?' }, method: :delete, class: "block px-3 py-1 text-sm leading-6 text-red-500" %>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    <!-- Add more row cells as needed -->
+                    </tr>
+                <% end %>
+            <!-- More people... -->
+        </tbody>
+        </table>
+    </div>
+    </div>
+</div>

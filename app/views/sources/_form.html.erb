@@ -1,178 +1,183 @@
-<%= form_with(model: [@campaign, @source]) do |form| %>
-  <div class="space-y-6 divide-y divide-white/5" data-controller="companies" >
-    <%= render "shared/error_messages", resource: form.object %>
 
-    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
-      <div>
-        <h2 class="text-base font-semibold leading-7 text-white">Source Details</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-400">Basic details about the source, including its name and current status.</p>
+<%= form_with(model: [@campaign, source], local: true, data: { turbo: false }, class: "contents") do |form| %>
+
+<%= render "shared/error_messages", resource: form.object %>
+  <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6" data-controller="dynamic-form">
+      
+      <div class="sm:col-span-full">
+          <label for="project-name" class="block text-sm font-medium leading-6 text-white">Source name</label>
+          <div class="mt-2">
+              <%= form.text_field :name, placeholder: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+          </div>
+      </div>
+
+      <div class="sm:col-span-2">
+          <label for="campaign_type" class="block text-sm font-medium leading-6 text-white">Integration Type</label>
+          <div class="mt-2">
+                <%= form.select :integration_type, Source.integration_types.keys.map { |type| [type.titleize, type] }, { prompt: 'Select type...', selected: form.object.company }, 
+                { class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", 
+                data: { 'dynamic-form-target': "select", action: "change->dynamic-form#toggleFields"} } %>
+          </div>
       </div>
       
-
-      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Source Name</label>
-          <div class="mt-2">
-              <%= form.text_field :name, autofocus: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", data: { companies_target: 'sourceNameField' } %>
+      <turbo-frame id="companies" class="hidden sm:col-span-4" data-dynamic-form-target="dynamicField" data-option-value="affiliate">
+          <div data-controller="companies">
+              <label for="vertical" class="block text-sm font-medium leading-6 text-white">Affiliate</label>
+              <div class="mt-2 h-full">
+                  <%= form.select :company_id, options_for_select(Company.all.map{ |c| [c.name, c.id] }, form.object.company&.id), { prompt: "Start typing to select or create"}, data: { companies_target: 'companyField' } %>
+              </div>
           </div>
-        </div>
+      </turbo-frame>
 
-        <div class="sm:col-span-2">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Status</label>
+      <div class="hidden sm:col-span-4" data-dynamic-form-target="dynamicField" data-option-value="web_form">
+          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Form Landing Page</label>
           <div class="mt-2">
-                <%= form.select(:status, Source.statuses.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+              <div class="w-full flex rounded-md shadow-sm ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                  <span class="flex select-none items-center pl-3 pr-2 text-gray-500 sm:text-sm">http://</span>
+                  <%= form.text_field :landing_page_url, class: "block w-full rounded-r-md border-0 bg-white/5 py-1.5 text-white shadow-sm focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "www.example.com" %>
+              </div>
           </div>
-        </div>
-
-        <div class="sm:col-span-4">
-          <% if @source.persisted? %>
-                <label for="about" class="block text-sm font-medium leading-6 text-white">Company</label>
-                <div class="mt-2">
-                  <div class="px-3 block w-full rounded-md border-0 bg-white/5 py-1.5 text-gray-500 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"><%= @source.company.name %></div>
-                </div>
-          <% else %>
-                <label for="about" class="block text-sm font-medium leading-6 text-white">Select a Company</label>
-
-                <%= form.select(:company_id, options_for_select(@companies.map{ |c| [c.name, c.id] }), {include_blank: true}, id: 'company_name', class: 'block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black', data: { companies_target: 'companySelectField' }) %>
-                
-                <p class="mt-1 text-sm leading-6 text-gray-300">or start typing to create a new company</p>
-
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
-      <div>
-        <h2 class="text-base font-semibold leading-7 text-white">Offer Details</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-400">Information about the type of offer, payout, margin, budget, and minimum bid for the source.</p>
       </div>
 
-      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Offer Type</label>
-          <div class="mt-2">
-                <%= form.select(:offer_type, Source.offer_types.keys.map { |type| [type.upcase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
-          </div>
-        </div>
-
-        <div class="sm:col-span-2">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Payout</label>
-          <div class="mt-2">
-            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">$</span>
-              <%= form.number_field :payout, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
-            </div>
-          </div>
-        </div>
-
-        <div class="sm:col-span-2">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Margin</label>
-          <div class="mt-2">
-            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-              <%= form.number_field :margin, class: "flex-1 border-0 bg-transparent py-1.5 pr-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
-              <span class="flex select-none items-center pr-3 text-gray-400 sm:text-sm">%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="sm:col-span-3">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Total Budget</label>
-          <div class="mt-2">
-            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">$</span>
-              <%= form.number_field :budget, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
-            </div>
-          </div>
-        </div>
-
-        <div class="sm:col-span-2">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Minimum Acceptable Bid</label>
-          <div class="mt-2">
-            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">$</span>
-              <%= form.number_field :minimum_acceptable_bid, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
-      <div>
-        <h2 class="text-base font-semibold leading-7 text-white">Payout Configuration</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-400">Configuration settings for the source's payout method and payment terms.</p>
+      <div class="hidden sm:col-start-1 sm:col-span-full" data-dynamic-form-target="dynamicField" data-option-value="affiliate">
+          <h2 class="text-base font-semibold leading-7 text-white">Payout Information</h2>
+          <p class="mt-1 text-sm leading-6 text-gray-300">Define your earnings: Select a fixed payout or a percentage-based commission.</p>
       </div>
 
-      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Payout Method</label>
-          <div class="mt-2">
-                <%= form.select(:payout_method, Source.payout_methods.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
+      <div class="hidden sm:col-start-1 sm:col-span-2" data-dynamic-form-target="dynamicField" data-option-value="affiliate">
+          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Method</label>
+          <div class="mt-2 h-full">
+              <%= form.select :payout_method, Source.payout_methods.keys.map { |type| [type.titleize, type] }, { include_blank: 'Select method...' }, 
+              { class: "block rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", 
+              data: { 'dynamic-form-target': "selectNested", action: "change->dynamic-form#toggleFieldsNested"} } %>
           </div>
-        </div>
-
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Payment Terms</label>
-          <div class="mt-2">
-                <%= form.select(:terms, Source.terms.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
-      <div>
-        <h2 class="text-base font-semibold leading-7 text-white">Integration Details</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-400">Specify how the source is integrated, including URLs and postback settings.</p>
       </div>
 
-       <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Integration Type</label>
-          <div class="mt-2">
-                <%= form.select(:integration_type, Source.integration_types.keys.map { |type| [type.titlecase, type] }, {}, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black") %>
-          </div>
+      <div class="hidden sm:col-span-2"  data-dynamic-form-target="dynamicField" data-option-value="affiliate">
+        <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Payout Structure</label>
+        <div class="mt-2 h-full">
+            <%= form.select :payout_structure, Source.payout_structures.keys.map { |type| [type.titleize, type] }, { include_blank: 'Select...' }, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
         </div>
-
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Landing Page URL</label>
-          <div class="mt-2">
-            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">http://</span>
-              <%= form.text_field :landing_page_url, autofocus: true, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
-            </div>
-          </div>
-        </div>
-
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Privacy Policy URL</label>
-          <div class="mt-2">
-            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">http://</span>
-              <%= form.text_field :privacy_policy_url, autofocus: true, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
-            </div>
-          </div>
-        </div>
-
-        <div class="sm:col-span-5">
-          <label for="website" class="block text-sm font-medium leading-6 text-white">Postback URL</label>
-          <div class="mt-2">
-            <div class="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-              <span class="flex select-none items-center pl-3 text-gray-400 sm:text-sm">http://</span>
-              <%= form.text_field :postback_url, autofocus: true, class: "flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6" %>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </div>
+
+      <div class="hidden sm:col-span-2" data-dynamic-form-target="dynamicField" data-option-value="affiliate">
+          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Exclusivity</label>
+          <div class="mt-2 h-full">
+              <%= form.select :offer_type, Source.offer_types.keys.map { |type| [type.titlecase, type] }, { include_blank: 'Select a type' }, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+          </div>
+      </div>
+
+      <div class="hidden sm:col-start-1 sm:col-span-2" data-dynamic-form-target="dynamicFieldNested" data-option-value="fixed_price">
+        <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Price</label>
+        <div class="relative mt-2 rounded-md shadow-sm">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <span class="text-gray-500 sm:text-sm">$</span>
+            </div>
+            <%= form.number_field :payout, class: "block rounded-md border-0 bg-white/5 py-1.5 pl-7 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "0.00" %>
+        </div>
+      </div>
+
+      <div class="hidden sm:col-start-1 sm:col-span-2" data-dynamic-form-target="dynamicFieldNested" data-option-value="percentage">
+          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Percentage</label>
+          <div class="relative mt-2 rounded-md shadow-sm">
+              
+              <%= form.number_field :margin, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 pr-7 pl-3 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "0" %>
+              
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <span class="text-gray-500 sm:text-sm">%</span>
+              </div>
+          </div>
+      </div>
+
+      <div class="hidden sm:col-span-2" data-dynamic-form-target="dynamicFieldNested" data-option-value="percentage">
+          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Minimum Payout</label>
+          <div class="relative mt-2 rounded-md shadow-sm">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <span class="text-gray-500 sm:text-sm">$</span>
+              </div>
+              <%= form.number_field :minimum_acceptable_bid, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 pl-7 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "0.00" %>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <span class="text-gray-500 sm:text-sm" id="price-currency">USD</span>
+              </div>
+          </div>
+      </div>
+          
+
+      <div data-controller="drawers" class="sm:col-span-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+          <div data-drawers-target="tab" data-action="click->drawers#change" class="flex sm:col-span-2">
+              <p class="block text-sm font-medium leading-6 text-white">Additional Settings</p>
+              <div>
+                  <svg data-drawers-target="open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="ml-2 mt-1 h-4 w-4 text-gray-400">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                  </svg>
+
+                  <svg data-drawers-target="close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden ml-2 mt-1 h-4 w-4 text-gray-400">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+
+              </div>
+          </div>
+
+          <div data-drawers-target="panel" class="hidden sm:col-span-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                  
+
+                      <div class="hidden sm:col-span-4" data-dynamic-form-target="dynamicField" data-option-value="web_form">
+                          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white" >Success Redirect URL</label>
+                          <div class="mt-2">
+                              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                                  <span class="flex select-none items-center pl-3 pr-2 text-gray-500 sm:text-sm">http://</span>
+                                  <%= form.text_field :success_redirect_url, class: "block w-full rounded-r-md border-0 bg-white/5 py-1.5 text-white shadow-sm focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "www.example.com" %>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="hidden sm:col-span-4" data-dynamic-form-target="dynamicField" data-option-value="web_form">
+                          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Failure Redirect URL</label>
+                          <div class="mt-2">
+                              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                                  <span class="flex select-none items-center pl-3 pr-2 text-gray-500 sm:text-sm">http://</span>
+                                  <%= form.text_field :failure_redirect_url, class: "block w-full rounded-r-md border-0 bg-white/5 py-1.5 text-white shadow-sm focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "www.example.com" %>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="hidden sm:col-span-2" data-dynamic-form-target="dynamicField" data-option-value="affiliate">
+                          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Timeout</label>
+                          <div class="relative mt-2 rounded-md shadow-sm">
+                              
+                              <%= form.number_field :timeout, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 pr-7 pl-3 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "15000" %>
+                              
+                              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                  <span class="text-gray-500 sm:text-sm">ms</span>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="sm:col-span-6">
+                          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Postback URL</label>
+                          <div class="mt-2">
+                              <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                                  <span class="flex select-none items-center pl-3 pr-2 text-gray-500 sm:text-sm">http://</span>
+                                  <%= form.text_field :postback_url, class: "block w-full rounded-r-md border-0 bg-white/5 py-1.5 text-white shadow-sm focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black", placeholder: "www.example.com?field={{field_name}}&field2={{field_name2}}" %>
+                              </div>
+                          </div>
+                      </div>
+                      
+                  
+                      <div class="sm:col-span-6">
+                          <label for="distribution_schedule_days" class="block text-sm font-medium leading-6 text-white">Notes / Description</label>
+                          <div class="mt-2 h-full">
+                              <%= form.text_area :description, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+                          </div>
+                      </div>
+                  
+
+          </div>
+      </div>
   </div>
 
-  <div class="mt-6 flex items-center justify-end gap-x-6">
-    <%= link_to "Cancel", campaign_path(@campaign), class: "text-sm font-semibold leading-6 text-white" %>
-    <%= form.submit 'Add Source', class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
-  </div>
+<div class="mt-6 flex items-center justify-end gap-x-6">
+  <%= form.submit class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+</div>
 <% end %>

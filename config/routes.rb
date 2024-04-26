@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   draw :turbo
 
   # Jumpstart views
-  if Rails.env.development? || Rails.env.test?
+  if Rails.env.local?
     mount Jumpstart::Engine, at: "/jumpstart"
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
@@ -43,23 +43,33 @@ Rails.application.routes.draw do
       resource :me, controller: :me
       resource :password
       resources :accounts do 
-        resources :campaigns do
-          resources :leads, only: [:create] do
-            post 'ping', on: :member, to: 'leads#ping'
+
+        resources :campaigns, only: [] do
+          resources :sources, only: [] do
+            post :ping, on: :member
+            post :post, on: :member
           end
         end
+
+        # resources :campaigns do
+        #   resources :leads, only: [:create] do
+        #     post 'ping', on: :member, to: 'leads#ping'
+        #   end
+        # end
       end
+
       resources :users
       resources :notification_tokens, only: :create
       resources :affiliates
-      resources :campaign_sources, path: :inbound do 
-        member do 
-          post :ping
-          post :post
-          post :direct
-          post :test_buyer
-        end
-      end
+
+      # resources :campaign_sources, path: :inbound do 
+      #   member do 
+      #     post :ping
+      #     post :post
+      #     post :direct
+      #     post :test_buyer
+      #   end
+      # end
     end
   end
 
@@ -76,7 +86,13 @@ Rails.application.routes.draw do
 
   resources :announcements, only: [:index, :show]
   resources :api_tokens
-  resources :source_tokens
+  resources :source_tokens do
+    post 'refresh_token', on: :member
+  end
+
+  post '/campaigns/:campaign_id/validate_formula', to: 'calculated_fields#validate_formula'
+  get '/posting_instructions/:token', to: 'posting_instructions#show', as: :posting_instructions
+
 
   resources :campaigns do 
     collection do
@@ -85,11 +101,41 @@ Rails.application.routes.draw do
     member do
       get :logs
     end
-    resources :sources
+    resources :sources do 
+      member do
+        patch :archive
+        patch :activate
+        patch :pause
+      end
+    end
+    resources :source_filters do 
+      member do
+        patch :archive
+        patch :activate
+        patch :pause
+      end
+    end
     resources :distributions
+    resources :distribution_filters do 
+      member do
+        patch :archive
+        patch :activate
+        patch :pause
+      end
+    end
     resources :campaign_fields, path: :fields do 
       member do 
         patch :move
+      end
+      collection do
+        get :list_value
+      end
+    end
+    resources :calculated_fields do 
+      member do
+        patch :archive
+        patch :activate
+        patch :pause
       end
     end
     resources :build, controller: 'campaigns/build'
@@ -119,18 +165,18 @@ Rails.application.routes.draw do
       put 'archive'
       put 'unarchive'
     end
+    resources :fields do 
+      member do 
+        patch :move
+      end
+      collection do
+        get :list_value
+      end
+    end
   end
 
   resources :companies do 
-    collection do
-      get "contact_field"
-    end
-    member do
-      get :settings
-    end
     resources :contacts
-    resources :sources
-    resources :distributions
   end
 
   resources :sources, only: [:index]
@@ -228,6 +274,10 @@ Rails.application.routes.draw do
     # Alternate route to use if logged in users should still see public root
     # get "/dashboard", to: "dashboard#show", as: :user_root
   end
+
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get "up" => "rails/health#show", as: :rails_health_check
 
   # Public marketing homepage
   root to: "static#index"

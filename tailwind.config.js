@@ -2,10 +2,21 @@
 // https://github.com/tailwindcss/tailwindcss/blob/master/stubs/defaultConfig.stub.js
 const colors = require('tailwindcss/colors')
 const defaultTheme = require('tailwindcss/defaultTheme')
-const { getUltimateTurboModalPath } = require('ultimate_turbo_modal/gemPath');
+
+
+//const { getUltimateTurboModalPath } = require('ultimate_turbo_modal/gemPath')
+
+const { execSync } = require('child_process');
+
+function getUltimateTurboModalPath() {
+  const path = execSync('bundle show ultimate_turbo_modal').toString().trim();
+  return `${path}/**/*.{erb,html,rb}`;
+}
 
 /** @type {import('tailwindcss').Config */
 module.exports = {
+  darkMode: 'class',
+
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
@@ -13,11 +24,11 @@ module.exports = {
   ],
 
   content: [
+    './public/*.html',
+    './app/components/**/*.rb',
     './app/helpers/**/*.rb',
     './app/javascript/**/*.js',
-    './app/views/**/*.erb',
-    './app/views/**/*.haml',
-    './app/views/**/*.slim',
+    './app/views/**/*.{erb,haml,html,slim,rb}',
     './lib/jumpstart/app/views/**/*.erb',
     './lib/jumpstart/app/helpers/**/*.rb',
     getUltimateTurboModalPath()
@@ -33,6 +44,7 @@ module.exports = {
         secondary: colors.emerald,
         tertiary: colors.gray,
         danger: colors.red,
+        gray: colors.neutral,
         "code-400": "#fefcf9",
         "code-600": "#3c455b",
         zinc: colors.zinc,

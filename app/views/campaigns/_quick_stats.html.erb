@@ -1,0 +1,38 @@
+<div class="space-y-4 bg-gray-700/10 pb-0 -mb-px transition" >
+    <div class="relative isolate overflow-hidden">
+        <!-- Stats -->
+        <div class="lg:border-t lg:dark:border-t-slate-100/5 border-t-gray-800/10">
+            <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 lg:px-2 xl:px-0">
+                <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-800/10 dark:border-gray-100/5 px-8 py-4 sm:px-6 lg:border-t-0 xl:px-16">
+                    <dt class="w-full text-sm font-medium leading-6 text-gray-600 dark:text-gray-200">Accepted Pings</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-600 dark:text-gray-200"><%= number_with_delimiter(@accepted_ping_count) %></dd>
+                    <dd class="text-sm font-medium text-gray-400"><%= @campaign.ping_rejection_rate() %>% rejected</dd>
+                </div>
+                <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-800/10 dark:border-gray-100/5 px-4 py-4 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+                    <dt class="w-full text-sm font-medium leading-6 text-gray-600 dark:text-gray-200">Posted Leads</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-600 dark:text-gray-200"><%= @campaign.recent_leads_count() %></dd>
+                    <dd class="text-sm font-medium text-gray-400"><%= @campaign.recent_acceptance_rate() %>% posted</dd>
+                </div>
+                <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-800/10 dark:border-gray-100/5 px-4 py-4 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+                    <dt class="w-full text-sm font-medium leading-6 text-gray-600 dark:text-gray-200">Sold Leads</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-600 dark:text-gray-200"><%= @campaign.sold_leads_count() %></dd>
+                    <dd class="text-sm font-medium text-gray-400"><%= @campaign.recent_sale_rate() %>% sold</dd>
+                </div>
+                <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-800/10 dark:border-gray-100/5 px-4 py-4 sm:px-6 lg:border-t-0 xl:px-16 lg:border-l">
+                    <dt class="text-sm font-medium leading-6 text-gray-600 dark:text-gray-200">Revenue</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-600 dark:text-gray-200"><%= number_to_currency(@campaign.recent_revenue(), unit: "$", precision: 0) %></dd>
+                    <dd class="text-sm font-medium text-gray-400"><%= number_to_currency(@campaign.recent_cost(), unit: "$", precision: 0) %> cost</dd>
+                </div>
+                <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-800/10 dark:border-gray-100/5 px-4 py-4 sm:px-6 lg:border-t-0 xl:px-16 sm:border-l">
+                    <dt class="text-sm font-medium leading-6 text-gray-600 dark:text-gray-200">Profit</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-600 dark:text-gray-200"><%= number_to_currency(@campaign.recent_profit(), unit: "$", precision: 0) %></dd>
+                    <dd class="text-sm font-medium text-gray-400"><%= @campaign.profit_margin() %>% margin</dd>
+                </div>
+            </dl>
+        </div>
+        <%# <div class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50" aria-hidden="true">
+            <div class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#68A24B] to-[#68A24B]" style="clip-path: polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)"></div>
+        </div> %>
+    </div>
+
+</div>

@@ -3,19 +3,24 @@ application_name: Swayed
 business_name: Swayed
 business_address: ''
 domain: imswayed.com
-default_from_email: Swayed <support@imswayed.com>
 support_email: support@imswayed.com
+default_from_email: Swayed <support@imswayed.com>
 background_job_processor: sidekiq
 email_provider: sendgrid
 personal_accounts: false
-solargraph: false
 register_with_account: true
+collect_billing_address: true
 apns: false
 fcm: false
-collect_billing_address: true
+integrations:
 omniauth_providers:
 - google-oauth2
 payment_processors:
 - stripe
 multitenancy:
 - path
+gems:
+- acts_as_tenant
+- oj
+- rack-attack
+- whenever

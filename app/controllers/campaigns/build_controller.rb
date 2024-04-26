@@ -15,6 +15,10 @@ class Campaigns::BuildController < ApplicationController
            
             @distributions = Distribution.all - @campaign.distributions
         when :mapping
+            @campaign.campaign_distributions.each do |campaign_distribution|
+                # Build a new blank mapped field for each distribution
+                campaign_distribution.mapped_fields.build
+            end
         end
         
         render_wizard

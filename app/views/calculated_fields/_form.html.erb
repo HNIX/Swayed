@@ -1,0 +1,37 @@
+
+<%= form_with(model: [@campaign, calculated_field], local: true, data: { turbo: false }, class: "contents") do |form| %>
+
+    <%= render "shared/error_messages", resource: form.object %>
+
+    <div class="space-y-12">
+        <div data-controller="json-insert">
+            <div class="flex justify-between">
+                <div class="sm:col-span-full">
+                    <label for="project-name" class="block text-sm font-medium leading-6 text-white">Calculated field name</label>
+                    <div class="mt-2">
+                        <%= form.text_field :name, placeholder: true, class: "block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black" %>
+                    </div>
+                </div>   
+            </div>
+            <div class="mt-3 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div class="col-span-full">
+                    <div class="mt-2 relative" data-controller="formula validate-formula" data-validate-formula-campaign-id-value="<%= @campaign.id %>">
+                        <%= form.rich_text_area :formula, class: "h-56 block w-full rounded-b-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6", data: { 
+                            json_insert_target: "textarea", 
+                            formula_target: "formulaInput",
+                            validate_formula_target: "input",
+                            action: "keyup->validate-formula#validate",
+                            fields_campaign: @campaign.id
+                        } %>
+                        <div data-validate-formula-target="feedback" id="formula-feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<div class="mt-6 flex items-center justify-end gap-x-6">
+  <%= form.submit class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+</div>
+<% end %>
