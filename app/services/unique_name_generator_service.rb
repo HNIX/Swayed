@@ -1,4 +1,4 @@
-class UniqueNameGenerator
+class UniqueNameGeneratorService
     def initialize(campaign)
       @campaign = campaign
     end
