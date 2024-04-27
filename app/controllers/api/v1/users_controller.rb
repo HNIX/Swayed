@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::BaseController
-  skip_before_action :authenticate_api_token!, only: [:create]
+  skip_before_action :authenticate_api_token!, only: [:create], :raise => false
   before_action :configure_permitted_parameters, only: [:create]
 
   def create

@@ -4,7 +4,7 @@ class Api::V1::CampaignSourcesController < Api::InboundBaseController
     before_action :set_tenant
     before_action :check_duplicate_ping, only: :ping
     before_action :set_ping, only: :post
-    skip_before_action :authenticate_api_token, :set_account, :validate_company, :check_ping_limits, only: :test_buyer
+    skip_before_action :authenticate_token, :set_account, :validate_company, :check_ping_limits, only: :test_buyer, :raise => false
 
     def ping
         if api_ping = create_ping
