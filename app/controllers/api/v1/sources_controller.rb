@@ -1,4 +1,4 @@
-class Api::V1::LeadsController < Api::InboundBaseController
+class Api::V1::SourcesController < Api::InboundBaseController
     before_action :authenticate_source
 
     before_action :set_campaign
