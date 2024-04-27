@@ -1,5 +1,5 @@
 class PostingInstructionsController < ApplicationController
-    skip_before_action :authenticate_user!, only: [:show]
+    skip_before_action :authenticate_user!, only: [:show], :raise => false
 
     def show
         @source = Source.find_by(secure_token: params[:token])

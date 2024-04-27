@@ -103,17 +103,17 @@ class Source < ApplicationRecord
   end
 
   # Calculate the maximum bid amount based on the source type and payout
-  def calculate_max_bid
-    case type
-      when 'CPL'
-        payout
-      when 'RevShare'
-        # Implement logic to calculate based on revenue sharing
-      else
-        # Default value or logic for other types
-        0
-    end
-  end
+  # def calculate_max_bid
+  #   case type
+  #     when 'CPL'
+  #       payout
+  #     when 'RevShare'
+  #       # Implement logic to calculate based on revenue sharing
+  #     else
+  #       # Default value or logic for other types
+  #       0
+  #   end
+  # end
 
   def total_revenue
     leads.where(status: 'sold').sum(:revenue_cents)/100

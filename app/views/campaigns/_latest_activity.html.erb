@@ -2,16 +2,15 @@
         <h2 class="px-4 text-base font-semibold leading-7 text-gray-900 dark:text-white sm:px-6 lg:px-8">Latest activity</h2>
         <table class="mt-2 w-full whitespace-nowrap text-left">
         <colgroup>
-            <col class="w-full sm:w-7/12">
-            <col class="lg:w-2/12">
-            <col class="lg:w-2/12">
+            <col class="w-full sm:w-10/12">
+            <%# <col class="lg:w-2/12"> %>
             <col class="lg:w-1/12">
             <col class="lg:w-1/12">
         </colgroup>
         <thead class="border-b border-gray-900/10 dark:border-white/10 text-sm leading-6 text-gray-600 dark:text-white">
         <tr>
             <th scope="col" class="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">Request</th>
-            <th scope="col" class="hidden py-2 pl-0 pr-8 font-semibold sm:table-cell">To / From</th>
+            <%# <th scope="col" class="hidden py-2 pl-0 pr-8 font-semibold sm:table-cell">To / From</th> %>
             <th scope="col" class="py-2 pl-0 pr-4 text-right font-semibold sm:pr-8 sm:text-left lg:pr-20">Status</th>
             <th scope="col" class="hidden py-2 pl-0 pr-4 text-right font-semibold sm:table-cell sm:pr-6 lg:pr-8">Request time</th>
         </tr>
@@ -43,11 +42,13 @@
                             
                         </div>
                     </td>
-                    <td class="hidden py-3 pl-0 pr-4 sm:table-cell sm:pr-8">
-                        <div class="flex items-center gap-x-4">
-                            <div class="truncate text-sm font-medium leading-6 text-gray-900 dark:text-white"><%= request.requestable.name %></div>
+                    <%# <td class="hidden py-3 pl-0 pr-4 sm:table-cell sm:pr-8"> %>
+                        <%# <div class="flex items-center gap-x-4"> %>
+                            <%# <div class="truncate text-sm font-medium leading-6 text-gray-900 dark:text-white">%>
+                            <%#= request.requestable.name %>
+                            <%# </div>
                         </div>
-                    </td>
+                    </td> %>
                     <td class="py-3 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">
                         <div class="flex items-center justify-end gap-x-2 sm:justify-start">
                         <time class="text-gray-400 sm:hidden" datetime="2023-01-23T11:00"><%= time_ago_in_words(request.request_time) %> ago</time>
