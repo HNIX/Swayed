@@ -598,7 +598,7 @@ DEPENDENCIES
   devise-i18n (~> 1.10)
   draper
   erb_lint
-  error_highlight (>= 0.4.0)
+  error_highlight (>= 0.6.0)
   faker
   image_processing (~> 1.12)
   inline_svg (~> 1.6)

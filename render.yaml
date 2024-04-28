@@ -1,5 +1,6 @@
 # Example Render configuration. You will need to adjust this for the different services you run.
 # Replace repo url with the repository url for your Jumpstart Pro application
+previewsEnabled: true
 services:
   - type: web
     repo: https://github.com/HNIX/Swayed # Replace this url
