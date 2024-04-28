@@ -67,7 +67,14 @@ class CampaignDecorator < Draper::Decorator
     end
 
     def profit_margin(n = nil)
-        ((recent_profit(n) / recent_revenue(n)) * 100).round(0)
+        revenue = recent_revenue(n)
+        profit = recent_profit(n)
+      
+        if revenue.nil? || revenue.zero?
+          0.0 # or any other default value you want to return when revenue is nil or zero
+        else
+          ((profit / revenue) * 100).round(0)
+        end
     end
 
     # Calculates the change in profit compared to the previous period.

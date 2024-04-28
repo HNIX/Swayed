@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   include Authorization
 
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :check_app_secret
 
   impersonates :user
 
@@ -60,5 +61,11 @@ class ApplicationController < ActionController::Base
 
   def require_account
     redirect_to new_user_registration_path unless current_account
+  end
+
+  def check_app_secret
+    unless request.headers['X-App-Secret'] == ENV['APP_SECRET'] || params[:secret] == ENV['APP_SECRET']
+      render plain: 'Unauthorized', status: :unauthorized
+    end
   end
 end

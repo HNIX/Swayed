@@ -1,5 +1,5 @@
 --- !ruby/object:Jumpstart::Configuration
-application_name: Swayed
+application_name: Swayed LDX
 business_name: Swayed
 business_address: ''
 domain: imswayed.com
