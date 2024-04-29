@@ -44,9 +44,9 @@ class Campaign < ApplicationRecord
   has_many :sources, dependent: :destroy
   has_many :source_filters, dependent: :destroy
   has_many :distribution_filters, dependent: :destroy
-  has_many :campaign_distributions
+  has_many :campaign_distributions, dependent: :destroy
   has_many :distributions, through: :campaign_distributions
-  has_many :api_requests
+  has_many :api_requests, dependent: :destroy
   has_many :leads, through: :api_requests, source: :lead
 
   # Enums
@@ -93,13 +93,13 @@ class Campaign < ApplicationRecord
     end
   end
 
-  def api_ping_limit_reached?
-    pings_count.to_i >= api_ping_limit.to_i
-  end
+  # def api_ping_limit_reached?
+  #   pings_count.to_i >= api_ping_limit.to_i
+  # end
 
-  def increment_pings_count
-    increment!(:pings_count)
-  end
+  # def increment_pings_count
+  #   increment!(:pings_count)
+  # end
 
   def available_distributions
     Distribution.where.not(id: distributions.select(:id))

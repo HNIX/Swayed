@@ -24,10 +24,8 @@ class Vertical < ApplicationRecord
   acts_as_tenant :account
 
   has_many :campaigns
+  has_many :fields, dependent: :destroy
   has_many :companies, through: :campaigns
-
-  has_many :field_associations, as: :fieldable
-  has_many :fields, through: :field_associations
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :verticals, partial: "verticals/index", locals: {vertical: self} }

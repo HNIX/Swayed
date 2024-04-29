@@ -43,30 +43,58 @@
 #  fk_rails_...  (company_id => companies.id)
 #
 
+# File: test/fixtures/sources.yml
+
 one:
+  budget: 1000
+  description: "Source One Description"
+  failure_redirect_url: "https://example.com/failure"
+  integration_type: 0
+  landing_page_url: "https://example.com/landing"
+  margin: 0.2
+  minimum_acceptable_bid: 0.5
+  name: "Source One"
+  offer_type: 0
+  payout: 500
+  payout_method: 0
+  payout_structure: 0
+  postback_url: "https://example.com/postback"
+  privacy_policy_url: "https://example.com/privacy"
+  secure_token: "abc123"
+  shared: true
+  status: "active"
+  success_redirect_url: "https://example.com/success"
+  terms: "Terms and Conditions"
+  timeout: 20000
+  tracking_url: "https://example.com/tracking"
+  traffic_sources: 0
+  campaign: one
   company: one
-  terms: MyString
-  status: 1
-  landing_page_url: MyString
-  privacy_policy_url: MyString
-  postback_url: MyString
-  payout_method: MyString
-  payout_type: MyString
-  payout: 1
-  payout_cap: 1
-  ping_cap: 1
-  budget: 1
+  unique_source_id: "source_one_unique_id"
 
 two:
+  budget: 2000
+  description: "Source Two Description"
+  failure_redirect_url: "https://example.com/failure"
+  integration_type: 1
+  landing_page_url: "https://example.com/landing"
+  margin: 0.3
+  minimum_acceptable_bid: 0.8
+  name: "Source Two"
+  offer_type: 1
+  payout: 800
+  payout_method: 1
+  payout_structure: 1
+  postback_url: "https://example.com/postback"
+  privacy_policy_url: "https://example.com/privacy"
+  secure_token: "def456"
+  shared: false
+  status: "inactive"
+  success_redirect_url: "https://example.com/success"
+  terms: "Terms and Conditions"
+  timeout: 25000
+  tracking_url: "https://example.com/tracking"
+  traffic_sources: 1
+  campaign: two
   company: two
-  terms: MyString
-  status: 1
-  landing_page_url: MyString
-  privacy_policy_url: MyString
-  postback_url: MyString
-  payout_method: MyString
-  payout_type: MyString
-  payout: 1
-  payout_cap: 1
-  ping_cap: 1
-  budget: 1
+  unique_source_id: "source_two_unique_id"

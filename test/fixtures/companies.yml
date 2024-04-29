@@ -25,27 +25,31 @@
 #
 
 one:
-  name: MyString
-  payment_terms: MyString
-  billing_cycle: MyString
-  address: MyString
-  city: MyString
-  state: MyString
-  zip_code: MyString
-  tax_id: MyString
-  currency: MyString
-  payment_threshold: 1
-  status: MyString
+  address: "123 Main St"
+  billing_cycle: "Monthly"
+  city: "New York"
+  currency: "USD"
+  name: "Company One"
+  notes: "Some notes about the company"
+  payment_terms: "Net 30"
+  payment_threshold: 1000
+  state: "NY"
+  status: "Active"
+  zip_code: "10001"
+  account: one
+  tax_id: "123456789"
 
 two:
-  name: MyString
-  payment_terms: MyString
-  billing_cycle: MyString
-  address: MyString
-  city: MyString
-  state: MyString
-  zip_code: MyString
-  tax_id: MyString
-  currency: MyString
-  payment_threshold: 1
-  status: MyString
+  address: "456 Elm St"
+  billing_cycle: "Quarterly"
+  city: "San Francisco"
+  currency: "USD"
+  name: "Company Two"
+  notes: "Additional notes for the company"
+  payment_terms: "Net 60"
+  payment_threshold: 5000
+  state: "CA"
+  status: "Inactive"
+  zip_code: "94101"
+  account: two
+  tax_id: "987654321"

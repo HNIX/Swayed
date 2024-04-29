@@ -4,10 +4,17 @@ module SubscriptionsHelper
   end
 
   def pricing_cta(plan)
-    if plan.trial_period_days?
-      t(".start_trial")
+    plan.trial_period_days? ? t(".start_trial") : t(".get_started")
+  end
+
+  def pricing_link_to(plan, **opts)
+    default_options = {class: "btn btn-secondary btn-large btn-block"}
+    opts = default_options.merge(opts)
+
+    if plan.contact_url.present?
+      link_to t(".contact_us"), plan.contact_url, **opts
     else
-      t(".get_started")
+      link_to pricing_cta(plan), new_subscription_path(plan: plan), **opts
     end
   end
 

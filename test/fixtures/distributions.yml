@@ -31,15 +31,35 @@
 #
 
 one:
+  conditional_logic_enabled: true
+  endpoint: "https://example.com/api/v1/endpoint"
+  headers: true
+  headers_option: false
+  key: "distribution_key_one"
+  name: "Distribution One"
+  request_body_all_fields: true
+  request_format: 0
+  request_method: 0
+  response_format: "json"
+  response_mapping: { "key1": "value1", "key2": "value2" }
+  select_fields: false
+  status: "active"
+  template: { "template_key": "template_value" }
   company: one
-  account: one
-  endpoint: MyString
-  key: MyString
-  status: 1
 
 two:
+  conditional_logic_enabled: false
+  endpoint: "https://example.com/api/v2/endpoint"
+  headers: false
+  headers_option: true
+  key: "distribution_key_two"
+  name: "Distribution Two"
+  request_body_all_fields: false
+  request_format: 1
+  request_method: 1
+  response_format: "xml"
+  response_mapping: { "key3": "value3", "key4": "value4" }
+  select_fields: true
+  status: "draft"
+  template: { "template_key": "template_value" }
   company: two
-  account: two
-  endpoint: MyString
-  key: MyString
-  status: 1

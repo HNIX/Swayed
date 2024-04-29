@@ -19,9 +19,11 @@
 #
 
 one:
-  name: MyString
-  header_value: MyString
+  header_value: "application/json"
+  name: "Content-Type"
+  distribution: one
 
 two:
-  name: MyString
-  header_value: MyString
+  header_value: "Bearer token123"
+  name: "Authorization"
+  distribution: two

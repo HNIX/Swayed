@@ -19,13 +19,11 @@
 #
 
 one:
-  integer_value: 1
-  string_value: MyString
-  value_type: 1
+  list_value: "Option 1"
+  value_type: "string"
   campaign_field: one
 
 two:
-  integer_value: 1
-  string_value: MyString
-  value_type: 1
+  list_value: "10"
+  value_type: "integer"
   campaign_field: two

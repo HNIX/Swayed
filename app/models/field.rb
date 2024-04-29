@@ -22,8 +22,8 @@
 #
 # Indexes
 #
-#  index_fields_on_name_and_vertical_id  (name,vertical_id) UNIQUE
-#  index_fields_on_vertical_id           (vertical_id)
+#  index_fields_on_name         (name) UNIQUE
+#  index_fields_on_vertical_id  (vertical_id)
 #
 # Foreign Keys
 #
@@ -34,9 +34,7 @@ class Field < ApplicationRecord
 
   has_rich_text :notes
 
-  has_many :field_associations, as: :fieldable
-  has_many :campaigns, through: :field_associations, source: :fieldable, source_type: "Campaign"
-  has_many :verticals, through: :field_associations, source: :fieldable, source_type: "Vertical"
+  belongs_to :vertical
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :fields, partial: "fields/index", locals: {field: self} }

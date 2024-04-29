@@ -22,9 +22,17 @@
 #
 
 one:
-  name: MyString
-  description: MyText
+  archived: false
+  base: true
+  description: "Vertical One Description"
+  primary_category: 0
+  secondary_category: "Subcategory One"
+  account: one
 
 two:
-  name: MyString
-  description: MyText
+  archived: true
+  base: false
+  description: "Vertical Two Description"
+  primary_category: 1
+  secondary_category: "Subcategory Two"
+  account: two

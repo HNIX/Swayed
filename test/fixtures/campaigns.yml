@@ -29,11 +29,27 @@
 #
 
 one:
+  campaign_type: 0
+  description: "This is the first campaign"
+  distribution_method: 0
+  distribution_schedule_days: ["Monday", "Wednesday", "Friday"]
+  distribution_schedule_enabled: true
+  distribution_schedule_end_time: "17:00"
+  distribution_schedule_start_time: "09:00"
+  name: "Campaign One"
+  status: 0
+  account: one
   vertical: one
-  name: MyString
-  description: MyText
 
 two:
+  campaign_type: 1
+  description: "This is the second campaign"
+  distribution_method: 1
+  distribution_schedule_days: ["Tuesday", "Thursday"]
+  distribution_schedule_enabled: false
+  distribution_schedule_end_time: "16:00"
+  distribution_schedule_start_time: "10:00"
+  name: "Campaign Two"
+  status: 1
+  account: two
   vertical: two
-  name: MyString
-  description: MyText

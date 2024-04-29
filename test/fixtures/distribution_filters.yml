@@ -26,21 +26,21 @@
 #
 
 one:
-  apply_to_all: false
-  criteria: 
-  name: MyString
-  operator: MyString
-  status: 1
-  value: MyString
+  apply_to_all: true
+  criteria: { "key": "value" }
+  name: "Filter One"
+  operator: "equal"
+  status: "active"
+  value: "filter_value"
   campaign_field: one
   campaign: one
 
 two:
   apply_to_all: false
-  criteria: 
-  name: MyString
-  operator: MyString
-  status: 1
-  value: MyString
+  criteria: { "key1": "value1", "key2": "value2" }
+  name: "Filter Two"
+  operator: "greater_than"
+  status: "inactive"
+  value: "another_filter_value"
   campaign_field: two
   campaign: two

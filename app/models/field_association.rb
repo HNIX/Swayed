@@ -19,6 +19,5 @@
 #  fk_rails_...  (field_id => fields.id)
 #
 class FieldAssociation < ApplicationRecord
-  belongs_to :field
-  belongs_to :fieldable, polymorphic: true
+  belongs_to :field, polymorphic: true
 end

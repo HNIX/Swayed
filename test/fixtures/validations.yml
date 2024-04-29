@@ -27,11 +27,27 @@
 #
 
 one:
-  validation_type: 1
-  validation_data: MyText
-  campaign_fields: one
+  max_value: 100
+  min_value: 0
+  operator: "greater_than"
+  validation_type: 0
+  value_boolean: null
+  value_date: null
+  value_date_end: null
+  value_date_start: null
+  value_integer: null
+  value_text: null
+  campaign_field: one
 
 two:
+  max_value: null
+  min_value: null
+  operator: "equal_to"
   validation_type: 1
-  validation_data: MyText
-  campaign_fields: two
+  value_boolean: true
+  value_date: null
+  value_date_end: null
+  value_date_start: null
+  value_integer: null
+  value_text: null
+  campaign_field: two

@@ -22,11 +22,17 @@
 #
 
 one:
-  name: MyString
-  formula: MyString
+  clean_formula: "field1 + field2"
+  error_log: null
+  formula: "{{field1}} + {{field2}}"
+  name: "Calculated Field One"
+  status: "active"
   campaign: one
 
 two:
-  name: MyString
-  formula: MyString
+  clean_formula: "field3 * field4"
+  error_log: { "message": "Division by zero", "line": 3 }
+  formula: "{{field3}} * {{field4}}"
+  name: "Calculated Field Two"
+  status: "inactive"
   campaign: two

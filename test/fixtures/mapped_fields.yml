@@ -23,15 +23,15 @@
 #
 
 one:
-  name: MyString
-  static_value: MyString
-  campaign_field: one
-  campaign_distribution: one
   is_static: false
+  name: "Field 1"
+  static_value: null
+  campaign_distribution: one
+  campaign_field: one
 
 two:
-  name: MyString
-  static_value: MyString
-  campaign_field: two
+  is_static: true
+  name: "Static Field"
+  static_value: "Static Value"
   campaign_distribution: two
-  is_static: false
+  campaign_field: two

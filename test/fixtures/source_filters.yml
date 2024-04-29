@@ -26,11 +26,21 @@
 #
 
 one:
-  criteria: 
-  status: 1
   apply_to_all: false
+  criteria: { "key": "value" }
+  name: "Source Filter One"
+  operator: "equal"
+  status: "active"
+  value: "Filter Value"
+  campaign_field: one
+  campaign: one
 
 two:
-  criteria: 
-  status: 1
-  apply_to_all: false
+  apply_to_all: true
+  criteria: { "key1": "value1", "key2": "value2" }
+  name: "Source Filter Two"
+  operator: "greater_than"
+  status: "inactive"
+  value: "Another Filter Value"
+  campaign_field: two
+  campaign: two

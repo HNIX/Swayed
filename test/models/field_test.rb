@@ -22,8 +22,8 @@
 #
 # Indexes
 #
-#  index_fields_on_name_and_vertical_id  (name,vertical_id) UNIQUE
-#  index_fields_on_vertical_id           (vertical_id)
+#  index_fields_on_name         (name) UNIQUE
+#  index_fields_on_vertical_id  (vertical_id)
 #
 # Foreign Keys
 #

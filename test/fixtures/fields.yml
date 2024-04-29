@@ -22,8 +22,8 @@
 #
 # Indexes
 #
-#  index_fields_on_name_and_vertical_id  (name,vertical_id) UNIQUE
-#  index_fields_on_vertical_id           (vertical_id)
+#  index_fields_on_name         (name) UNIQUE
+#  index_fields_on_vertical_id  (vertical_id)
 #
 # Foreign Keys
 #
@@ -31,21 +31,33 @@
 #
 
 one:
-  name: MyString
-  label: MyString
-  data_type: MyString
-  validated: false
-  post_required: false
-  ping_required: false
+  name: "Field One"
+  data_type: "string"
+  default_value: "Default Value"
+  example_value: "Example Value"
   hide: false
+  is_pii: false
+  max_value: 100
+  min_value: 0
+  position: 1
+  post_only: false
+  required: false
+  validated: false
+  value_acceptance: 1
   vertical: one
 
 two:
-  name: MyString
-  label: MyString
-  data_type: MyString
-  validated: false
-  post_required: false
-  ping_required: false
-  hide: false
+  name: "Field Two"
+  data_type: "integer"
+  default_value: "10"
+  example_value: "20"
+  hide: true
+  is_pii: true
+  max_value: 200
+  min_value: 10
+  position: 2
+  post_only: true
+  required: true
+  validated: true
+  value_acceptance: 2
   vertical: two

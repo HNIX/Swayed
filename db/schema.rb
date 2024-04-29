@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_02_192322) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -361,7 +361,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_02_192322) do
     t.boolean "post_only", default: false
     t.boolean "required", default: false
     t.integer "value_acceptance"
-    t.index ["name", "vertical_id"], name: "index_fields_on_name_and_vertical_id", unique: true
+    t.index ["name"], name: "index_fields_on_name", unique: true
     t.index ["vertical_id"], name: "index_fields_on_vertical_id"
   end
 

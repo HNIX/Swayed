@@ -24,29 +24,29 @@
 #
 
 one:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
-  phone: MyString
-  address: MyString
-  city: MyString
-  state: MyString
-  zip: MyString
-  status: MyString
-  fields: 
-  status: 
-  score: 1
+  bid_cents: 1000
+  custom_fields: { "field1": "value1", "field2": "value2" }
+  email: "john@example.com"
+  first_name: "John"
+  last_name: "Doe"
+  phone: "123-456-7890"
+  profit_cents: 500
+  revenue_cents: 2000
+  score: 80
+  status: "current"
+  account: one
+  api_request: one
 
 two:
-  first_name: MyString
-  last_name: MyString
-  email: MyString
-  phone: MyString
-  address: MyString
-  city: MyString
-  state: MyString
-  zip: MyString
-  status: MyString
-  fields: 
-  status: 
-  score: 1
+  bid_cents: 1500
+  custom_fields: { "field3": "value3", "field4": "value4" }
+  email: "jane@example.com"
+  first_name: "Jane"
+  last_name: "Smith"
+  phone: "987-654-3210"
+  profit_cents: 800
+  revenue_cents: 3000
+  score: 90
+  status: "converted"
+  account: two
+  api_request: two

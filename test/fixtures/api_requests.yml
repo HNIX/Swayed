@@ -38,27 +38,47 @@
 #
 
 one:
-  accepted: false
-  lead_posted: false
-  price: 1
-  request_body: 
-  response_body: 
-  status: 1
+  id: <%= SecureRandom.uuid %>
+  accepted: true
+  api_key: "abc123"
+  direction: "inbound"
+  endpoint: "/api/v1/leads"
+  headers: { "Content-Type": "application/json" }
+  lead_posted: true
+  method_type: "POST"
+  price: 100
+  request_body: { "name": "John Doe", "email": "john@example.com" }
+  request_body_hash: "abcdef123456"
+  request_errors: null
+  request_time: <%= 1.hour.ago %>
+  requestable_type: "Lead"
+  requestable_id: 1
+  response_body: { "status": "success", "message": "Lead created" }
+  response_code: 200
+  source_ip: "127.0.0.1"
+  status: "success"
   test: false
-  response_code: 1
   campaign: one
-  source: one
-  distribution: one
 
 two:
+  id: <%= SecureRandom.uuid %>
   accepted: false
+  api_key: "def456"
+  direction: "outbound"
+  endpoint: "/api/v1/campaigns"
+  headers: { "Authorization": "Bearer token123" }
   lead_posted: false
-  price: 1
-  request_body: 
-  response_body: 
-  status: 1
-  test: false
-  response_code: 1
+  method_type: "GET"
+  price: null
+  request_body: null
+  request_body_hash: null
+  request_errors: "Invalid API key"
+  request_time: <%= 2.hours.ago %>
+  requestable_type: "Campaign"
+  requestable_id: 2
+  response_body: { "error": "Unauthorized" }
+  response_code: 401
+  source_ip: "192.168.0.1"
+  status: "error"
+  test: true
   campaign: two
-  source: two
-  distribution: two

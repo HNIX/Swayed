@@ -35,6 +35,8 @@ class Account < ApplicationRecord
   has_many :addresses, as: :addressable, dependent: :destroy
   has_one :billing_address, -> { where(address_type: :billing) }, class_name: "Address", as: :addressable
   has_one :shipping_address, -> { where(address_type: :shipping) }, class_name: "Address", as: :addressable
+  has_many :campaigns, dependent: :destroy
+  has_many :verticals, dependent: :destroy
 
   scope :personal, -> { where(personal: true) }
   scope :impersonal, -> { where(personal: false) }
@@ -73,9 +75,9 @@ class Account < ApplicationRecord
     owner_id == user.id
   end
 
-  def monthly_api_pings_count(month: Time.zone.now.month, year: Time.zone.now.year)
-    api_pings.where(created_at: Date.new(year, month).beginning_of_month.Date.new(year, month).end_of_month).count
-  end
+  # def monthly_api_pings_count(month: Time.zone.now.month, year: Time.zone.now.year)
+  #   api_pings.where(created_at: Date.new(year, month).beginning_of_month.Date.new(year, month).end_of_month).count
+  # end
 
   # An account can be transferred by the owner if it:
   # * Isn't a personal account

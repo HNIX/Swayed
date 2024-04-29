@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: api_tokens
+# Table name: source_tokens
 #
 #  id           :bigint           not null, primary key
 #  expires_at   :datetime
@@ -11,34 +11,38 @@
 #  transient    :boolean          default(FALSE)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  user_id      :bigint           not null
+#  account_id   :bigint
+#  source_id    :bigint
 #
 # Indexes
 #
-#  index_api_tokens_on_token    (token) UNIQUE
-#  index_api_tokens_on_user_id  (user_id)
+#  index_source_tokens_on_account_id  (account_id)
+#  index_source_tokens_on_name        (name) UNIQUE
+#  index_source_tokens_on_source_id   (source_id) UNIQUE
+#  index_source_tokens_on_token       (token) UNIQUE
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (account_id => accounts.id)
+#  fk_rails_...  (source_id => sources.id)
 #
-
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
   expires_at: <%= 1.day.from_now %>
   last_used_at: <%= 1.hour.ago %>
   metadata: { "key": "value", "nested": { "key": "nested_value" } }
-  name: "API Token One"
+  name: "Source Token One"
   token: "abc123"
   transient: false
-  user: one
+  account: one
+  source: one
 
 two:
   expires_at: <%= 7.days.from_now %>
   last_used_at: <%= 2.hours.ago %>
   metadata: { "key1": "value1", "key2": "value2" }
-  name: "API Token Two"
+  name: "Source Token Two"
   token: "def456"
   transient: true
-  user: two
+  account: two
+  source: two

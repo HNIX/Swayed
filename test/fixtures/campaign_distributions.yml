@@ -23,15 +23,19 @@
 #
 
 one:
+  field_mapping:
+    first_name: "lead.first_name"
+    last_name: "lead.last_name"
+    email: "lead.email"
+  use_template: true
   campaign: one
   distribution: one
-  weekly_limit: 1
-  daily_limit: 1
-  monthly_limit: 1
 
 two:
+  field_mapping:
+    name: "contact.name"
+    phone: "contact.phone"
+  use_template: true
   campaign: two
   distribution: two
-  weekly_limit: 1
-  daily_limit: 1
-  monthly_limit: 1
+
