@@ -31,12 +31,12 @@ class Campaign < ApplicationRecord
   acts_as_tenant :account
 
   include PgSearch::Model
-  pg_search_scope :search, against: [:name, :status], using: { tsearch: { prefix: true }}
+  pg_search_scope :search, against: [:name, :status], using: {tsearch: {prefix: true}}
 
   # Constants
   ACTIVE_CAMPAIGNS_LIMIT = 10
   DAYS_OPTIONS = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday]
-  
+
   # Associations
   belongs_to :vertical
   has_many :campaign_fields, -> { order(position: :asc) }, dependent: :destroy
@@ -50,21 +50,21 @@ class Campaign < ApplicationRecord
   has_many :leads, through: :api_requests, source: :lead
 
   # Enums
-  enum status: { draft: 0, active: 1, paused: 2, test: 3, ended: 4 }
-  enum campaign_type: { ping_post: 0, direct_post: 1, calls: 2 }
-  enum distribution_method: { weighted: 0, round_robin: 1, manual: 2, priority: 3, highest_bid: 4 }
+  enum status: {draft: 0, active: 1, paused: 2, test: 3, ended: 4}
+  enum campaign_type: {ping_post: 0, direct_post: 1, calls: 2}
+  enum distribution_method: {weighted: 0, round_robin: 1, manual: 2, priority: 3, highest_bid: 4}
 
   # Validations
-  validates :name, presence: true, length: { minimum: 3, maximum: 100 }, uniqueness: { scope: :account_id, message: "This campaign name is already taken." }, on: :update
+  validates :name, presence: true, length: {minimum: 3, maximum: 100}, uniqueness: {scope: :account_id, message: "This campaign name is already taken."}, on: :update
   validates :status, :campaign_type, :distribution_method, :vertical, presence: true
-  validates :status, inclusion: { in: statuses.keys, message: "%{value} is not a valid status" }
+  validates :status, inclusion: {in: statuses.keys, message: "%{value} is not a valid status"}
 
   # Length Validations
-  validates :description, length: { maximum: 500 }, allow_blank: true
+  validates :description, length: {maximum: 500}, allow_blank: true
 
   # Inclusion Validations
-  validates :campaign_type, inclusion: { in: campaign_types.keys, message: "%{value} is not a valid campaign type" }
-  validates :distribution_method, inclusion: { in: distribution_methods.keys, message: "%{value} is not a valid distribution method" }
+  validates :campaign_type, inclusion: {in: campaign_types.keys, message: "%{value} is not a valid campaign type"}
+  validates :distribution_method, inclusion: {in: distribution_methods.keys, message: "%{value} is not a valid distribution method"}
 
   # Custom Validations
   validate :end_date_after_start_date
@@ -76,7 +76,7 @@ class Campaign < ApplicationRecord
   # Nested Attributes
   accepts_nested_attributes_for :campaign_fields, allow_destroy: true, :reject_if => :all_blank
   accepts_nested_attributes_for :sources, :reject_if => :all_blank
-  accepts_nested_attributes_for :distributions, allow_destroy: true, reject_if: proc { |attributes| attributes['name'].blank? && attributes['headers_attributes'][0].nil? }
+  accepts_nested_attributes_for :distributions, allow_destroy: true, reject_if: proc { |attributes| attributes["name"].blank? && attributes["headers_attributes"][0].nil? }
   accepts_nested_attributes_for :campaign_distributions
 
   # Callbacks
@@ -118,26 +118,25 @@ class Campaign < ApplicationRecord
   end
 
   def active_campaigns_limit
-    errors.add(:base, "You have reached the limit of #{ACTIVE_CAMPAIGNS_LIMIT} active campaigns.") if active? && Campaign.where(status: 'active').limit(ACTIVE_CAMPAIGNS_LIMIT).exists?
+    errors.add(:base, "You have reached the limit of #{ACTIVE_CAMPAIGNS_LIMIT} active campaigns.") if active? && Campaign.where(status: "active").limit(ACTIVE_CAMPAIGNS_LIMIT).exists?
   end
 
   def sample_value_for(field, data_type)
     case data_type.downcase
-    when 'text'
+    when "text"
       field.name
-    when 'number'
+    when "number"
       123
-    when 'date'
+    when "date"
       Date.today.to_s
-    when 'boolean'
+    when "boolean"
       [true, false].sample
-    when 'email'
+    when "email"
       "email@example.com"
-    when 'phone'
+    when "phone"
       "(123) 456-7890"
     else
-      'Unknown Type'
+      "Unknown Type"
     end
   end
 end
-

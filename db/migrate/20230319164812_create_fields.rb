@@ -16,6 +16,5 @@ class CreateFields < ActiveRecord::Migration[7.0]
 
     add_index :fields, [:name, :vertical_id], unique: true
     add_index :fields, [:label, :vertical_id], unique: true
-
   end
 end

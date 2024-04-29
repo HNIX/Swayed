@@ -12,7 +12,7 @@ class SourceTokensController < ApplicationController
 
   def create
     @source_token = SourceToken.new(source_token_params)
-    
+
     if @source_token.save
       redirect_to @source_token, notice: t(".created")
     else
@@ -39,7 +39,7 @@ class SourceTokensController < ApplicationController
   # POST /source_tokens/:id/refresh_token
   def refresh_token
     @source_token.refresh_token!
-    redirect_to campaign_sources_path(@source_token.source.campaign), notice: 'Source token has been refreshed successfully.'
+    redirect_to campaign_sources_path(@source_token.source.campaign), notice: "Source token has been refreshed successfully."
   end
 
   private

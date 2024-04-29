@@ -12,8 +12,3 @@ class AddFieldsToCampaignFields < ActiveRecord::Migration[7.1]
     remove_column :campaign_fields, :validated, :boolean
   end
 end
-
-
-
-
-

@@ -13,7 +13,7 @@ class SourcesController < ApplicationController
   def create
     @source = @campaign.sources.build(source_params)
     if @source.save
-      redirect_to campaign_sources_path(@campaign), notice: 'Source was successfully created.'
+      redirect_to campaign_sources_path(@campaign), notice: "Source was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -25,7 +25,7 @@ class SourcesController < ApplicationController
 
   def update
     if @source.update(source_params)
-      redirect_to campaign_sources_path(@campaign), notice: 'Source was successfully updated.'
+      redirect_to campaign_sources_path(@campaign), notice: "Source was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class SourcesController < ApplicationController
 
   def destroy
     @source.destroy
-    redirect_to campaign_sources_path(@campaign), notice: 'Source was successfully removed.'
+    redirect_to campaign_sources_path(@campaign), notice: "Source was successfully removed."
   end
 
   def index
@@ -68,7 +68,7 @@ class SourcesController < ApplicationController
 
   def source_params
     permitted_attributes = [:payout_structure, :success_redirect_url, :failure_redirect_url, :timeout, :description, :name, :offer_type, :company_id, :terms, :status, :landing_page_url, :privacy_policy_url, :postback_url, :payout_method, :payout, :budget, :margin, :minimum_acceptable_bid]
-    permitted_attributes += [:campaign_id, :integration_type] if action_name == 'create'
+    permitted_attributes += [:campaign_id, :integration_type] if action_name == "create"
     params.require(:source).permit(permitted_attributes)
   end
 
@@ -84,4 +84,3 @@ class SourcesController < ApplicationController
     sources.reorder("#{sort_column} #{sort_direction}")
   end
 end
-  

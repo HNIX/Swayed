@@ -18,6 +18,6 @@
 #  fk_rails_...  (lead_id => leads.id)
 #
 class ApiRequestLead < ApplicationRecord
-    belongs_to :api_request
-    belongs_to :lead
-  end
+  belongs_to :api_request
+  belongs_to :lead
+end

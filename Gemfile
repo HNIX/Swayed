@@ -43,24 +43,24 @@ gem "image_processing", "~> 1.12"
 # Security update
 gem "nokogiri", ">= 1.12.5"
 
-gem 'phonelib'
+gem "phonelib"
 
-gem 'rules', github: 'HNIX/rules'
+gem "rules", github: "HNIX/rules"
 
-gem 'wicked'
+gem "wicked"
 
-gem 'acts_as_list'
+gem "acts_as_list"
 
-gem 'faker'
+gem "faker"
 
-gem 'kaminari'
+gem "kaminari"
 
-gem 'dentaku'
+gem "dentaku"
 
-#gem "meilisearch-rails", "~> 0.10.1"
-gem 'pg_search', "~> 2.3"
+# gem "meilisearch-rails", "~> 0.10.1"
+gem "pg_search", "~> 2.3"
 
-gem 'draper'
+gem "draper"
 
 gem "ultimate_turbo_modal", "~> 1.6"
 

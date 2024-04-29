@@ -1,14 +1,14 @@
 module ApplicationHelper
   include Pagy::Frontend
 
-  def sort_link_to(name, column, **options)
-    if params[:sort] == column.to_s
-      direction = params[:direction] == "asc" ? "desc" : "asc"
+  def sort_link_to(name, column, **)
+    direction = if params[:sort] == column.to_s
+      (params[:direction] == "asc") ? "desc" : "asc"
     else
-      direction = "asc"
+      "asc"
     end
 
-    link_to name, request.params.merge(sort: column, direction: direction), **options
+    link_to(name, request.params.merge(sort: column, direction: direction), **)
   end
 
   # Generates button tags for Turbo disable with
@@ -72,14 +72,14 @@ module ApplicationHelper
 
   def page_header
     case controller_name
-    when 'campaigns'
-      action_name == 'show' ? 'Campaign Details' : 'Campaigns'
-    when 'sources'
-      action_name == 'show' ? 'Source Details' : 'Sources'
-    when 'distributions'
-      action_name == 'show' ? 'Distribution Details' : 'Distributions'
+    when "campaigns"
+      (action_name == "show") ? "Campaign Details" : "Campaigns"
+    when "sources"
+      (action_name == "show") ? "Source Details" : "Sources"
+    when "distributions"
+      (action_name == "show") ? "Distribution Details" : "Distributions"
     else
-      'Swayed LDX'
+      "Swayed LDX"
     end
   end
 end

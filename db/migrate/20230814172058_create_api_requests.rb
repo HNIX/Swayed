@@ -1,6 +1,6 @@
 class CreateApiRequests < ActiveRecord::Migration[7.0]
   def change
-    create_table :api_requests, id: :uuid  do |t|
+    create_table :api_requests, id: :uuid do |t|
       t.boolean :accepted
       t.boolean :lead_posted
       t.integer :price

@@ -33,8 +33,8 @@ class CampaignField < ApplicationRecord
 
   # Constants
   VALID_NAME_REGEX = /\A[a-z0-9_]+\z/i
-  DATA_TYPE_OPTIONS = { text: 0, number: 1, boolean: 2, date: 3, email: 5, phone: 6 }
-  VALUE_ACCEPTANCE_OPTIONS = { any: 0, list: 1, range: 2 }
+  DATA_TYPE_OPTIONS = {text: 0, number: 1, boolean: 2, date: 3, email: 5, phone: 6}
+  VALUE_ACCEPTANCE_OPTIONS = {any: 0, list: 1, range: 2}
 
   # Enums
   enum data_type: DATA_TYPE_OPTIONS
@@ -54,87 +54,86 @@ class CampaignField < ApplicationRecord
   accepts_nested_attributes_for :list_values, allow_destroy: true, :reject_if => :all_blank
 
   # Callbacks for broadcasting changes
-  after_create_commit { broadcast_prepend_later_to :campaign_fields, partial: "campaign_fields/index", locals: { campaign_field: self } }
+  after_create_commit { broadcast_prepend_later_to :campaign_fields, partial: "campaign_fields/index", locals: {campaign_field: self} }
   after_update_commit { broadcast_replace_later_to self }
   after_destroy_commit { broadcast_remove_to :campaign_fields, target: dom_id(self, :index) }
 
   # Validations
-  validates :name, presence: true, format: { with: VALID_NAME_REGEX, message: "can only be alphanumeric with underscores" }, length: { minimum: 2, maximum: 100 },
-                   uniqueness: { scope: :campaign_id, case_sensitive: false, message: "This field name is already used for this campaign." }
-  validates :data_type, presence: true, inclusion: { in: DATA_TYPE_OPTIONS.keys.map(&:to_s), message: "%{value} is not a valid field type" }
-  validates :value_acceptance, presence: true, inclusion: { in: VALUE_ACCEPTANCE_OPTIONS.keys.map(&:to_s), message: "%{value} is not valid" }
+  validates :name, presence: true, format: {with: VALID_NAME_REGEX, message: "can only be alphanumeric with underscores"}, length: {minimum: 2, maximum: 100},
+    uniqueness: {scope: :campaign_id, case_sensitive: false, message: "This field name is already used for this campaign."}
+  validates :data_type, presence: true, inclusion: {in: DATA_TYPE_OPTIONS.keys.map(&:to_s), message: "%{value} is not a valid field type"}
+  validates :value_acceptance, presence: true, inclusion: {in: VALUE_ACCEPTANCE_OPTIONS.keys.map(&:to_s), message: "%{value} is not valid"}
   validate :validate_post_required, :validate_list_values_if_number
-
 
   # Instance methods for formatting and validation
   def format_value
     case data_type
-    when 'text' then 'Text'
-    when 'number' then 'Number (whole or decimal)'
-    when 'boolean' then 'Boolean (true or false)'
-    when 'date' then 'ISO 8601 Date (YYYY-MM-DD)'
-    when 'email' then 'Standard email format'
-    when 'phone' then 'Phone number (E.164 format)'
-    else 'Unknown format'
+    when "text" then "Text"
+    when "number" then "Number (whole or decimal)"
+    when "boolean" then "Boolean (true or false)"
+    when "date" then "ISO 8601 Date (YYYY-MM-DD)"
+    when "email" then "Standard email format"
+    when "phone" then "Phone number (E.164 format)"
+    else "Unknown format"
     end
   end
 
   def generate_example_value
     case data_type
-    when 'text' then '"Sample Text"'
-    when 'number' then '42 or 42.5'
-    when 'boolean' then 'true/false'
-    when 'date' then '2023-01-01'
-    when 'email' then 'example@email.com'
-    when 'phone' then '+1234567890'
-    else 'N/A'
+    when "text" then '"Sample Text"'
+    when "number" then "42 or 42.5"
+    when "boolean" then "true/false"
+    when "date" then "2023-01-01"
+    when "email" then "example@email.com"
+    when "phone" then "+1234567890"
+    else "N/A"
     end
   end
 
   def enhanced_notes
     prepend_text = case value_acceptance
-                   when 'list'
-                     format_list_values_as_bullets
-                   when 'range'
-                     "#{min_value} to #{max_value}"
-                   else
-                     ''
-                   end
+    when "list"
+      format_list_values_as_bullets
+    when "range"
+      "#{min_value} to #{max_value}"
+    else
+      ""
+    end
 
-    "#{prepend_text}".html_safe
+    prepend_text.to_s.html_safe
   end
 
   def operator_options
     case data_type
-    when 'number'
+    when "number"
       {
-        'equal' => 'Equals',
-        'not_equal' => 'Does not equal',
-        'greater_than' => 'Greater than',
-        'less_than' => 'Less than',
-        'greater_than_or_equal' => 'Greater than or equal to',
-        'less_than_or_equal' => 'Less than or equal to'
+        "equal" => "Equals",
+        "not_equal" => "Does not equal",
+        "greater_than" => "Greater than",
+        "less_than" => "Less than",
+        "greater_than_or_equal" => "Greater than or equal to",
+        "less_than_or_equal" => "Less than or equal to"
       }
-    when 'text'
+    when "text"
       {
-        'equal' => 'Equals',
-        'not_equal' => 'Does not equal',
-        'contains' => 'Contains',
-        'not_contains' => 'Does not contain',
-        'starts_with' => 'Starts with',
-        'ends_with' => 'Ends with'
+        "equal" => "Equals",
+        "not_equal" => "Does not equal",
+        "contains" => "Contains",
+        "not_contains" => "Does not contain",
+        "starts_with" => "Starts with",
+        "ends_with" => "Ends with"
       }
     else {
-      'equal' => 'Equals',
-      'not_equal' => 'Does not equal',
-      'contains' => 'Contains',
-      'not_contains' => 'Does not contain',
-      'starts_with' => 'Starts with',
-      'ends_with' => 'Ends with'
+      "equal" => "Equals",
+      "not_equal" => "Does not equal",
+      "contains" => "Contains",
+      "not_contains" => "Does not contain",
+      "starts_with" => "Starts with",
+      "ends_with" => "Ends with"
     }
     end
   end
-  
+
   private
 
   # Private validation methods
@@ -150,11 +149,13 @@ class CampaignField < ApplicationRecord
   end
 
   def valid_number?(value)
-    !!Float(value) rescue false
+    !!Float(value)
+  rescue
+    false
   end
 
   def format_list_values_as_bullets
-    return '' if list_values.blank?
+    return "" if list_values.blank?
 
     list_items = list_values.map { |value| "<li>#{value.list_value}</li>" }.join
     "<ul>#{list_items}</ul>"
@@ -162,39 +163,39 @@ class CampaignField < ApplicationRecord
 
   def field_requirements
     case data_type.downcase
-    when 'text'
+    when "text"
       text_requirements
-    when 'number'
+    when "number"
       number_requirements
-    when 'boolean'
-      'Boolean value (true or false)'
-    when 'date'
-      'Valid date in ISO 8601 format (YYYY-MM-DD)'
-    when 'email'
-      'Valid formatted email address'
-    when 'phone'
+    when "boolean"
+      "Boolean value (true or false)"
+    when "date"
+      "Valid date in ISO 8601 format (YYYY-MM-DD)"
+    when "email"
+      "Valid formatted email address"
+    when "phone"
+      "Valid phone number"
     else
-      'Specific requirements are not defined for this type'
+      "Specific requirements are not defined for this type"
     end
   end
 
   def text_requirements
-    value_acceptance == 'list' ? 'Any text from the permitted values' : 'Any text'
+    (value_acceptance == "list") ? "Any text from the permitted values" : "Any text"
   end
 
   def number_requirements
     case value_acceptance
-    when 'list'
-      'Any number from the permitted values'
-    when 'range'
+    when "list"
+      "Any number from the permitted values"
+    when "range"
       "Number within the permitted range"
     else
-      'Whole or decimal number'
+      "Whole or decimal number"
     end
   end
 
   def phone_number_requirements
-    phone_format ? "Phone number in the format: #{phone_format}" : '10-digit phone number'
+    phone_format ? "Phone number in the format: #{phone_format}" : "10-digit phone number"
   end
 end
-

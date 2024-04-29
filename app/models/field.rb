@@ -35,18 +35,18 @@ class Field < ApplicationRecord
   has_rich_text :notes
 
   has_many :field_associations, as: :fieldable
-  has_many :campaigns, through: :field_associations, source: :fieldable, source_type: 'Campaign'
-  has_many :verticals, through: :field_associations, source: :fieldable, source_type: 'Vertical'
-  
+  has_many :campaigns, through: :field_associations, source: :fieldable, source_type: "Campaign"
+  has_many :verticals, through: :field_associations, source: :fieldable, source_type: "Vertical"
+
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :fields, partial: "fields/index", locals: {field: self} }
   after_update_commit -> { broadcast_replace_later_to self }
   after_destroy_commit -> { broadcast_remove_to :fields, target: dom_id(self, :index) }
 
-  enum data_type: { text: 0, number: 1, boolean: 2, date: 3, email: 5, phone: 6 }
-  enum value_acceptance: { any: 0, list: 1, range: 2 }
+  enum data_type: {text: 0, number: 1, boolean: 2, date: 3, email: 5, phone: 6}
+  enum value_acceptance: {any: 0, list: 1, range: 2}
 
-  validates :name, presence: true, uniqueness: { scope: :vertical_id }
+  validates :name, presence: true, uniqueness: {scope: :vertical_id}
   validates :data_type, presence: true
   validate :validate_data_type
 
@@ -56,5 +56,3 @@ class Field < ApplicationRecord
     errors.add(:data_type, "is not valid") unless DATA_TYPES.include?(data_type)
   end
 end
-
-

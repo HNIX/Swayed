@@ -29,7 +29,7 @@ class DistributionFilter < ApplicationRecord
   belongs_to :campaign_field
   has_and_belongs_to_many :distributions
 
-  enum status: { active: 0, paused: 1, archived: 2 }
+  enum status: {active: 0, paused: 1, archived: 2}
 
   def applies_to?(distribution)
     apply_to_all || distributions.include?(distribution)

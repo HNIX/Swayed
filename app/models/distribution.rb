@@ -33,23 +33,23 @@ class Distribution < ApplicationRecord
   after_initialize :set_default_response_mapping
 
   belongs_to :company
-  
+
   has_many :campaign_distributions
   has_many :campaigns, through: :campaign_distributions
   has_many :api_requests, as: :requestable
-  has_many :leads, through: :api_requests, source: :lead 
+  has_many :leads, through: :api_requests, source: :lead
   has_many :headers, dependent: :destroy
   has_and_belongs_to_many :distribution_filters
 
   accepts_nested_attributes_for :headers, allow_destroy: true, :reject_if => :all_blank
 
-  enum request_method: { get: 0, post: 1, put: 2, patch: 3 }
-  enum request_format: { form: 0, json: 1, xml: 2 }
-  enum status: { draft: 0, active: 1, paused: 2, archived: 3 }
+  enum request_method: {get: 0, post: 1, put: 2, patch: 3}
+  enum request_format: {form: 0, json: 1, xml: 2}
+  enum status: {draft: 0, active: 1, paused: 2, archived: 3}
 
-  scope :active, -> { where(status: ['active', 'paused']) }
-  scope :paused, -> { where(status: 'paused') }
-  scope :archived, -> { where(status: 'archived') }
+  scope :active, -> { where(status: ["active", "paused"]) }
+  scope :paused, -> { where(status: "paused") }
+  scope :archived, -> { where(status: "archived") }
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :distributions, partial: "distributions/index", locals: {distribution: self} }
@@ -63,34 +63,33 @@ class Distribution < ApplicationRecord
   validates :request_format, presence: true
 
   # Inclusion Validations
-  validates :request_method, inclusion: { in: request_methods.keys, message: "%{value} is not a valid request method" }
-  validates :request_format, inclusion: { in: request_formats.keys, message: "%{value} is not a valid request format" }
+  validates :request_method, inclusion: {in: request_methods.keys, message: "%{value} is not a valid request method"}
+  validates :request_format, inclusion: {in: request_formats.keys, message: "%{value} is not a valid request format"}
 
   # Length Validations
-  validates :name, length: { minimum: 3, maximum: 100 }
- 
-   # Uniqueness Validations
-   validates :name, uniqueness: { case_sensitive: false, message: "This distribution name is already in use." }
- 
-   # Format Validations
-   validates :name, format: { with: /\A[a-zA-Z0-9_\- ]+\z/, message: "can only be alphanumeric with spaces, underscores, and hyphens" }
-   validates :endpoint, format: { with: URI::regexp(%w[http https]), message: "is not a valid URL" }
+  validates :name, length: {minimum: 3, maximum: 100}
 
-   # Custom Validations
-   # For instance, ensuring a buyer's endpoint is reachable (though this might be better done asynchronously in the real world)
-   #validate :endpoint_reachable
- 
- 
+  # Uniqueness Validations
+  validates :name, uniqueness: {case_sensitive: false, message: "This distribution name is already in use."}
+
+  # Format Validations
+  validates :name, format: {with: /\A[a-zA-Z0-9_\- ]+\z/, message: "can only be alphanumeric with spaces, underscores, and hyphens"}
+  validates :endpoint, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "is not a valid URL"}
+
+  # Custom Validations
+  # For instance, ensuring a buyer's endpoint is reachable (though this might be better done asynchronously in the real world)
+  # validate :endpoint_reachable
+
   def last_api_request_time
     api_requests.last&.created_at
   end
 
   def total_revenue
-    leads.sum(:revenue_cents)/100
+    leads.sum(:revenue_cents) / 100
   end
 
   def total_profit
-    leads.sum(:profit_cents)/100
+    leads.sum(:profit_cents) / 100
   end
 
   private
@@ -107,5 +106,4 @@ class Distribution < ApplicationRecord
   rescue Faraday::ConnectionFailed
     errors.add(:endpoint_url, "is not reachable.")
   end
-
 end

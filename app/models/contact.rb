@@ -19,7 +19,7 @@
 #
 #  fk_rails_...  (company_id => companies.id)
 #
-class Contact < ApplicationRecord  
+class Contact < ApplicationRecord
   belongs_to :company
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :contacts, partial: "contacts/index", locals: {contact: self} }
@@ -33,10 +33,10 @@ class Contact < ApplicationRecord
   validates :last_name, presence: true
 
   # Uniqueness Validations
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "is not a valid email address" }
-  
+  validates :email, format: {with: URI::MailTo::EMAIL_REGEXP, message: "is not a valid email address"}
+
   # Phone number format validation (if there's a phone number attribute)
-  validates :phone, format: { with: /\A(\+\d{1,3}[- ]?)?\d{10}\z/, message: "is not a valid phone number" }, allow_blank: true
+  validates :phone, format: {with: /\A(\+\d{1,3}[- ]?)?\d{10}\z/, message: "is not a valid phone number"}, allow_blank: true
 
   def name
     "#{first_name} #{last_name}"

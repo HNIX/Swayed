@@ -19,15 +19,14 @@
 #   )
 #   Jumpstart.grant_system_admin!(user)
 
-
 # ApiRequest.destroy_all
 
 # source = Source.last
 
-# 1000.times do 
+# 1000.times do
 #     request = ApiRequest.create(
 #         accepted: Faker::Boolean.boolean,
-#         api_key: source.source_token.token, 
+#         api_key: source.source_token.token,
 #         direction: ['inbound','outbound'].sample,
 #         request_body: { first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, phone: Faker::PhoneNumber.phone_number, address: Faker::Address.street_name },
 #         request_time: Faker::Time.between(from: DateTime.now - 10, to: DateTime.now),
@@ -44,8 +43,7 @@
 #                                                    .where(account_id: 3)
 #                                                    .select { |c| c.sources.any? && c.distributions.any? }
 
-
-# 2000.times do 
+# 2000.times do
 #     # Sample a campaign from the filtered list
 #     campaign = campaigns_with_sources_and_distributions.sample
 
@@ -70,7 +68,7 @@
 #     )
 # end
 
-# 5000.times do 
+# 5000.times do
 #     # Sample a campaign from the filtered list
 #     campaign = campaigns_with_sources_and_distributions.sample
 
@@ -94,7 +92,6 @@
 #         created_at: Faker::Time.between(from: 1.month.ago, to: Time.now)
 #     )
 # end
-
 
 # Check if the source exists and has API requests
 # 200.times do |i|
@@ -121,9 +118,8 @@
 #       account_id: 3,
 #       created_at: Faker::Time.between(from: 1.days.ago, to: Time.now)
 #     )
-#   end 
+#   end
 # end
-
 
 # Source.find_each do |source|
 #     unless source.source_token
@@ -133,6 +129,3 @@
 #       puts "Source ##{source.id} already has a token."
 #     end
 #   end
-
-
-

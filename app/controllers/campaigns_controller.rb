@@ -31,7 +31,7 @@ class CampaignsController < ApplicationController
   def update
     if @campaign.update(campaign_params)
       if nested_campaign_fields_present?
-        redirect_to data_campaign_path(@campaign), notice: 'Campaign fields were successfully updated.'
+        redirect_to data_campaign_path(@campaign), notice: "Campaign fields were successfully updated."
       else
         redirect_to campaign_path(@campaign), notice: t(".updated")
       end
@@ -45,15 +45,15 @@ class CampaignsController < ApplicationController
     @campaign.destroy
     redirect_to campaigns_path, status: :see_other, notice: t(".destroyed")
   end
-  
+
   def field
     @target_element_id = params[:target_element_id]
   end
 
   def show
     @latest_requests = @campaign.api_requests.order(request_time: :desc).limit(6)
-    @inbound_requests_count = @campaign.api_requests.where(direction: 'inbound').count
-    @accepted_ping_count = @campaign.api_requests.where(direction: 'inbound', status: 'accepted').count
+    @inbound_requests_count = @campaign.api_requests.where(direction: "inbound").count
+    @accepted_ping_count = @campaign.api_requests.where(direction: "inbound", status: "accepted").count
   end
 
   def logs
@@ -67,11 +67,11 @@ class CampaignsController < ApplicationController
   end
 
   def campaign_params
-    params.require(:campaign).permit(:name, :status, :campaign_type, :description, :distribution_schedule_enabled, 
-    :distribution_method, :distribution_schedule_start_time, :distribution_schedule_end_time, :vertical_id, 
-    campaign_fields_attributes: [:position, :name, :label, :data_type, :id, :ping_required, :post_required, :post_only, :_destroy],
-    distribution_schedule_days: [], 
-    distribution_ids: [])
+    params.require(:campaign).permit(:name, :status, :campaign_type, :description, :distribution_schedule_enabled,
+      :distribution_method, :distribution_schedule_start_time, :distribution_schedule_end_time, :vertical_id,
+      campaign_fields_attributes: [:position, :name, :label, :data_type, :id, :ping_required, :post_required, :post_only, :_destroy],
+      distribution_schedule_days: [],
+      distribution_ids: [])
   end
 
   def nested_campaign_fields_present?
@@ -79,11 +79,10 @@ class CampaignsController < ApplicationController
   end
 
   def apply_sorting(campaigns)
-    sort_column = %w{name status campaign_type}.include?(params[:sort]) ? params[:sort] : "name"
-    sort_direction = %w{asc desc}.include?(params[:direction]) ? params[:direction] : "asc"
+    sort_column = %w[name status campaign_type].include?(params[:sort]) ? params[:sort] : "name"
+    sort_direction = %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     campaigns.reorder("#{sort_column} #{sort_direction}")
   end
-
 
   def search_api_requests
     # Ensure you have pagination set up, e.g., using kaminari or will_paginate gem
@@ -95,13 +94,10 @@ class CampaignsController < ApplicationController
     @api_requests = @api_requests.where(status: params[:status]) if params[:status].present?
 
     if params[:start_date].present? && params[:end_date].present?
-      @api_requests = @api_requests.where('created_at >= ? AND created_at <= ?', params[:start_date], params[:end_date])
+      @api_requests = @api_requests.where("created_at >= ? AND created_at <= ?", params[:start_date], params[:end_date])
     end
 
     # Use Pagy for pagination
     @pagy, @api_requests = pagy(@api_requests, items: 10) # Adjust the number of items per page as needed
-
   end
-  
-
 end

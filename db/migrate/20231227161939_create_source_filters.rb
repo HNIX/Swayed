@@ -1,7 +1,7 @@
 class CreateSourceFilters < ActiveRecord::Migration[7.1]
   def change
     create_table :source_filters do |t|
-      t.jsonb :criteria, null: false, default: '{}'
+      t.jsonb :criteria, null: false, default: "{}"
       t.string :name
       t.integer :status, default: 0
       t.boolean :apply_to_all, default: false

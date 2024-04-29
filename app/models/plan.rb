@@ -52,8 +52,8 @@ class Plan < ApplicationRecord
     Array.wrap(super)
   end
 
-  def amount_with_currency(**options)
-    Pay::Currency.format(amount, **{currency: currency}.merge(options))
+  def amount_with_currency(**)
+    Pay::Currency.format(amount, currency: currency, **)
   end
 
   def dollar_amount
@@ -101,6 +101,6 @@ class Plan < ApplicationRecord
   def id_for_processor(processor_name, currency: "usd")
     return if processor_name.nil?
     processor_name = :braintree if processor_name.to_s == "paypal"
-    send("#{processor_name}_id")
+    send(:"#{processor_name}_id")
   end
 end

@@ -51,7 +51,7 @@ class CampaignDistribution < ApplicationRecord
     self.field_mapping ||= {}
   end
 
-  #move to service
+  # move to service
   def over_outbound_ping_limit?(campaign_distribution)
     daily_limit = campaign_distribution.daily_limit
     weekly_limit = campaign_distribution.weekly_limit
@@ -67,5 +67,4 @@ class CampaignDistribution < ApplicationRecord
 
     daily_limit_exceeded || weekly_limit_exceeded || monthly_limit_exceeded
   end
-
 end

@@ -55,10 +55,10 @@
 #  fk_rails_...  (company_id => companies.id)
 #
 
-require 'securerandom'
+require "securerandom"
 class Source < ApplicationRecord
   include PgSearch::Model
-  pg_search_scope :search, against: :name, using: { tsearch: { prefix: true } }
+  pg_search_scope :search, against: :name, using: {tsearch: {prefix: true}}
 
   belongs_to :company, optional: true
   belongs_to :campaign
@@ -67,11 +67,11 @@ class Source < ApplicationRecord
   has_one :source_token, dependent: :destroy
   has_and_belongs_to_many :source_filters
 
-  enum status: { active: 0, paused: 1, archived: 2 }
-  enum offer_type: { exclusive: 0, shared: 1 }
-  enum payout_method: { percentage: 0, fixed_price: 1 }
-  enum integration_type: { affiliate: 0, web_form: 1 }
-  enum payout_structure: { per_lead: 0, per_action: 1, per_click: 2 }
+  enum status: {active: 0, paused: 1, archived: 2}
+  enum offer_type: {exclusive: 0, shared: 1}
+  enum payout_method: {percentage: 0, fixed_price: 1}
+  enum integration_type: {affiliate: 0, web_form: 1}
+  enum payout_structure: {per_lead: 0, per_action: 1, per_click: 2}
 
   before_create :generate_source_id
   after_create :generate_source_token
@@ -87,8 +87,8 @@ class Source < ApplicationRecord
   validates :payout, presence: true, if: -> { fixed_price? }
   validate :integration_type_cannot_change, :affiliate_cannot_change, on: :update
 
-  validates :success_redirect_url, :failure_redirect_url, format: { with: URI::regexp(%w[http https]), message: "Invalid URL format" }, allow_blank: true
-  validates :budget, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :success_redirect_url, :failure_redirect_url, format: {with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "Invalid URL format"}, allow_blank: true
+  validates :budget, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
 
   scope :active, -> { where(status: [:active, :paused]) }
   scope :paused, -> { where(status: :paused) }
@@ -116,11 +116,11 @@ class Source < ApplicationRecord
   # end
 
   def total_revenue
-    leads.where(status: 'sold').sum(:revenue_cents)/100
+    leads.where(status: "sold").sum(:revenue_cents) / 100
   end
 
   def total_profit
-    leads.where(status: 'sold').sum(:profit_cents)/100
+    leads.where(status: "sold").sum(:profit_cents) / 100
   end
 
   private
@@ -128,7 +128,7 @@ class Source < ApplicationRecord
   def generate_source_token
     build_source_token(name: "Token-#{Time.now.to_i}").save
   end
-  
+
   def generate_secure_token
     self.secure_token = SecureRandom.hex(10) # generates a random hex string
   end
@@ -149,4 +149,3 @@ class Source < ApplicationRecord
     errors.add(:company_id, "Affiliate cannot be changed after creation") if company_id_changed? && persisted?
   end
 end
-

@@ -64,8 +64,8 @@ class ApplicationController < ActionController::Base
   end
 
   def check_app_secret
-    unless request.headers['X-App-Secret'] == ENV['APP_SECRET'] || params[:secret] == ENV['APP_SECRET']
-      render plain: 'Unauthorized', status: :unauthorized
+    unless request.headers["X-App-Secret"] == ENV["APP_SECRET"] || params[:secret] == ENV["APP_SECRET"]
+      render plain: "Unauthorized", status: :unauthorized
     end
   end
 end

@@ -36,23 +36,23 @@
 #
 #  fk_rails_...  (campaign_id => campaigns.id)
 #
-require 'digest'
-require 'json'
+require "digest"
+require "json"
 class ApiRequest < ApplicationRecord
-  self.primary_key = 'id' 
+  self.primary_key = "id"
 
   include PgSearch::Model
 
-  pg_search_scope :search_by_terms, 
+  pg_search_scope :search_by_terms,
     against: [:id, :direction, :status, :created_at],
     associated_against: {
       source: [:name], # Assuming Source has a name attribute
       distribution: [:name] # Assuming Distribution has a name attribute
     },
     using: {
-      tsearch: { prefix: true }
+      tsearch: {prefix: true}
     }
-   
+
   # Associations
   belongs_to :campaign
   belongs_to :requestable, polymorphic: true
@@ -63,13 +63,13 @@ class ApiRequest < ApplicationRecord
   # For the many-to-many relationship with leads for outbound requests
   has_many :api_request_leads
   has_many :leads, through: :api_request_leads
- 
+
   # Validations
   validates :direction, presence: true
   validate :source_or_distribution_presence
 
-  enum status: { pending: 0, accepted: 1, rejected: 2 }
-  enum direction: { inbound: 0, outbound: 1 }
+  enum status: {pending: 0, accepted: 1, rejected: 2}
+  enum direction: {inbound: 0, outbound: 1}
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :api_requests, partial: "api_requests/index", locals: {api_request: self} }
@@ -87,8 +87,10 @@ class ApiRequest < ApplicationRecord
   end
 
   def self.duplicate_by_ids?(params)
-    where(jornaya_id: params[:jornaya_id], trusted_form_id: params[:trusted_form_id])
-        .exists? if params[:jornaya_id].present? || params[:trusted_form_id].present?
+    if params[:jornaya_id].present? || params[:trusted_form_id].present?
+      where(jornaya_id: params[:jornaya_id], trusted_form_id: params[:trusted_form_id])
+        .exists?
+    end
   end
 
   def self.duplicate_by_request_body_hash?(request_body_hash, time_frame)
@@ -99,10 +101,10 @@ class ApiRequest < ApplicationRecord
   private
 
   def source_or_distribution_presence
-    if direction == 'inbound' && requestable_type != 'Source'
-      errors.add(:requestable, 'must be associated with a source for inbound requests')
-    elsif direction == 'outbound' && requestable_type != 'Distribution'
-      errors.add(:requestable, 'must be associated with a distribution for outbound requests')
+    if direction == "inbound" && requestable_type != "Source"
+      errors.add(:requestable, "must be associated with a source for inbound requests")
+    elsif direction == "outbound" && requestable_type != "Distribution"
+      errors.add(:requestable, "must be associated with a distribution for outbound requests")
     end
   end
 

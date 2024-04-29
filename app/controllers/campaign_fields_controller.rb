@@ -12,7 +12,7 @@ class CampaignFieldsController < ApplicationController
   def create
     @field = @campaign.campaign_fields.build(field_params)
     if @field.save
-      redirect_to campaign_campaign_fields_path(@campaign), notice: 'Field was successfully created.'
+      redirect_to campaign_campaign_fields_path(@campaign), notice: "Field was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -25,7 +25,7 @@ class CampaignFieldsController < ApplicationController
 
   def update
     if @field.update(field_params)
-      redirect_to campaign_campaign_fields_path(@campaign), notice: 'Field was successfully updated.'
+      redirect_to campaign_campaign_fields_path(@campaign), notice: "Field was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -33,7 +33,7 @@ class CampaignFieldsController < ApplicationController
 
   def destroy
     @field.destroy
-    redirect_to campaign_campaign_fields_path(@campaign), notice: 'Field was successfully removed.'
+    redirect_to campaign_campaign_fields_path(@campaign), notice: "Field was successfully removed."
   end
 
   def move
@@ -63,7 +63,6 @@ class CampaignFieldsController < ApplicationController
       format.json { render json: @field.operator_options.to_json }
       format.html
     end
-
   end
 
   private
@@ -77,8 +76,8 @@ class CampaignFieldsController < ApplicationController
   end
 
   def field_params
-    params.require(:campaign_field).permit(:data_type, :position, :post_only, :hide, :name, :is_pii, 
-      :example_value, :value_acceptance, :default_value, :notes, :phone_format, :min_value, :max_value, 
+    params.require(:campaign_field).permit(:data_type, :position, :post_only, :hide, :name, :is_pii,
+      :example_value, :value_acceptance, :default_value, :notes, :phone_format, :min_value, :max_value,
       :required, list_values_attributes: [:list_value, :id, :_destroy])
   end
 end

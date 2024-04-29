@@ -29,7 +29,7 @@ class SourceFilter < ApplicationRecord
   belongs_to :campaign_field
   has_and_belongs_to_many :sources
 
-  enum status: { active: 0, paused: 1, archived: 2 }
+  enum status: {active: 0, paused: 1, archived: 2}
 
   # Custom method to check if the filter applies to a given source
   def applies_to?(source)

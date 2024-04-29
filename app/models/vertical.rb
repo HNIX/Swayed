@@ -22,10 +22,10 @@
 #
 class Vertical < ApplicationRecord
   acts_as_tenant :account
-  
+
   has_many :campaigns
   has_many :companies, through: :campaigns
-  
+
   has_many :field_associations, as: :fieldable
   has_many :fields, through: :field_associations
 
@@ -36,7 +36,7 @@ class Vertical < ApplicationRecord
 
   scope :sorted, -> { order("created_at DESC") }
 
-  enum primary_category: { home_services: 0, legal: 1, debt: 2 }
+  enum primary_category: {home_services: 0, legal: 1, debt: 2}
 
   validates :primary_category, presence: true
   validates :secondary_category, presence: true
@@ -44,7 +44,7 @@ class Vertical < ApplicationRecord
 
   attribute :archived, :boolean, default: false
 
-  def name 
+  def name
     "#{primary_category&.titleize} - #{secondary_category&.titleize}"
   end
 end

@@ -24,5 +24,5 @@ class ListValue < ApplicationRecord
   after_update_commit -> { broadcast_replace_later_to self }
   after_destroy_commit -> { broadcast_remove_to :list_values, target: dom_id(self, :index) }
 
-  enum value_type: { string: 0, number: 1 }
+  enum value_type: {string: 0, number: 1}
 end

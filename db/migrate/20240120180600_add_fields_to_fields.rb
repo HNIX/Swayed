@@ -11,6 +11,5 @@ class AddFieldsToFields < ActiveRecord::Migration[7.1]
     remove_column :fields, :label
     remove_column :fields, :ping_required
     remove_column :fields, :post_required
-    
   end
 end

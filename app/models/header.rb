@@ -26,6 +26,6 @@ class Header < ApplicationRecord
 
   HEADER_VALUES = %w[Accept Accept-Charset Accept-Encoding Accept-Language Accept-Datetime Authorization Cache-Control Connection].freeze
 
-  validates :name, presence: true, uniqueness: { scope: :distribution_id }
+  validates :name, presence: true, uniqueness: {scope: :distribution_id}
   validates :header_value, presence: true
 end

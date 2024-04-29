@@ -10,9 +10,9 @@ class TurboFailureApp < Devise::FailureApp
   include Turbo::Native::Navigation
 
   # Turbo Native requests that require authentication should return 401s to trigger the login modal
-   def http_auth?
-     turbo_native_app? || super
-   end
+  def http_auth?
+    turbo_native_app? || super
+  end
 end
 
 # Assuming you have not yet modified this file, each configuration option below
@@ -278,7 +278,7 @@ Devise.setup do |config|
   # should add them to the navigational formats lists.
   #
   # The "*/*" below is required to match Internet Explorer requests.
-  config.navigational_formats = ['*/*', :html, :turbo_stream]
+  config.navigational_formats = ["*/*", :html, :turbo_stream]
 
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete

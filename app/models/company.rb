@@ -31,10 +31,9 @@ class Company < ApplicationRecord
   has_many :sources
   has_many :campaigns, through: :sources
   has_many :distributions
-  
+
   CYCLE = %w[monthly weekly daily quarterly]
   CURRENCY = %w[US CAD EUR GBP AUD JPY CHF]
-
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :companies, partial: "companies/index", locals: {company: self} }
@@ -49,10 +48,10 @@ class Company < ApplicationRecord
   validates_uniqueness_to_tenant :name
 
   # Format Validations
-  validates :name, format: { with: /\A[a-zA-Z0-9_\- ]+\z/, message: "can only be alphanumeric with spaces, underscores, and hyphens" }
+  validates :name, format: {with: /\A[a-zA-Z0-9_\- ]+\z/, message: "can only be alphanumeric with spaces, underscores, and hyphens"}
 
   # Length Validations
-  validates :name, length: { minimum: 2, maximum: 100 }
+  validates :name, length: {minimum: 2, maximum: 100}
 
   def initials
     name.split.map { |word| word[0] }.join
@@ -60,5 +59,5 @@ class Company < ApplicationRecord
 
   # def monthly_api_pings_count(month: Time.zone.now.month, year: Time.zone.now.year)
   #   api_pings.where(created_at: Date.new(year, month).beginning_of_month..Date.new(year, month).end_of_month).count
-  # end 
+  # end
 end

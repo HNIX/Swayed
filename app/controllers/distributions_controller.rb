@@ -10,12 +10,11 @@ class DistributionsController < ApplicationController
   end
 
   def create
-    
     @distribution = @campaign.distributions.build(distribution_params)
 
     if @distribution.save
       @campaign.distributions << @distribution
-      redirect_to campaign_distributions_path(@campaign), notice: 'Distribution was successfully created.'
+      redirect_to campaign_distributions_path(@campaign), notice: "Distribution was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,7 +27,7 @@ class DistributionsController < ApplicationController
   def update
     respond_to do |format|
       if @distribution.update(distribution_params)
-        format.html { redirect_to campaign_distributions_path(@campaign), notice: 'Distribution was successfully updated.' }
+        format.html { redirect_to campaign_distributions_path(@campaign), notice: "Distribution was successfully updated." }
         format.json { render :show, status: :ok, location: @distribution }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -40,7 +39,7 @@ class DistributionsController < ApplicationController
   def destroy
     @distribution.destroy
     respond_to do |format|
-      format.html { redirect_to campaign_distributions_path(@campaign), notice: 'Distribution was successfully destroyed.' }
+      format.html { redirect_to campaign_distributions_path(@campaign), notice: "Distribution was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -54,7 +53,7 @@ class DistributionsController < ApplicationController
   end
 
   private
-  
+
   def get_campaign
     @campaign = Campaign.find(params[:campaign_id])
   end
@@ -80,6 +79,3 @@ class DistributionsController < ApplicationController
     distributions.reorder("#{sort_column} #{sort_direction}")
   end
 end
-
-
-

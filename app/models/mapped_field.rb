@@ -32,12 +32,12 @@ class MappedField < ApplicationRecord
   after_update_commit -> { broadcast_replace_later_to self }
   after_destroy_commit -> { broadcast_remove_to :mapped_fields, target: dom_id(self, :index) }
 
-  validates :name, presence: true, uniqueness: { scope: :campaign_distribution_id }
-  #validates :campaign_field_id, presence: true, unless: :is_static?
+  validates :name, presence: true, uniqueness: {scope: :campaign_distribution_id}
+  # validates :campaign_field_id, presence: true, unless: :is_static?
 
   def handle_custom_value
-    if self.campaign_field_id == -1 
-      self.campaign_field_id = nil 
+    if campaign_field_id == -1
+      self.campaign_field_id = nil
       self.is_static = true
     else
       self.is_static = false

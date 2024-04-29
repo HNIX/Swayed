@@ -3,7 +3,6 @@ class Api::InboundBaseController < ApplicationController
   skip_before_action :require_accepted_latest_agreements!
   prepend_before_action :authenticate_token!
 
-
   private
 
   def authenticate_token!
@@ -25,5 +24,4 @@ class Api::InboundBaseController < ApplicationController
   def account
     @account = affiliate_token.account
   end
-
 end

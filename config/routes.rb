@@ -21,7 +21,7 @@ Rails.application.routes.draw do
         resource :impersonate, module: :user
       end
       resources :connected_accounts
-      resources :accounts 
+      resources :accounts
       resources :account_users
       resources :plans
       namespace :pay do
@@ -37,13 +37,11 @@ Rails.application.routes.draw do
 
   # API routes
   namespace :api, defaults: {format: :json} do
-      
     namespace :v1 do
       resource :auth
       resource :me, controller: :me
       resource :password
-      resources :accounts do 
-
+      resources :accounts do
         resources :campaigns, only: [] do
           resources :sources, only: [] do
             post :ping, on: :member
@@ -62,8 +60,8 @@ Rails.application.routes.draw do
       resources :notification_tokens, only: :create
       resources :affiliates
 
-      # resources :campaign_sources, path: :inbound do 
-      #   member do 
+      # resources :campaign_sources, path: :inbound do
+      #   member do
       #     post :ping
       #     post :post
       #     post :direct
@@ -87,28 +85,27 @@ Rails.application.routes.draw do
   resources :announcements, only: [:index, :show]
   resources :api_tokens
   resources :source_tokens do
-    post 'refresh_token', on: :member
+    post "refresh_token", on: :member
   end
 
-  post '/campaigns/:campaign_id/validate_formula', to: 'calculated_fields#validate_formula'
-  get '/posting_instructions/:token', to: 'posting_instructions#show', as: :posting_instructions
+  post "/campaigns/:campaign_id/validate_formula", to: "calculated_fields#validate_formula"
+  get "/posting_instructions/:token", to: "posting_instructions#show", as: :posting_instructions
 
-
-  resources :campaigns do 
+  resources :campaigns do
     collection do
       get :field
     end
     member do
       get :logs
     end
-    resources :sources do 
+    resources :sources do
       member do
         patch :archive
         patch :activate
         patch :pause
       end
     end
-    resources :source_filters do 
+    resources :source_filters do
       member do
         patch :archive
         patch :activate
@@ -116,29 +113,29 @@ Rails.application.routes.draw do
       end
     end
     resources :distributions
-    resources :distribution_filters do 
+    resources :distribution_filters do
       member do
         patch :archive
         patch :activate
         patch :pause
       end
     end
-    resources :campaign_fields, path: :fields do 
-      member do 
+    resources :campaign_fields, path: :fields do
+      member do
         patch :move
       end
       collection do
         get :list_value
       end
     end
-    resources :calculated_fields do 
+    resources :calculated_fields do
       member do
         patch :archive
         patch :activate
         patch :pause
       end
     end
-    resources :build, controller: 'campaigns/build'
+    resources :build, controller: "campaigns/build"
   end
 
   resources :distributions do
@@ -150,23 +147,23 @@ Rails.application.routes.draw do
   end
 
   resources :campaign_fields, path: :fields do
-    resources :validations do 
+    resources :validations do
       collection do
         get :options
       end
     end
   end
 
-  resources :verticals do 
+  resources :verticals do
     collection do
       get :field
     end
     member do
-      put 'archive'
-      put 'unarchive'
+      put "archive"
+      put "unarchive"
     end
-    resources :fields do 
-      member do 
+    resources :fields do
+      member do
         patch :move
       end
       collection do
@@ -175,7 +172,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :companies do 
+  resources :companies do
     resources :contacts
   end
 
