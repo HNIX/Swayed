@@ -1,18 +1,16 @@
-require "jumpstart/credentials_generator"
 require "jumpstart/engine"
 
 module Jumpstart
   autoload :AccountMiddleware, "jumpstart/account_middleware"
+  autoload :AdministrateHelpers, "jumpstart/administrate_helpers"
   autoload :Clients, "jumpstart/clients"
   autoload :Configuration, "jumpstart/configuration"
-  autoload :Controller, "jumpstart/controller"
   autoload :JobProcessor, "jumpstart/job_processor"
   autoload :Mailer, "jumpstart/mailer"
   autoload :Mentions, "jumpstart/mentions"
   autoload :Multitenancy, "jumpstart/multitenancy"
   autoload :Omniauth, "jumpstart/omniauth"
   autoload :SubscriptionExtensions, "jumpstart/subscription_extensions"
-  autoload :AdministrateHelpers, "jumpstart/administrate_helpers"
 
   def self.restart
     run_command "rails restart"
@@ -44,12 +42,16 @@ module Jumpstart
 
   # Commands to be run after bundle install
   def self.post_install
-    if JobProcessor.delayed_job? && Dir[Rails.root.join("db/migrate/**/*delayed_jobs*")].any?
+    if JobProcessor.delayed_job? && !Dir[Rails.root.join("db/migrate/**/*delayed_jobs*")].any?
       run_command("rails generate delayed:migration")
       run_command("rails db:migrate")
     end
-    if JobProcessor.good_job? && Dir[Rails.root.join("db/migrate/**/*good_jobs*")].any?
+    if JobProcessor.good_job? && !Dir[Rails.root.join("db/migrate/**/*good_jobs*")].any?
       run_command("rails generate good_job:install")
+      run_command("rails db:migrate")
+    end
+    if JobProcessor.solid_queue? && !Dir[Rails.root.join("db/migrate/**/*solid_queue*")].any?
+      run_command("rails generate solid_queue:install")
       run_command("rails db:migrate")
     end
   end

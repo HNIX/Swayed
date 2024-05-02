@@ -1,0 +1,13 @@
+<div class="z-10 bottom-0 h-auto px-2 py-4 text-sm lg:px-8 ">
+  <div class="flex flex-col-reverse p-4 text-sm lg:flex-row lg:justify-between lg:p-0 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-center">
+      <div class="text-gray-700 dark:text-white">© <%= Date.current.year %> <%= Jumpstart.config.business_name %></div>
+    </div>
+
+    <ul class="list-none flex flex-wrap justify-center">
+      <li><%= link_to t(".about"), about_path, class: "text-gray-700 dark:text-white hover:text-gray-800 no-underline block px-4 lg:my-0 my-2" %></li>
+      <li><%= link_to t(".privacy"), privacy_path, class: "text-gray-700 dark:text-white hover:text-gray-800 no-underline block lg:my-0 my-2 px-4" %></li>
+      <li><%= link_to t(".terms"), terms_path, class: "text-gray-700 dark:text-white hover:text-gray-800 no-underline block lg:my-0 my-2 px-4" %></li>
+    </ul>
+  </div>
+</footer>

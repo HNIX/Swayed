@@ -1,6 +1,11 @@
 require "test_helper"
 
 class Jumpstart::StaticTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = users(:one)
+    sign_in @user
+  end 
+  
   test "homepage" do
     get root_path
     assert_response :success

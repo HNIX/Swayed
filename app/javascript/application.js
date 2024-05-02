@@ -12,6 +12,7 @@ require("local-time").start()
 //Chartkick
 import "chartkick/chart.js"
 
+
 addEventListener("turbo:before-frame-render", (event) => {
     event.detail.render = (currentElement, newElement) => {
         Idiomorph.morph(currentElement, newElement, {

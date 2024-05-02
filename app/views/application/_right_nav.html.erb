@@ -1,0 +1,39 @@
+<%# Place any links for the RIGHT side of the nav bar here. Be sure to add class: "nav-link" to each item for proper spacing. %>
+
+<% if Jumpstart.config.payments_enabled? && (!user_signed_in? || current_account_admin?) && not_subscribed? %>
+  <%= nav_link_to t(".pricing"), pricing_path, class: "nav-link" %>
+<% end %>
+
+<% if user_signed_in? %>
+
+  <div class="hidden lg:inline-block">
+    <%= render "notifications" %>
+  </div>
+
+  <%#= nav_link_to tag.span(t(".announcements")), announcements_path, class: ["nav-link", unread_announcements_class(current_user)] %>
+
+  <div class="relative" data-controller="dropdown">
+    <button type="button" class="mr-4 cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [&:focus:not(:focus-visible)]:outline-none m-0 p-0 rounded border border-solid inline-flex items-center whitespace-nowrap no-underline disabled:opacity-50 antialiased font-sans font-medium text-sm text-gray-900 leading-6 px-4 h-10 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-700 hover:to-indigo-700 !text-white focus:ring-indigo-600 !border-0 [a&:hover]:!text-white [a&:focus]:!text-white" data-action="click->dropdown#toggle click@window->dropdown#hide" role="button">
+      New
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-mr-0.5 h-4 w-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    </button>
+
+    <div data-dropdown-target="menu"
+                      data-transition-enter="transition ease-out duration-200"
+                      data-transition-enter-from="opacity-0 translate-y-1"
+                      data-transition-enter-to="opacity-100 translate-y-0"
+                      data-transition-leave="transition ease-in duration-150"
+                      data-transition-leave-from="opacity-100 translate-y-0"
+                      data-transition-leave-to="opacity-0 translate-y-1"
+                      class="z-20 hidden mt-2 lg:absolute lg:right-0 dropdown-menu">
+      <div class="overflow-hidden bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 rounded shadow-md">
+        <%= link_to "Campaign", new_campaign_path, class: 'text-gray-800 bg-white hover:bg-primary-50 dark:text-gray-50 dark:bg-gray-800 dark:hover:bg-primary-800 transition ease-in-out duration-200 whitespace-nowrap no-underline block px-6 py-3' %>
+        <%= link_to "Contact", new_company_path, class: 'text-gray-800 bg-white hover:bg-primary-50 dark:text-gray-50 dark:bg-gray-800 dark:hover:bg-primary-800 transition ease-in-out duration-200 whitespace-nowrap no-underline block px-6 py-3' %>
+        <%= link_to "Distribution", new_distribution_path, class: 'text-gray-800 bg-white hover:bg-primary-50 dark:text-gray-50 dark:bg-gray-800 dark:hover:bg-primary-800 transition ease-in-out duration-200 whitespace-nowrap no-underline block px-6 py-3' %>
+      </div>
+    </div>
+  </div>
+<% end %>
+                 

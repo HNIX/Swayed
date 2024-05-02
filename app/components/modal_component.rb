@@ -1,4 +1,4 @@
-class ModalComponent < ApplicationComponent
+class ModalComponent < JumpstartComponent
   renders_one :header
   renders_one :body
   renders_one :actions
@@ -12,13 +12,13 @@ class ModalComponent < ApplicationComponent
 
     case @size
     when :sm
-      "max-w-sm max-h-screen w-full relative"
+      "modal rounded-lg max-w-sm max-h-screen w-full bg-transparent backdrop:backdrop-blur-sm backdrop:bg-black/50"
     when :lg
-      "max-w-lg max-h-screen w-full relative"
+      "modal rounded-lg max-w-lg max-h-screen w-full bg-transparent backdrop:backdrop-blur-sm backdrop:bg-black/50"
     when :fullscreen
-      "fixed top-0 left-0 w-full h-full relative"
+      "modal m-0 h-full w-full max-h-full max-w-full bg-transparent backdrop:backdrop-blur-sm"
     else # :md
-      "max-w-md max-h-screen w-full relative"
+      "modal rounded-lg max-w-md max-h-screen w-full bg-transparent backdrop:backdrop-blur-sm backdrop:bg-black/50"
     end
   end
 
@@ -27,9 +27,9 @@ class ModalComponent < ApplicationComponent
 
     case @size
     when :fullscreen
-      "p-6 w-screen h-screen bg-white dark:bg-gray-900"
+      "p-6 w-full h-full bg-white dark:bg-gray-900"
     else
-      "p-6 bg-white rounded shadow-lg dark:bg-gray-900 dark:text-gray-200"
+      "p-6 bg-white dark:bg-gray-900 dark:text-gray-200"
     end
   end
 

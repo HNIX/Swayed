@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 
 on:
   pull_request:
@@ -9,7 +9,42 @@ on:
       - main
 
 jobs:
+  scan:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Scan for security vulnerabilities
+        run: bin/brakeman
+
+  lint:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Lint code for consistent style
+        run: bundle exec standardrb
+
+      - name: Erblint
+        run: bundle exec erblint --lint-all
+
   test:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -42,7 +77,7 @@ jobs:
           bundler-cache: true
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: '.node-version'
           cache: yarn
@@ -53,13 +88,6 @@ jobs:
           sudo apt-get install -y -qq libvips
           yarn install --frozen-lockfile
 
-      - name: Standardrb Check
-        run: bundle exec standardrb
-
-# Uncomment to enable Brakeman checks in CI
-#     - name: Brakeman Check
-#       run: bundle exec brakeman
-
       - name: Run tests
         env:
           DATABASE_URL: postgres://postgres:password@localhost:5432/test
@@ -67,6 +95,7 @@ jobs:
           RAILS_ENV: test
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
+          bin/rails zeitwerk:check
           bin/rails test:prepare
           bin/rails db:test:prepare
           bin/rails test

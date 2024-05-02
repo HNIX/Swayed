@@ -16,7 +16,7 @@ Components may capture content for a specific slot. To provide HTML for the slot
 
 ```erb
 <%= render SlideoverComponent.new do |component| %>
-  <button class="btn btn-white" data-action="slideover#show:prevent">Open Slideover</button>
+  <button class="btn btn-secondary" data-action="slideover#show:prevent">Open Slideover</button>
 
   <% component.capture_for :panel do %>
     <h4 class="mt-0">This is the panel content.</h4>
@@ -31,7 +31,7 @@ The `content` of a component is the output of the main block. In this case, the 
 Components are standard Ruby objects so you can add your own attributes, methods and logic.
 
 ```ruby
-class MyComponent < ApplicationComponent
+class MyComponent < JumpstartComponent
   attr_reader :close_button
 
   # Saves a single value

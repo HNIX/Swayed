@@ -26,8 +26,6 @@
 #     en:
 #       "yes": yup
 #       enabled: "ON"
-#
-# https://mikerogers.io/2016/01/10/i18n-rails-internationalisation-i18n-cheatsheet.html
 
 en:
   are_you_sure: "Are you sure?"
@@ -304,56 +302,7 @@ en:
       confirm: "Are you sure you want to revoke this Source token?"
       auth_header: "Authenticate using Header"
 
-  payment_methods:
-    new:
-      billing: "Billing"
-      payment_details: "Payment Details"
-      past_due: "Your payment method was declined. Please add another payment method to continue."
-
-    create:
-      updated: "Your payment method was updated successfully."
-
-    forms:
-      braintree:
-        button: "Update Card"
-      fake_processor:
-        message: "You have free access and don't need to add a payment method."
-      stripe:
-        credit_or_debit_card: "Credit or Debit Card"
-        button: "Update Card"
-
-  dashboard:
-    show:
-      title: "Dashboard"
-
-  payments:
-    success: "Thanks for subscribing!"
-    show:
-      successful: "Payment Successful"
-      successful_description: "This payment was already successfully confirmed."
-      cancelled: "Payment Cancelled"
-      cancelled_description: "This payment was cancelled."
-      confirm: "Confirm your %{amount} payment"
-      confirm_description: "Extra confirmation is needed to process your payment. Please confirm your payment by filling out your payment details below."
-      back: "Go back"
-      confirm_button: "Confirm Payment"
-
-  static:
-    no_plans_html: "There are no pricing plans configured. %{link}."
-    pricing:
-      heading: "Pricing Plans"
-      subhead: "Simple, straightforward pricing to get your online business up and running"
-      monthly: "Monthly"
-      yearly: "Yearly"
-
-    about:
-      title: "About Us"
-    privacy:
-      title: "Privacy Policy"
-    terms:
-      title: "Terms Of Service"
-
-  shared:
+  application:
     footer:
       about: "About Us"
       privacy: "Privacy Policy"
@@ -404,26 +353,60 @@ en:
       sign_out: "Sign Out"
       log_in: "Log In"
       sign_up: "Sign Up"
-    oauth:
-      apple: "Sign in with Apple"
-      developer: "Developer"
-      facebook: "Sign in with Facebook"
-      github: "Sign in with GitHub"
-      gitlab: "Sign in with GitLab"
-      google_oauth2: "Sign in with Google"
-      microsoft_graph: "Sign in with Microsoft"
-      stripe: "Sign in with Stripe"
-      twitter: "Sign in with Twitter"
     right_nav:
       pricing: "Pricing"
       announcements: "What's New"
-    scaffold:
-      edit:
-        title: "Edit %{model}"
-      new:
-        title: "New %{model}"
-      actions: "Actions"
-      view: "View"
+
+  dashboard:
+    show:
+      title: "Dashboard"
+
+  oauth:
+    sign_in_with: "Sign in with %{provider}"
+    apple: "Apple"
+    developer: "Developer"
+    facebook: "Facebook"
+    github: "GitHub"
+    gitlab: "GitLab"
+    google_oauth2: "Google"
+    microsoft_graph: "Microsoft"
+    stripe: "Stripe"
+    twitter: "Twitter"
+
+  payments:
+    success: "Thanks for subscribing!"
+    show:
+      successful: "Payment Successful"
+      successful_description: "This payment was already successfully confirmed."
+      cancelled: "Payment Cancelled"
+      cancelled_description: "This payment was cancelled."
+      confirm: "Confirm your %{amount} payment"
+      confirm_description: "Extra confirmation is needed to process your payment. Please confirm your payment by filling out your payment details below."
+      back: "Go back"
+      confirm_button: "Confirm Payment"
+
+  scaffold:
+    edit:
+      title: "Edit %{model}"
+    new:
+      title: "New %{model}"
+    actions: "Actions"
+    view: "View"
+
+  static:
+    no_plans_html: "There are no pricing plans configured. %{link}."
+    pricing:
+      heading: "Pricing Plans"
+      subhead: "Simple, straightforward pricing to get your online business up and running"
+      monthly: "Monthly"
+      yearly: "Yearly"
+
+    about:
+      title: "About Us"
+    privacy:
+      title: "Privacy Policy"
+    terms:
+      title: "Terms Of Service"
 
   subscriptions:
     created: "Thanks for subscribing!"
@@ -432,6 +415,8 @@ en:
     already_subscribed: "You are already subscribed."
 
     plan:
+      contact_us: "Contact Us"
+      contact_us_price: "Let's Talk"
       change_plan: "Change Plan"
       current_plan: "Current plan"
       get_started: "Get Started"
@@ -499,10 +484,23 @@ en:
       update_payment_method: "Update payment method"
       failed_payment: "Your latest payment has failed. Update your payment method to continue this plan."
 
-    payment_method:
-      payment_method: "Payment Method"
-      no_payment_method: "You have no payment method on file."
-      update_payment_method: "Update payment method"
+    payment_methods:
+      new:
+        billing: "Billing"
+        payment_details: "Payment Details"
+        past_due: "Your payment method was declined. Please add another payment method to continue."
+
+      create:
+        updated: "Your payment method was updated successfully."
+
+      forms:
+        braintree:
+          button: "Update Card"
+        fake_processor:
+          message: "You have free access and don't need to add a payment method."
+        stripe:
+          credit_or_debit_card: "Credit or Debit Card"
+          button: "Update Card"
 
     billing_address:
       billing_address: "Billing Address"
@@ -535,7 +533,7 @@ en:
       title: "Billing History"
       date: "Date"
       amount: "Amount"
-      payment_method: "Payment Method"
+      invoice: "Invoice"
       receipt: "Receipt"
       view: "View"
       empty: "No billing history."
@@ -593,7 +591,6 @@ en:
           quantity: "Quantity"
           unit_price: "Unit Price"
           total: "Total"
-        quantity: "Quantity"
         back: "Back to Billing"
 
     forms:
@@ -666,6 +663,7 @@ en:
         instructions_1_html: "Install Authy: %{ios} or %{android}"
         instructions_2: "In the app, select \"Add account\""
         instructions_3: "Choose \"Scan QR Code\""
+        instructions_4: "Trouble scanning? Enter this key in your app instead:"
         verify_header: "Enter the six-digit code from the application"
         verify_description: "After scanning the QR code, the app will display a code that you can enter to continue."
         cancel: "Cancel"
@@ -683,6 +681,7 @@ en:
     index:
       title: "Notifications"
       empty_placeholder: "Nothing to see here — yet."
+      mark_all_as_read: "Mark all as read"
     invite_accepted: "%{user} accepted your invitation."
     account_transferred: "%{previous_owner} made you owner of the %{account} account."
     empty: "Nothing to see here — yet."

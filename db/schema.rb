@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_01_230655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -24,7 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.jsonb "roles", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_account_invitations_on_account_id"
+    t.index ["account_id", "email"], name: "index_account_invitations_on_account_id_and_email", unique: true
     t.index ["invited_by_id"], name: "index_account_invitations_on_invited_by_id"
     t.index ["token"], name: "index_account_invitations_on_token", unique: true
   end
@@ -35,8 +35,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.jsonb "roles", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_account_users_on_account_id"
-    t.index ["user_id"], name: "index_account_users_on_user_id"
+    t.index ["account_id", "user_id"], name: "index_account_users_on_account_id_and_user_id", unique: true
   end
 
   create_table "accounts", force: :cascade do |t|
@@ -167,6 +166,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.string "requestable_type"
     t.bigint "requestable_id"
     t.index ["campaign_id"], name: "index_api_requests_on_campaign_id"
+    t.index ["created_at"], name: "index_api_requests_on_created_at"
     t.index ["request_body_hash"], name: "index_api_requests_on_request_body_hash"
     t.index ["requestable_type", "requestable_id"], name: "index_api_requests_on_requestable"
   end
@@ -344,27 +344,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.index ["fieldable_type", "fieldable_id"], name: "index_field_associations_on_fieldable"
   end
 
-  create_table "fields", force: :cascade do |t|
-    t.string "name"
-    t.string "data_type"
-    t.boolean "validated", default: false
-    t.boolean "hide", default: false
-    t.bigint "vertical_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "example_value"
-    t.string "default_value"
-    t.boolean "is_pii"
-    t.integer "max_value"
-    t.integer "min_value"
-    t.integer "position"
-    t.boolean "post_only", default: false
-    t.boolean "required", default: false
-    t.integer "value_acceptance"
-    t.index ["name"], name: "index_fields_on_name", unique: true
-    t.index ["vertical_id"], name: "index_fields_on_vertical_id"
-  end
-
   create_table "headers", force: :cascade do |t|
     t.string "name"
     t.string "header_value"
@@ -420,6 +399,34 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.index ["campaign_field_id"], name: "index_mapped_fields_on_campaign_field_id"
   end
 
+  create_table "noticed_events", force: :cascade do |t|
+    t.bigint "account_id"
+    t.string "type"
+    t.string "record_type"
+    t.bigint "record_id"
+    t.jsonb "params"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "notifications_count"
+    t.index ["account_id"], name: "index_noticed_events_on_account_id"
+    t.index ["record_type", "record_id"], name: "index_noticed_events_on_record"
+  end
+
+  create_table "noticed_notifications", force: :cascade do |t|
+    t.bigint "account_id"
+    t.string "type"
+    t.bigint "event_id", null: false
+    t.string "recipient_type", null: false
+    t.bigint "recipient_id", null: false
+    t.datetime "read_at", precision: nil
+    t.datetime "seen_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_noticed_notifications_on_account_id"
+    t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
+    t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
+  end
+
   create_table "notification_tokens", force: :cascade do |t|
     t.bigint "user_id"
     t.string "token", null: false
@@ -455,6 +462,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.jsonb "metadata"
     t.integer "subscription_id"
     t.bigint "customer_id"
+    t.string "stripe_account"
     t.index ["customer_id", "processor_id"], name: "index_pay_charges_on_customer_id_and_processor_id", unique: true
   end
 
@@ -468,6 +476,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.datetime "deleted_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stripe_account"
     t.index ["owner_type", "owner_id", "deleted_at"], name: "customer_owner_processor_index"
     t.index ["processor", "processor_id"], name: "index_pay_customers_on_processor_and_processor_id"
   end
@@ -492,6 +501,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stripe_account"
     t.index ["customer_id", "processor_id"], name: "index_pay_payment_methods_on_customer_id_and_processor_id", unique: true
   end
 
@@ -515,6 +525,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.string "pause_behavior"
     t.datetime "pause_starts_at"
     t.datetime "pause_resumes_at"
+    t.string "payment_method_id"
+    t.string "stripe_account"
     t.index ["customer_id", "processor_id"], name: "index_pay_subscriptions_on_customer_id_and_processor_id", unique: true
     t.index ["metered"], name: "index_pay_subscriptions_on_metered"
     t.index ["pause_starts_at"], name: "index_pay_subscriptions_on_pause_starts_at"
@@ -542,6 +554,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.string "description"
     t.string "unit_label"
     t.boolean "charge_per_unit"
+    t.string "stripe_id"
+    t.string "braintree_id"
+    t.string "paddle_billing_id"
+    t.string "paddle_classic_id"
+    t.string "lemon_squeezy_id"
+    t.string "fake_processor_id"
+    t.string "contact_url"
   end
 
   create_table "rules_rule_sets", force: :cascade do |t|
@@ -692,6 +711,27 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
     t.index ["campaign_field_id"], name: "index_validations_on_campaign_field_id"
   end
 
+  create_table "vertical_fields", force: :cascade do |t|
+    t.string "name"
+    t.string "data_type"
+    t.boolean "validated", default: false
+    t.boolean "hide", default: false
+    t.bigint "vertical_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "example_value"
+    t.string "default_value"
+    t.boolean "is_pii"
+    t.integer "max_value"
+    t.integer "min_value"
+    t.integer "position"
+    t.boolean "post_only", default: false
+    t.boolean "required", default: false
+    t.integer "value_acceptance"
+    t.index ["name"], name: "index_vertical_fields_on_name", unique: true
+    t.index ["vertical_id"], name: "index_vertical_fields_on_vertical_id"
+  end
+
   create_table "verticals", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.text "description"
@@ -725,8 +765,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
   add_foreign_key "distribution_filters", "campaign_fields"
   add_foreign_key "distribution_filters", "campaigns"
   add_foreign_key "distributions", "companies"
-  add_foreign_key "field_associations", "fields"
-  add_foreign_key "fields", "verticals"
+  add_foreign_key "field_associations", "vertical_fields", column: "field_id"
   add_foreign_key "headers", "distributions"
   add_foreign_key "list_values", "campaign_fields"
   add_foreign_key "mapped_fields", "campaign_distributions"
@@ -741,5 +780,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_29_204614) do
   add_foreign_key "sources", "campaigns"
   add_foreign_key "sources", "companies"
   add_foreign_key "validations", "campaign_fields"
+  add_foreign_key "vertical_fields", "verticals"
   add_foreign_key "verticals", "accounts"
 end

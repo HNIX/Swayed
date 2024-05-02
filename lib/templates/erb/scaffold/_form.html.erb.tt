@@ -1,5 +1,5 @@
 <%%= form_with(model: <%= model_resource_name %>) do |form| %>
-  <%%= render "shared/error_messages", resource: form.object %>
+  <%%= render "error_messages", resource: form.object %>
 
 <%- attributes.each do |attribute| -%>
   <div class="form-group">
@@ -37,9 +37,9 @@
     <%%= form.button button_text(form.send(:submit_default_value)), class: "btn btn-primary" %>
 
     <%% if form.object.new_record? %>
-      <%%= link_to t("cancel"), <%= index_helper(type: :path) %>, class: "btn btn-white" %>
+      <%%= link_to t("cancel"), <%= index_helper(type: :path) %>, class: "btn btn-secondary" %>
     <%% else %>
-      <%%= link_to t("cancel"), <%= show_helper(type: :path) %>, class: "btn btn-white" %>
+      <%%= link_to t("cancel"), <%= show_helper(type: :path) %>, class: "btn btn-secondary" %>
     <%% end %>
   </div>
 <%% end %>

@@ -8,7 +8,7 @@ class VerticalsController < ApplicationController
 
   def new
     @vertical = Vertical.new
-    @vertical.fields.build
+    @vertical.vertical_fields.build
   end
 
   def create
@@ -52,6 +52,10 @@ class VerticalsController < ApplicationController
     redirect_to verticals_path, notice: "Vertical was successfully unarchived."
   end
 
+  def show
+    
+  end
+
   private
 
   def set_vertical
@@ -60,7 +64,7 @@ class VerticalsController < ApplicationController
 
   def vertical_params
     params.require(:vertical).permit(:name, :primary_category, :secondary_category,
-      fields_attributes: [:name, :label, :data_type, :id, :ping_required, :post_required],
+      vertical_fields_attributes: [:name, :label, :data_type, :id, :ping_required, :post_required],
       calculated_fields_attributes: [:id, :name, :formula, :_destroy])
   end
 end

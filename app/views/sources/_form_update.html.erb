@@ -1,6 +1,6 @@
 <%= form_with(model: [@campaign, source], local: true, data: { turbo: false }, class: "contents") do |form| %>
 
-    <%= render "shared/error_messages", resource: form.object %>
+    <%= render "error_messages", resource: form.object %>
     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6" data-controller="dynamic-form">
         
         <div class="sm:col-span-full">

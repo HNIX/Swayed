@@ -1,6 +1,6 @@
 <div class="flex flex-wrap">
   <div class="w-full mb-4 lg:w-1/4 lg:pr-4">
-    <%= render partial: "shared/account_navbar" %>
+    <%= render partial: "account_navbar" %>
   </div>
 
   <div class="w-full lg:w-3/4 lg:pl-4">
@@ -10,8 +10,8 @@
 
       <h1 class="h3 mb-4"><%= t('.title', resource: resource.model_name.human) %></h1>
 
-      <%= form_with(model: resource, as: resource_name, url: registration_path(resource_name), method: :put, class: "mb-16") do |form| %>
-        <%= render "shared/error_messages", resource: resource %>
+      <%= form_with(model: resource, as: resource_name, url: registration_path(resource_name), method: :put, class: "mb-16", html: {data: {controller: "bridge--form", action: "turbo:submit-start->bridge--form#submitStart turbo:submit-end->bridge--form#submitEnd"}}) do |form| %>
+        <%= render "error_messages", resource: resource %>
         <div class="flex flex-wrap items-start justify-between">
           <div class="w-full lg:w-1/2">
             <div class="form-group">
@@ -56,7 +56,7 @@
           </div>
         </div>
         <div class="mt-2 form-group">
-          <%= form.button button_text(t('.update'), disable_with: t(".saving")), class: "btn btn-primary" %>
+          <%= form.button button_text(t('.update'), disable_with: t(".saving")), class: "btn btn-primary", "data-bridge--form-target": "submit", "data-bridge-title": t('.update') %>
         </div>
       <% end %>
 

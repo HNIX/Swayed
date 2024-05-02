@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "~> 7.1.1"
+gem "rails", "~> 7.1.3"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails", ">= 3.4.1"
@@ -17,7 +17,7 @@ gem "pg"
 gem "puma", "~> 6.0"
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem "turbo-rails"
+gem "turbo-rails", "~> 2.0.3"
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails", "~> 1.0", ">= 1.0.2"
@@ -26,7 +26,7 @@ gem "stimulus-rails", "~> 1.0", ">= 1.0.2"
 gem "jbuilder", github: "excid3/jbuilder", branch: "partial-paths" # "~> 2.11"
 
 # Use Redis adapter to run Action Cable in production
-gem "redis", "~> 5.0"
+gem "redis", "~> 5.1"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -64,30 +64,31 @@ gem "draper"
 
 gem "ultimate_turbo_modal", "~> 1.6"
 
+gem 'groupdate'
+
+gem 'chartkick'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows]
 
-  # Optional debugging tools
-  # gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
-  # gem "pry-rails"
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  gem "brakeman", require: false
 
-  gem "annotate", ">= 3.2.0"
-  gem "letter_opener_web", "~> 2.0"
+  # Lint code for consistent style
   gem "standard", require: false
   gem "erb_lint", require: false
 
-  # Security tooling to
-  # gem "brakeman"
-  # gem "bundler-audit", github: "rubysec/bundler-audit"
+  gem "letter_opener_web", "~> 2.0"
+
+  # Optional debugging tools
+  # gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  # gem "pry-rails"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console", ">= 4.1.0"
-
-  # A fully configurable and extendable Git hook manager
-  gem "overcommit", require: false
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler", ">= 2.3.3"
@@ -95,18 +96,24 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 
-  # gem "error_highlight", ">= 0.6.0", platforms: [:ruby]
+  # Annotate models and tests with database columns
+  # gem "annotate", ">= 3.2.0"
+
+  # A fully configurable and extendable Git hook manager
+  gem "overcommit", require: false
 end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara", ">= 3.39"
-  gem "selenium-webdriver", ">= 4.11.0"
+  gem "selenium-webdriver", ">= 4.20.1"
   gem "webmock"
 end
 
 # Jumpstart Pro dependencies
+require_relative "lib/jumpstart/lib/jumpstart/yaml_serializer"
+require_relative "lib/jumpstart/lib/jumpstart/configuration"
 eval_gemfile "Gemfile.jumpstart"
 
 # We recommend using strong migrations when your app is in production
-# gem "strong_migrations", "~> 0.7.6"
+# gem "strong_migrations"

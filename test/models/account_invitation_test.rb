@@ -1,28 +1,3 @@
-# == Schema Information
-#
-# Table name: account_invitations
-#
-#  id            :bigint           not null, primary key
-#  email         :string           not null
-#  name          :string           not null
-#  roles         :jsonb            not null
-#  token         :string           not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  account_id    :bigint           not null
-#  invited_by_id :bigint
-#
-# Indexes
-#
-#  index_account_invitations_on_account_id     (account_id)
-#  index_account_invitations_on_invited_by_id  (invited_by_id)
-#  index_account_invitations_on_token          (token) UNIQUE
-#
-# Foreign Keys
-#
-#  fk_rails_...  (account_id => accounts.id)
-#  fk_rails_...  (invited_by_id => users.id)
-#
 require "test_helper"
 
 class AccountInvitationTest < ActiveSupport::TestCase
@@ -56,10 +31,11 @@ class AccountInvitationTest < ActiveSupport::TestCase
   end
 
   test "accept sends notifications account owner and inviter" do
-    assert_difference "Notification.count", 2 do
+    assert_difference "Noticed::Notification.count", 2 do
       account_invitations(:two).accept!(users(:invited))
     end
-    assert_equal @account, Notification.last.account
-    assert_equal users(:invited), Notification.last.params[:user]
+    event = Noticed::Event.last
+    assert_equal @account, event.account
+    assert_equal users(:invited), event.user
   end
 end

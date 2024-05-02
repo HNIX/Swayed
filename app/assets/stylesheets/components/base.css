@@ -1,3 +1,8 @@
+/* Tells browser to use dark mode scroll bars, etc */
+.dark {
+  color-scheme: dark;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -5,16 +10,17 @@ body {
   /* mobile viewport bug fix */
   min-height: -webkit-fill-available;
 }
+
 .main {
   flex: 1;
 }
 
 a {
-  @apply text-indigo-400;
+  @apply text-primary-600;
 
   &:hover,
   &:focus {
-    @apply text-blue-500;
+    @apply text-primary-500;
 
     transform: none;
   }

@@ -13,6 +13,11 @@ module Jumpstart
 
     config.to_prepare do
       Administrate::ApplicationController.helper Jumpstart::AdministrateHelpers
+
+      if Rails.env.development?
+        ::ApplicationController.include(Jumpstart::Welcome)
+        ::ApplicationController.include(Jumpstart::BundleAssets)
+      end
     end
 
     initializer "turbo.native.navigation.helper" do
@@ -23,9 +28,6 @@ module Jumpstart
     end
 
     initializer "jumpstart.setup" do |app|
-      # Set ActiveJob from Jumpstart
-      ActiveJob::Base.queue_adapter = Jumpstart::JobProcessor.queue_adapter(Jumpstart.config.job_processor)
-
       if Rails.env.development?
         # This makes sure we can load the Jumpstart assets in development
         config.assets.precompile << "jumpstart_manifest.js"
@@ -34,6 +36,11 @@ module Jumpstart
       if Jumpstart::Multitenancy.path? || Rails.env.test?
         app.config.middleware.use Jumpstart::AccountMiddleware
       end
+    end
+
+    initializer "jumpstart.sidekiq" do
+      # Removable https://github.com/hotwired/turbo-rails/issues/522
+      ::Sidekiq.strict_args!(false) if defined?(::Sidekiq)
     end
   end
 end

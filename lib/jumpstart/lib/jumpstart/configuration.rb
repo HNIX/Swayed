@@ -1,10 +1,5 @@
-require_relative "configuration/mailable"
-require_relative "configuration/integratable"
-require_relative "configuration/payable"
-require "erb"
-require "open-uri"
-require "psych"
-require "set" # standard:disable Lint/RedundantRequireStatement
+# Gems cannot be loaded here since this runs during bundler/setup
+require_relative "yaml_serializer"
 
 module Jumpstart
   def self.config
@@ -16,6 +11,120 @@ module Jumpstart
   end
 
   class Configuration
+    # Manages email provider integrations
+    module Mailable
+      AVAILABLE_PROVIDERS = {
+        "Amazon SES" => :ses,
+        "Mailgun" => :mailgun,
+        "Mailjet" => :mailjet,
+        "Mandrill" => :mandrill,
+        "OhMySMTP" => :ohmysmtp,
+        "Postmark" => :postmark,
+        "Sendgrid" => :sendgrid,
+        "SendinBlue" => :sendinblue,
+        "SparkPost" => :sparkpost
+      }.freeze
+
+      AVAILABLE_PROVIDERS.values.map(&:to_s).each do |name|
+        define_method :"#{name}?" do
+          email_provider == name
+        end
+      end
+    end
+
+    # Manages 3rd party service integrations
+    module Integratable
+      AVAILABLE_PROVIDERS = {
+        "AirBrake" => "airbrake",
+        "AppSignal" => "appsignal",
+        "BugSnag" => "bugsnag",
+        "ConvertKit" => "convertkit",
+        "Drip" => "drip",
+        "Honeybadger" => "honeybadger",
+        "Intercom" => "intercom",
+        "MailChimp" => "mailchimp",
+        "Rollbar" => "rollbar",
+        "Scout" => "scout",
+        "Sentry" => "sentry",
+        "Skylight" => "skylight"
+      }.freeze
+
+      attr_writer :integrations
+
+      AVAILABLE_PROVIDERS.values.each do |provider|
+        define_method(:"#{provider}?") do
+          integrations.include?(provider)
+        end
+      end
+
+      def integrations
+        @integrations || []
+      end
+
+      def self.has_credentials?(integration)
+        credentials_for(integration).first.last.present? if credentials_for(integration).present?
+      end
+
+      def self.credentials_for(integration)
+        Jumpstart.credentials.dig(Rails.env, integration.to_sym) || Jumpstart.credentials.dig(integration.to_sym) || {}
+      end
+    end
+
+    module Payable
+      attr_writer :payment_processors
+      attr_writer :plans
+      attr_writer :monthly_plans
+      attr_writer :yearly_plans
+
+      def payment_processors
+        Array(@payment_processors)
+      end
+
+      def payments_enabled?
+        payment_processors.any?
+      end
+
+      def stripe?
+        payment_processors.include? "stripe"
+      end
+
+      def braintree?
+        payment_processors.include? "braintree"
+      end
+
+      def paypal?
+        payment_processors.include? "paypal"
+      end
+
+      def paddle_billing?
+        payment_processors.include? "paddle_billing"
+      end
+
+      def paddle_classic?
+        payment_processors.include? "paddle_classic"
+      end
+
+      def plans
+        Array.wrap(@plans)
+      end
+
+      def monthly_plans
+        @monthly_plans ||= filter_plans("month")
+      end
+
+      def yearly_plans
+        @yearly_plans ||= filter_plans("year")
+      end
+
+      private
+
+      def filter_plans(frequency, default = "month")
+        plans.select do |plan|
+          plan.fetch(frequency, default).present?
+        end
+      end
+    end
+
     include Mailable
     include Integratable
     include Payable
@@ -37,10 +146,7 @@ module Jumpstart
 
     def self.load!
       if File.exist?(config_path)
-        config_yaml = ERB.new(File.read(config_path)).result
-        config = Psych.safe_load(config_yaml, permitted_classes: [Hash, Jumpstart::Configuration])
-        return config if config.is_a?(Jumpstart::Configuration)
-        new(config)
+        new(YAMLSerializer.load(config_path)).apply_upgrades
       else
         new
       end
@@ -55,44 +161,57 @@ module Jumpstart
     end
 
     def initialize(options = {})
-      @application_name = options["application_name"] || "Jumpstart"
-      @business_name = options["business_name"] || "Jumpstart Company, LLC"
+      @application_name = options["application_name"] || "My App"
+      @business_name = options["business_name"] || "My Company, LLC"
       @business_address = options["business_address"] || ""
       @domain = options["domain"] || "example.com"
       @support_email = options["support_email"] || "support@example.com"
-      @default_from_email = options["default_from_email"] || "Jumpstart <support@example.com>"
+      @default_from_email = options["default_from_email"] || "My App <no-reply@example.com>"
       @background_job_processor = options["background_job_processor"] || "async"
       @email_provider = options["email_provider"]
-
-      @personal_accounts = cast_to_boolean(options["personal_accounts"])
-      @personal_accounts = true if @personal_accounts.nil?
-
-      @register_with_account = cast_to_boolean(options["register_with_account"]) || false
-      @collect_billing_address = cast_to_boolean(options["collect_billing_address"])
-
+      @personal_accounts = cast_to_boolean(options["personal_accounts"], default: true)
       @apns = cast_to_boolean(options["apns"])
       @fcm = cast_to_boolean(options["fcm"])
-      @integrations = options["integrations"]
-      @omniauth_providers = options["omniauth_providers"]
-      @payment_processors = options["payment_processors"]
-      @multitenancy = options["multitenancy"]
-      @gems = options["gems"]
+      @integrations = options.fetch("integrations", [])
+      @omniauth_providers = options.fetch("omniauth_providers", [])
+      @payment_processors = options.fetch("payment_processors", [])
+      @multitenancy = options.fetch("multitenancy", [])
+      @gems = options.fetch("gems", [])
+    end
+
+    def apply_upgrades
+      if @payment_processors&.include? "paddle"
+        @payment_processors.delete "paddle"
+        @payment_processors << "paddle_classic"
+        write_config
+      end
+      self
+    end
+
+    def write_config
+      YAMLSerializer.dump_to_file(self.class.config_path, self)
     end
 
     def save
-      # Creates config/jumpstart.yml
-      File.write(self.class.config_path, to_yaml)
-
+      write_config
       update_procfiles
       copy_configs
-      generate_credentials
 
       # Change the Jumpstart config to the latest version
       Jumpstart.config = self
     end
 
     def job_processor
-      (background_job_processor || "async").to_sym
+      (background_job_processor || :async).to_sym
+    end
+
+    def queue_adapter
+      case job_processor
+      when :delayed_job
+        :delayed
+      else
+        job_processor
+      end
     end
 
     def gems
@@ -103,20 +222,15 @@ module Jumpstart
       Array(@omniauth_providers)
     end
 
-    def register_with_account=(value)
-      @register_with_account = cast_to_boolean(value)
-    end
-
     def register_with_account?
-      @register_with_account.nil? ? false : cast_to_boolean(@register_with_account)
+      !personal_accounts?
     end
 
     def personal_accounts=(value)
       @personal_accounts = cast_to_boolean(value)
     end
 
-    def personal_accounts
-      # Enabled by default
+    def personal_accounts?
       @personal_accounts.nil? ? true : cast_to_boolean(@personal_accounts)
     end
 
@@ -126,14 +240,6 @@ module Jumpstart
 
     def fcm?
       cast_to_boolean(@fcm || false)
-    end
-
-    def collect_billing_address=(value)
-      @collect_billing_address = cast_to_boolean(value)
-    end
-
-    def collect_billing_address?
-      cast_to_boolean(@collect_billing_address || false)
     end
 
     def update_procfiles
@@ -192,25 +298,6 @@ module Jumpstart
 
       if skylight?
         copy_template("config/skylight.yml")
-      end
-    end
-
-    def generate_credentials
-      %w[test development staging production].each do |env|
-        key_path = Pathname.new("config/credentials/#{env}.key")
-        credentials_path = "config/credentials/#{env}.yml.enc"
-
-        # Skip generating if credentials file already exists
-        next if File.exist?(credentials_path)
-
-        Rails::Generators::EncryptionKeyFileGenerator.new.add_key_file_silently(key_path)
-        Rails::Generators::EncryptionKeyFileGenerator.new.ignore_key_file_silently(key_path)
-        Rails::Generators::EncryptedFileGenerator.new.add_encrypted_file_silently(credentials_path, key_path, Jumpstart::Credentials.template)
-
-        # Add the credentials if we're in a git repo
-        if File.directory?(".git")
-          system("git add #{credentials_path}")
-        end
       end
     end
 
@@ -273,11 +360,11 @@ module Jumpstart
       "FALSE", :FALSE,
       "off", :off,
       "OFF", :OFF
-    ].to_set.freeze
+    ].freeze
 
-    def cast_to_boolean(value)
+    def cast_to_boolean(value, default: nil)
       if value.nil? || value == ""
-        nil
+        default
       else
         !FALSE_VALUES.include?(value)
       end

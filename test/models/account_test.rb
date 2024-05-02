@@ -1,30 +1,8 @@
-# == Schema Information
-#
-# Table name: accounts
-#
-#  id                  :bigint           not null, primary key
-#  account_users_count :integer          default(0)
-#  billing_email       :string
-#  domain              :string
-#  extra_billing_info  :text
-#  name                :string           not null
-#  personal            :boolean          default(FALSE)
-#  subdomain           :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  owner_id            :bigint
-#
-# Indexes
-#
-#  index_accounts_on_owner_id  (owner_id)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (owner_id => users.id)
-#
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   test "validates uniqueness of domain" do
     account = accounts(:company).dup
     assert_not account.valid?
@@ -98,14 +76,14 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "personal accounts enabled" do
-    Jumpstart.config.stub(:personal_accounts, true) do
+    Jumpstart.config.stub(:personal_accounts?, true) do
       user = User.create! name: "Test", email: "personalaccounts@example.com", password: "password", password_confirmation: "password", terms_of_service: true
       assert user.accounts.first.personal?
     end
   end
 
   test "personal accounts disabled" do
-    Jumpstart.config.stub(:personal_accounts, false) do
+    Jumpstart.config.stub(:personal_accounts?, false) do
       user = User.create! name: "Test", email: "nonpersonalaccounts@example.com", password: "password", password_confirmation: "password", terms_of_service: true
       assert_not user.accounts.first.personal?
     end
@@ -114,11 +92,11 @@ class AccountTest < ActiveSupport::TestCase
   test "owner?" do
     account = accounts(:one)
     assert account.owner?(users(:one))
-    refute account.owner?(users(:two))
+    assert_not account.owner?(users(:two))
   end
 
   test "can_transfer? false for personal accounts" do
-    refute accounts(:one).can_transfer?(users(:one))
+    assert_not accounts(:one).can_transfer?(users(:one))
   end
 
   test "can_transfer? true for owner" do
@@ -127,7 +105,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "can_transfer? false for non-owner" do
-    refute accounts(:company).can_transfer?(users(:two))
+    assert_not accounts(:company).can_transfer?(users(:two))
   end
 
   test "transfer ownership to a new owner" do
@@ -140,8 +118,17 @@ class AccountTest < ActiveSupport::TestCase
   test "transfer ownership fails transferring to a user outside the account" do
     account = accounts(:company)
     owner = account.owner
-    refute account.transfer_ownership(users(:invited).id)
+    assert_not account.transfer_ownership(users(:invited).id)
     assert_equal owner, account.reload.owner
+  end
+
+  test "transfer ownership enqueues stripe sync" do
+    account = accounts(:company)
+    new_owner = users(:two)
+    payment_processor = account.set_payment_processor :fake_processor, allow_fake: true
+    assert_enqueued_with job: Pay::CustomerSyncJob, args: [payment_processor.id] do
+      account.transfer_ownership(new_owner.id)
+    end
   end
 
   test "billing_email shouldn't be included in receipts if empty" do
@@ -162,5 +149,23 @@ class AccountTest < ActiveSupport::TestCase
 
     mail = Pay::UserMailer.with(pay_customer: pay_customer, pay_charge: pay_charge).receipt
     assert_equal [account.email, "accounting@example.com"], mail.to
+  end
+
+  test "destroys noticed events when associated" do
+    account = accounts(:one)
+    Noticed::Event.create!(account: account)
+
+    assert_difference "Noticed::Event.count", -1 do
+      account.destroy
+    end
+  end
+
+  test "destroys noticed events when associated as record" do
+    account = accounts(:one)
+    Noticed::Event.create!(account: accounts(:two), record: account)
+
+    assert_difference "Noticed::Event.count", -1 do
+      account.destroy
+    end
   end
 end

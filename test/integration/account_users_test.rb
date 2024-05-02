@@ -23,7 +23,7 @@ class Jumpstart::AccountUsersTest < ActionDispatch::IntegrationTest
     test "can edit account user" do
       account_user = account_users(:company_regular_user)
       get edit_account_account_user_path(@account, account_user)
-      assert_select "button", "Update Account user"
+      assert_select "button", I18n.t("helpers.submit.update", model: AccountUser.model_name.human)
     end
 
     test "can update account user" do
@@ -40,6 +40,13 @@ class Jumpstart::AccountUsersTest < ActionDispatch::IntegrationTest
         delete account_account_user_path(@account, user.id)
       end
       assert_response :redirect
+    end
+
+    test "cannot delete account owner" do
+      account_user = @account.account_users.find_by(user_id: @account.owner_id)
+      assert_no_difference "@account.account_users.count" do
+        delete account_account_user_path(@account, account_user.id)
+      end
     end
 
     test "disables admin role checkbox when editing owner" do

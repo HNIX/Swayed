@@ -66,9 +66,6 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
 
-  # Raises error for missing translations.
-  # config.action_view.raise_on_missing_translations = true
-
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).
   config.require_master_key = true
@@ -78,4 +75,7 @@ Rails.application.configure do
 
   # Encrypts fixtures with Rails encryption
   config.active_record.encryption.encrypt_fixtures = true
+
+  # Use the test queue adapter instead of async. https://github.com/rails/rails/issues/46797
+  config.active_job.queue_adapter = :test
 end

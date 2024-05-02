@@ -6,19 +6,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def build_resource(hash = {})
     self.resource = resource_class.new_with_session(hash, session)
 
-    # Jumpstart: Skip email confirmation on registration.
-    #   Require confirmation when user changes their email only
-    resource.skip_confirmation!
-
     # Registering to accept an invitation should display the invitation on sign up
     if params[:invite] && (invite = AccountInvitation.find_by(token: params[:invite]))
       @account_invitation = invite
       resource.skip_default_account = true
 
-    # Build and display account fields in registration form if enabled
+    # Build and display account fields in registration form if needed
     elsif Jumpstart.config.register_with_account?
-      account = resource.owned_accounts.first
-      account ||= resource.owned_accounts.new
+      account = resource.owned_accounts.first || resource.owned_accounts.new
       account.account_users.new(user: resource, admin: true)
     end
   end

@@ -1,6 +1,6 @@
 <%= form_with(model: [@campaign, @distribution, @campaign_distribution]) do |form| %>
   <div class="space-y-6 divide-y divide-white/5" data-controller="companies" >
-    <%= render "shared/error_messages", resource: form.object %>
+    <%= render "error_messages", resource: form.object %>
 
     <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
       <div>

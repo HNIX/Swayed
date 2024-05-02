@@ -10,7 +10,7 @@ export default class extends Controller {
   }
 
   connect() {
-    this.subscription = consumer.subscriptions.create({ channel: "NotificationChannel" }, {
+    this.subscription = consumer.subscriptions.create({ channel: "Noticed::NotificationChannel" }, {
       connected: this._connected.bind(this),
       disconnected: this._disconnected.bind(this),
       received: this._received.bind(this)
@@ -56,7 +56,7 @@ export default class extends Controller {
   // Called when the notifications view opens
   open() {
     this.hideUnreadBadge()
-    this.markAllAsRead()
+    this.markAllAsSeen()
   }
 
   hasUnread() {
@@ -64,30 +64,28 @@ export default class extends Controller {
   }
 
   showUnreadBadge() {
-    if (this.hasBadgeTarget == false) { return }
-    this.badgeTarget.classList.remove("hidden")
+    this.badgeTarget?.classList?.remove("hidden")
   }
 
   hideUnreadBadge() {
-    if (this.hasBadgeTarget == false) { return }
-    this.badgeTarget.classList.add("hidden")
+    this.badgeTarget?.classList?.add("hidden")
   }
 
-  markAllAsRead() {
+  markAllAsSeen() {
     let ids = this.notificationTargets.map((target) => target.dataset.id)
-    this.subscription.perform("mark_as_read", {ids: ids})
+    this.subscription.perform("mark_as_seen", {ids: ids})
 
     this.accountUnreadValue = 0
     this.totalUnreadValue -= ids.length
   }
 
-  markAsInteracted(event) {
+  markAsRead(event) {
     let id = event.currentTarget.dataset.id
     if (id == null) return
-    this.subscription.perform("mark_as_interacted", {ids: [id]})
+    this.subscription.perform("mark_as_read", {ids: [id]})
 
     // Uncomment to visually mark notification as interacted
-    // event.currentTarget.dataset.interactedAt = new Date()
+    // event.currentTarget.dataset.readAt = new Date()
   }
 
   // Browser notifications

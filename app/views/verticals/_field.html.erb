@@ -1,4 +1,4 @@
-<%= fields_for "vertical[fields_attributes][#{field.persisted? ? field.id : Time.now.to_i }]", field do |ff| %>
+<%= fields_for "vertical[vertical_fields_attributes][#{vertical_field.persisted? ? vertical_field.id : Time.now.to_i }]", vertical_field do |ff| %>
 <div data-controller="fields">
     <div  id="field_<%= Time.now.to_i %>" class="flow-root" data-fields-target="field" >
       <%= ff.hidden_field :id %>
@@ -18,7 +18,7 @@
               <!-- More people... -->
             </tbody>
           </table>
-          <% if field.persisted? %>
+          <% if vertical_field.persisted? %>
               <%= ff.hidden_field :_destroy %>
               <%= link_to "Remove", "#", class: "remove-field" %>
           <% else %>

@@ -24,7 +24,7 @@ class Vertical < ApplicationRecord
   acts_as_tenant :account
 
   has_many :campaigns
-  has_many :fields, dependent: :destroy
+  has_many :vertical_fields, dependent: :destroy
   has_many :companies, through: :campaigns
 
   # Broadcast changes in realtime with Hotwire

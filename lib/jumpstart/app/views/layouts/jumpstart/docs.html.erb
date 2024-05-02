@@ -11,29 +11,22 @@
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
 
     <%# Be sure to add your own custom favicons %>
-    <%= render "shared/favicons" %>
-    <%= render "shared/payments_dependencies" %>
-
-    <%# Replace this with your FontAwesome Pro Kit code %>
-    <script defer src="https://kit.fontawesome.com/0e5ab6a736.js" crossorigin="anonymous"></script>
+    <%= render "favicons" %>
+    <%= render "payments_dependencies" %>
 
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/dark.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script>
       document.addEventListener("turbo:load", function() {
-        var snippets = document.querySelectorAll('pre code')
-        snippets.forEach(function(snippet) {
-          hljs.highlightElement(snippet);
-          snippet.parentNode.classList.add('dark:border', 'dark:border-gray-400/50', 'dark:rounded');
-        })
+        document.querySelectorAll("pre code").forEach(function(snippet) { hljs.highlightElement(snippet); })
       });
     </script>
 
     <%= yield :head %>
   </head>
   <body class="h-full overflow-x-hidden font-sans font-normal leading-normal bg-offwhite dark:bg-gray-900 dark:text-gray-50" data-controller="theme" data-theme-preference-value="<%= current_user&.theme %>">
-    <%= render partial: "shared/flash" %>
+    <%= render partial: "flash" %>
 
     <div class="sm:flex">
       <%= render partial: "jumpstart/docs/nav" %>

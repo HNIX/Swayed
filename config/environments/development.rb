@@ -23,7 +23,7 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
-    config.cache_store = :redis_cache_store, {url: ENV.fetch("REDIS_URL", "redis://localhost:6379/1")}
+    config.cache_store = :memory_store
     config.public_file_server.headers = {
       "Cache-Control" => "public, max-age=#{2.days.to_i}"
     }
@@ -74,6 +74,9 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 
+  # Uncomment the line below to enable strict loading across all models. More granular control can be applied at the model or association level.
+  # config.active_record.strict_loading_by_default = true
+
   # Set the default URL for ActionMailer in development.
   config.action_mailer.default_url_options = {host: "lvh.me", port: ENV.fetch("PORT", 3000).to_i}
   config.action_mailer.delivery_method = :letter_opener_web
@@ -83,4 +86,13 @@ Rails.application.configure do
 
   # You may need to set to include the correct URLs from Turbo, etc
   # config.action_controller.default_url_options = {host: "lvh.me", port: ENV.fetch("PORT", 3000).to_i}
+
+  config.generators.after_generate do |files|
+    parsable_files = files.filter { |file| file.end_with?(".rb") }
+    unless parsable_files.empty?
+      system("bundle exec standardrb --fix #{parsable_files.shelljoin}", exception: true)
+    end
+  end
+
+  config.active_job.queue_adapter = Jumpstart.config.queue_adapter
 end

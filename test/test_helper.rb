@@ -7,7 +7,14 @@ require "webmock/minitest"
 # Uncomment to view full stack trace in tests
 # Rails.backtrace_cleaner.remove_silencers!
 
-require "sidekiq/testing" if defined?(Sidekiq)
+if defined?(Sidekiq)
+  require "sidekiq/testing"
+  Sidekiq.logger.level = Logger::WARN
+end
+
+if defined?(SolidQueue)
+  SolidQueue.logger.level = Logger::WARN
+end
 
 module ActiveSupport
   class TestCase
@@ -38,6 +45,8 @@ WebMock.disable_net_connect!({
   allow_localhost: true,
   allow: [
     "chromedriver.storage.googleapis.com",
-    "api.stripe.com"
+    "api.stripe.com",
+    "rails-app",
+    "selenium"
   ]
 })

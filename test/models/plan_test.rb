@@ -1,23 +1,3 @@
-# == Schema Information
-#
-# Table name: plans
-#
-#  id                :bigint           not null, primary key
-#  amount            :integer          default(0), not null
-#  charge_per_unit   :boolean
-#  currency          :string
-#  description       :string
-#  details           :jsonb            not null
-#  hidden            :boolean
-#  interval          :string           not null
-#  interval_count    :integer          default(1)
-#  name              :string           not null
-#  trial_period_days :integer          default(0)
-#  unit_label        :string
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#
-
 require "test_helper"
 
 class PlanTest < ActiveSupport::TestCase
@@ -28,17 +8,17 @@ class PlanTest < ActiveSupport::TestCase
 
   test "monthly?" do
     assert monthly.monthly?
-    refute annual.monthly?
+    assert_not annual.monthly?
   end
 
   test "annual?" do
     assert annual.annual?
-    refute monthly.annual?
+    assert_not monthly.annual?
   end
 
   test "yearly?" do
     assert annual.yearly?
-    refute monthly.yearly?
+    assert_not monthly.yearly?
   end
 
   test "monthly_version" do
@@ -74,12 +54,12 @@ class PlanTest < ActiveSupport::TestCase
     assert plan.stripe_tax
 
     plan.stripe_tax = "0"
-    refute plan.stripe_tax
+    assert_not plan.stripe_tax
   end
 
   test "unit label required if charge_by_unit enabled" do
     plan = Plan.new(charge_per_unit: true, unit_label: "")
-    refute plan.valid?
+    assert_not plan.valid?
     assert plan.errors[:unit_label].any?
   end
 

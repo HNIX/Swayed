@@ -1,6 +1,6 @@
 <div class="flex flex-wrap">
   <div class="w-full mb-4 lg:w-1/4 lg:pr-4">
-    <%= render partial: "shared/account_navbar" %>
+    <%= render partial: "account_navbar" %>
   </div>
 
   <div class="w-full lg:w-3/4 lg:pl-4">
@@ -11,8 +11,8 @@
         </div>
 
         <div class="flex-shrink-0">
-          <%= link_to t(".edit"), edit_api_token_path(@api_token), class: "btn btn-light-gray" %>
-          <%= link_to t(".revoke"), @api_token, class: "btn btn-light-gray", data: { turbo_method: :delete, turbo_confirm: t(".confirm") } %>
+          <%= link_to t(".edit"), edit_api_token_path(@api_token), class: "btn btn-secondary" %>
+          <%= link_to t(".revoke"), @api_token, class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: t(".confirm") } %>
         </div>
       </div>
 

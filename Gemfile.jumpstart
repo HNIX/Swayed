@@ -1,34 +1,30 @@
 # Add dependencies for your application in the main Gemfile
 
 # Jumpstart Pro dependencies
-gem "administrate", github: "excid3/administrate", branch: "jumpstart"
-gem "administrate-field-active_storage", "~> 0.4.1"
-gem "country_select", "~> 8.0"
-gem "cssbundling-rails", "~> 1.3.1"
-gem "devise", "~> 4.9.0"
+gem "administrate", github: "excid3/administrate"
+gem "administrate-field-active_storage", "~> 1.0.0"
+gem "country_select", "~> 9.0"
+gem "cssbundling-rails", "~> 1.4.0"
+gem "devise", github: "excid3/devise", branch: "sign-in-after-reset-password-proc" # "~> 4.9.0"
 gem "devise-i18n", "~> 1.10"
 gem "inline_svg", "~> 1.6"
 gem "invisible_captcha", "~> 2.0"
-gem "jsbundling-rails", "~> 1.2.1"
+gem "jsbundling-rails", "~> 1.3.0"
 gem "jumpstart", path: "lib/jumpstart", group: :omit
-gem "local_time", "~> 2.1"
+gem "local_time", "~> 3.0"
 gem "name_of_person", "~> 1.0"
-gem "noticed", "~> 1.5"
-gem "pagy", "~> 6.0"
-gem "pay", "~> 6.2"
-gem "prawn", github: "prawnpdf/prawn"
+gem "noticed", "~> 2.2"
+gem "pagy", "~> 8.0"
+gem "pay", "~> 7.1"
 gem "prefixed_ids", "~> 1.2"
 gem "pretender", "~> 0.4"
 gem "pundit", "~> 2.1"
 gem "receipts", "~> 2.1"
 gem "rotp", "~> 6.2"
 gem "rqrcode", "~> 2.1"
-gem "ruby-oembed", "~> 0.16.0", require: "oembed"
+gem "ruby-oembed", "~> 0.17.0", require: "oembed"
 
-# Optional dependencies based on Jumpstart config
-require_relative "lib/jumpstart/lib/jumpstart/configuration"
-
-gem "acts_as_tenant", "~> 0.6" if Jumpstart.config.gems.include?("acts_as_tenant")
+gem "acts_as_tenant", "~> 1.0" if Jumpstart.config.gems.include?("acts_as_tenant")
 gem "oj", "~> 3.8" if Jumpstart.config.gems.include?("oj")
 gem "rack-attack", "~> 6.6" if Jumpstart.config.gems.include?("rack-attack")
 gem "whenever", "~> 1.0", require: false if Jumpstart.config.gems.include?("whenever")
@@ -64,10 +60,15 @@ gem "sneakers" if Jumpstart.config.background_job_processor == "sneakers"
 gem "sucker_punch" if Jumpstart.config.background_job_processor == "sucker_punch"
 gem "good_job" if Jumpstart.config.background_job_processor == "good_job"
 
+if Jumpstart.config.background_job_processor == "solid_queue"
+  gem "solid_queue"
+  gem "mission_control-jobs"
+end
+
 # Payment processors
-gem "stripe", "~> 9.2" if Jumpstart.config.stripe?
-gem "braintree" if Jumpstart.config.braintree? || Jumpstart.config.paypal?
-gem "paddle_pay" if Jumpstart.config.paddle?
+gem "stripe", "~> 10.0" if Jumpstart.config.stripe?
+gem "paddle", "~> 2.1" if Jumpstart.config.paddle_billing? || Jumpstart.config.paddle_classic?
+gem "braintree", "~> 4.15" if Jumpstart.config.braintree? || Jumpstart.config.paypal?
 
 # Notifications
 gem "apnotic" if Jumpstart.config.apns?

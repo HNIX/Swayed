@@ -31,7 +31,7 @@
 #
 require "test_helper"
 
-class FieldTest < ActiveSupport::TestCase
+class VerticalFieldTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
