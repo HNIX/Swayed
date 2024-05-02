@@ -74,8 +74,8 @@ class Campaign < ApplicationRecord
   scope :sorted, -> { order("created_at DESC") }
 
   # Nested Attributes
-  accepts_nested_attributes_for :campaign_fields, allow_destroy: true, :reject_if => :all_blank
-  accepts_nested_attributes_for :sources, :reject_if => :all_blank
+  accepts_nested_attributes_for :campaign_fields, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :sources, reject_if: :all_blank
   accepts_nested_attributes_for :distributions, allow_destroy: true, reject_if: proc { |attributes| attributes["name"].blank? && attributes["headers_attributes"][0].nil? }
   accepts_nested_attributes_for :campaign_distributions
 

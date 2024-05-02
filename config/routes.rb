@@ -110,7 +110,6 @@ Rails.application.routes.draw do
     end
   end
 
-
   resources :announcements, only: [:index, :show]
 
   namespace :action_text do

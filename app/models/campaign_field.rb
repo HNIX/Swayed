@@ -51,7 +51,7 @@ class CampaignField < ApplicationRecord
   has_many :distribution_filters, dependent: :destroy
 
   # Nested attributes
-  accepts_nested_attributes_for :list_values, allow_destroy: true, :reject_if => :all_blank
+  accepts_nested_attributes_for :list_values, allow_destroy: true, reject_if: :all_blank
 
   # Callbacks for broadcasting changes
   after_create_commit { broadcast_prepend_later_to :campaign_fields, partial: "campaign_fields/index", locals: {campaign_field: self} }

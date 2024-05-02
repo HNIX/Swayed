@@ -41,7 +41,7 @@ class Distribution < ApplicationRecord
   has_many :headers, dependent: :destroy
   has_and_belongs_to_many :distribution_filters
 
-  accepts_nested_attributes_for :headers, allow_destroy: true, :reject_if => :all_blank
+  accepts_nested_attributes_for :headers, allow_destroy: true, reject_if: :all_blank
 
   enum request_method: {get: 0, post: 1, put: 2, patch: 3}
   enum request_format: {form: 0, json: 1, xml: 2}

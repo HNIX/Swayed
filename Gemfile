@@ -64,9 +64,9 @@ gem "draper"
 
 gem "ultimate_turbo_modal", "~> 1.6"
 
-gem 'groupdate'
+gem "groupdate"
 
-gem 'chartkick'
+gem "chartkick"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

@@ -28,7 +28,7 @@ class CampaignDistribution < ApplicationRecord
   belongs_to :distribution
   has_many :mapped_fields, dependent: :destroy
 
-  accepts_nested_attributes_for :mapped_fields, allow_destroy: true, :reject_if => :all_blank
+  accepts_nested_attributes_for :mapped_fields, allow_destroy: true, reject_if: :all_blank
 
   # Broadcast changes in realtime with Hotwire
   after_create_commit -> { broadcast_prepend_later_to :campaign_distributions, partial: "campaign_distributions/index", locals: {campaign_distribution: self} }

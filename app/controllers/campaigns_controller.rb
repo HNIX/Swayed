@@ -54,19 +54,18 @@ class CampaignsController < ApplicationController
     @latest_requests = @campaign.api_requests.order(request_time: :desc).limit(6)
     @inbound_requests_count = @campaign.api_requests.where(direction: "inbound").count
     @accepted_ping_count = @campaign.api_requests.where(direction: "inbound", status: "accepted").count
- 
+
     time_back = params[:date_range].to_i
-    start_date = time_back.hours.ago.to_date  if time_back == 24  # Special case for 24 hours
-    start_date ||= time_back.days.ago.to_date  if time_back > 0
+    start_date = time_back.hours.ago.to_date if time_back == 24
+    start_date ||= time_back.days.ago.to_date if time_back > 0
     start_date ||= 7.days.ago.to_date  # Default case
 
     end_date = Date.today
 
     # Prepare a default hash with all dates set to zero
-    default_data = (start_date..end_date).map { |date| [date, 0] }.to_h
-    
-    @api_requests_by_date = @campaign.api_requests.group_by_day(:created_at, range: start_date..end_date).count
+    # default_data = (start_date..end_date).map { |date| [date, 0] }.to_h
 
+    @api_requests_by_date = @campaign.api_requests.group_by_day(:created_at, range: start_date..end_date).count
   end
 
   def logs

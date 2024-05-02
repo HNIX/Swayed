@@ -1,5 +1,5 @@
 class Api::V1::AuthsController < Api::BaseController
-  skip_before_action :authenticate_api_token!, only: [:create], :raise => false
+  skip_before_action :authenticate_api_token!, only: [:create], raise: false
   before_action :authenticate, only: [:create]
 
   # Requires email and password params

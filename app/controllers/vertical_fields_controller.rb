@@ -80,5 +80,4 @@ class VerticalFieldsController < ApplicationController
       :example_value, :value_acceptance, :default_value, :notes, :phone_format, :min_value, :max_value,
       :required, list_values: [], list_values_attributes: [:list_value, :id, :_destroy])
   end
-
 end

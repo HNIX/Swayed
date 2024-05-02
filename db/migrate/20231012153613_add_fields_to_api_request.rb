@@ -7,6 +7,6 @@ class AddFieldsToApiRequest < ActiveRecord::Migration[7.0]
     add_column :api_requests, :api_key, :string
     add_column :api_requests, :headers, :jsonb
     add_column :api_requests, :request_time, :datetime
-    change_column :api_requests, :direction, :integer, :default => 0
+    change_column :api_requests, :direction, :integer, default: 0
   end
 end

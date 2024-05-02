@@ -53,7 +53,6 @@ class VerticalsController < ApplicationController
   end
 
   def show
-    
   end
 
   private

@@ -16,9 +16,7 @@ class ApplicationController < ActionController::Base
   include Users::Sudo
   include Users::TimeZone
 
-  
   before_action :check_app_secret
-
 
   protected
 

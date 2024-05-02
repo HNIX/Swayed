@@ -18,11 +18,9 @@ namespace :api, defaults: {format: :json} do
       #   end
       # end
     end
-    
     resources :users
     resources :notification_tokens, only: :create
   end
 end
 
 resources :api_tokens
-
