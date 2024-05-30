@@ -50,12 +50,13 @@ class CampaignsController < ApplicationController
     @target_element_id = params[:target_element_id]
   end
 
-  def show
-    @latest_requests = @campaign.api_requests.order(request_time: :desc).limit(6)
-    @inbound_requests_count = @campaign.api_requests.where(direction: "inbound").count
-    @accepted_ping_count = @campaign.api_requests.where(direction: "inbound", status: "accepted").count
+  def show    
 
-    time_back = params[:date_range].to_i
+    session[:date_range] = params[:date_range] if params[:date_range].present?
+    session[:source] = params[:source] if params[:source].present?
+    session[:distribution] = params[:distribution] if params[:distribution].present?
+    
+    time_back = session[:date_range].to_i
     start_date = time_back.hours.ago.to_date if time_back == 24
     start_date ||= time_back.days.ago.to_date if time_back > 0
     start_date ||= 7.days.ago.to_date  # Default case
@@ -64,9 +65,27 @@ class CampaignsController < ApplicationController
 
     # Prepare a default hash with all dates set to zero
     # default_data = (start_date..end_date).map { |date| [date, 0] }.to_h
+    
+    # Start with all api_requests for the campaign
+    api_requests = @campaign.api_requests
 
-    @api_requests_by_date = @campaign.api_requests.group_by_day(:created_at, range: start_date..end_date).count
-  end
+    # Adjust filtering to handle polymorphic association
+    inbound_api_requests = api_requests.where(requestable_type: 'Source', requestable_id: session[:source]) if session[:source].present? 
+    outbound_api_requests = api_requests.where(requestable_type: 'Distribution', requestable_id: session[:distribution]) if session[:distribution].present? 
+
+    # Group and count api_requests by day within the given range
+    @inbound_requests_by_date = inbound_api_requests.group_by_day(:created_at, range: start_date..end_date).count
+    @outbound_requests_by_date = outbound_api_requests.group_by_day(:created_at, range: start_date..end_date).count
+
+
+    @accepted_inbound_ping_count = inbound_api_requests.where(created_at: start_date..end_date).count
+    @outbound_ping_count = outbound_api_requests.where(created_at: start_date..end_date).count
+
+    
+    @leads_count = @campaign.leads.where(created_at: start_date..end_date).count
+    @total_revenue = @campaign.leads.where(created_at: start_date..end_date).sum(:revenue_cents)/100.0
+    @total_profit = @campaign.leads.where(created_at: start_date..end_date).sum(:profit_cents)/100.0
+  end 
 
   def logs
     search_api_requests

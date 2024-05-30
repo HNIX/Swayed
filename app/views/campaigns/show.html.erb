@@ -8,7 +8,7 @@
       <ul role="list" class="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col list-none">
         <li>
           <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-          <%= nav_link_to campaign_path(@campaign), class: "bg-gray-50 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+          <%= nav_link_to campaign_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", inactive_class: "text-gray-700 dark:text-gray-200 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
             <svg class="h-6 w-6 shrink-0 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -16,7 +16,7 @@
           <% end %>
         </li>
         <li>
-          <%= nav_link_to campaign_campaign_fields_path(@campaign), class: "text-gray-700 dark:text-gray-200 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+          <%= nav_link_to campaign_campaign_fields_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", inactive_class: "text-gray-700 dark:text-gray-200 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
             <svg class="h-6 w-6 shrink-0 text-gray-400 dark:text-gray-200 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33" />
             </svg>
@@ -24,7 +24,7 @@
           <% end %>
         </li>
         <li>
-          <%= nav_link_to campaign_sources_path(@campaign), class: "text-gray-700 dark:text-gray-200 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+          <%= nav_link_to campaign_sources_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", inactive_class: "text-gray-700 dark:text-gray-200 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
             <svg class="h-6 w-6 shrink-0 text-gray-400 dark:text-gray-200 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
             </svg>
@@ -32,7 +32,7 @@
           <% end %>
         </li>
         <li>
-          <%= nav_link_to campaign_distributions_path(@campaign), class: "text-gray-700 dark:text-gray-200 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+          <%= nav_link_to campaign_distributions_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", inactive_class: "text-gray-700 dark:text-gray-200 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
             <svg class="h-6 w-6 shrink-0 text-gray-400 dark:text-gray-200 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
             </svg>
@@ -40,7 +40,7 @@
           <% end %>
         </li>
         <li>
-          <%= nav_link_to edit_campaign_path(@campaign), class: "text-gray-700 dark:text-gray-200 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+          <%= nav_link_to edit_campaign_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", inactive_class: "text-gray-700 dark:text-gray-200 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
             <svg class="h-6 w-6 shrink-0 text-gray-400 dark:text-gray-200 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
             </svg>
@@ -48,7 +48,7 @@
           <% end %>
         </li>
         <li>
-          <%= nav_link_to logs_campaign_path(@campaign), class: "text-gray-700 dark:text-gray-200 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+          <%= nav_link_to logs_campaign_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", inactive_class: "text-gray-700 dark:text-gray-200 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
             <svg class="h-6 w-6 shrink-0 text-gray-400 dark:text-gray-200 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
             </svg>
@@ -60,25 +60,78 @@
   </aside>
 
   <main class="px-4 lg:py-10 sm:px-6 lg:flex-auto lg:px-0">
-    <div class="mx-auto max-w-2xl space-y-6 sm:space-y-8 lg:mx-0 lg:max-w-none">
+    <div class="mx-auto max-w-2xl space-y-6 sm:space-y-10 lg:mx-0 lg:max-w-none">
+      <div class="flex justify-between">
+        <div class="max-w-xs">
+          <label for="location" class="block text-sm font-medium leading-6 text-gray-900">Date range:</label>
+          <%= form_tag(campaign_path(@campaign), method: :get, id: "date-range-form") do %>
+            <%= select_tag :date_range, options_for_select({
+              "Past 24 Hours" => "24",
+              "Past 7 Days" => "7",
+              "Past 30 Days" => "30",
+              "Past 180 Days" => "180",
+            }, params[:date_range] || session[:date_range]), onchange: "this.form.submit();" %>
+            <%= hidden_field_tag :source, params[:source] || session[:source] %>
+            <%= hidden_field_tag :date_range, params[:distribution] || session[:distribution] %>
+          <% end %>
+        </div>
+        <div class="max-w-md flex space-x-6">
+          <div>
+            <label for="location" class="block text-sm font-medium leading-6 text-gray-900">From:</label>
+            <%= form_tag(campaign_path(@campaign), method: :get, id: "source-form") do %>
+              <%= select_tag :source, options_from_collection_for_select(@campaign.sources, :id, :name, params[:source] || session[:source]), include_blank: 'All sources', onchange: "this.form.submit();" %>
+              <%= hidden_field_tag :date_range, params[:date_range] || session[:date_range] %>
+              <%= hidden_field_tag :date_range, params[:distribution] || session[:distribution] %>
+            <% end %>
+          </div>
 
-        <%= form_tag(campaign_path(@campaign), method: :get, id: "date-range-form") do %>
-          <%= select_tag :date_range, options_for_select({
-            "Past 24 Hours" => "24",
-            "Past 7 Days" => "7",
-            "Past 30 Days" => "30",
-            "Past 180 Days" => "180",
-          }, params[:date_range]), onchange: "this.form.submit();" %>
-        <% end %>
+          <div>
+            <label for="location" class="block text-sm font-medium leading-6 text-gray-900">To:</label>
+            <%= form_tag(campaign_path(@campaign), method: :get, id: "distribution-form") do %>
+              <%= select_tag :distribution, options_from_collection_for_select(@campaign.distributions, :id, :name, params[:distribution] || session[:distribution]), include_blank: 'All distributions', onchange: "this.form.submit();" %>
+              <%= hidden_field_tag :date_range, params[:date_range] || session[:date_range] %>
+              <%= hidden_field_tag :source, params[:source] || session[:source] %>
+            <% end %>
+          </div>
+        </div>
+      </div>
 
         <%= render 'quick_stats' %>
 
-        <div class="chart-container">
-          <%= line_chart @api_requests_by_date %>
+        <div class="border border-solid dark:border-slate-700 border-slate-200 rounded-md p-6">
+  
+          <div class="pb-6 flex justify-between border-b border-slate-200 dark:border-slate-700">
+            <h2 class="antialiased font-sans font-medium text-2xl text-gray-900 dark:text-white leading-8 m-0">Campaign Metrics</h2>
+          </div>
+
+          
+          <div class="sticky -mx-6 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="antialiased font-sans font-medium text-lg leading-6 dark:text-white text-gray-800 mb-0.5">Inbound API Requests</h3>
+              </div>
+            </div>
+
+            <%= line_chart @inbound_requests_by_date %>
+          
+            <hr class="w-[calc(100%_+_3rem)] bg-slate-200 my-6 -mx-6 mt-4">
+
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="antialiased font-sans font-medium text-lg leading-6 dark:text-white text-gray-800 mb-0.5">Outbound API Requests</h3>
+              </div>
+            </div>
+
+            <%= line_chart @outbound_requests_by_date %>
+          
+          </div>
+            
+          <hr class="w-[calc(100%_+_3rem)] bg-slate-200 my-6 -mx-6">
+            
         </div>
 
-      <%= render 'latest_activity' %>
     </div>
+
   </main>
 </div>
 
