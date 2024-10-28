@@ -49,7 +49,7 @@ Run `bin/setup` to install Ruby and JavaScript dependencies and setup your datab
 bin/setup
 ```
 
-## Running Jumpstart Pro Rails
+## Running Swayed
 
 To run your application, you'll use the `bin/dev` command:
 
@@ -59,17 +59,6 @@ bin/dev
 
 This starts up Overmind (or Foreman) running the processes defined in `Procfile.dev`. We've configured this to run the Rails server, CSS bundling, and JS bundling out of the box. You can add background workers like Sidekiq, the Stripe CLI, etc to have them run at the same time.
 
-#### Running on Windows
-
-See the [Installation docs](https://jumpstartrails.com/docs/installation#windows)
-
-#### Running with Docker or Docker Compose
-
-See the [Installation docs](https://jumpstartrails.com/docs/installation#docker)
-
-## Merging Updates
-
-To merge changes from Jumpstart Pro, you will merge from the `jumpstart-pro` remote.
 
 ```bash
 git fetch jumpstart-pro
