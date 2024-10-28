@@ -1,4 +1,4 @@
-# 🎉 Jumpstart Pro Rails
+# Swayed - A Transactional ETL
 
 Welcome! To get started, clone the repository and push it to a new repository.
 
