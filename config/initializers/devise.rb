@@ -1,20 +1,5 @@
 # frozen_string_literal: true
 
-class TurboFailureApp < Devise::FailureApp
-  # Compatibility for Turbo::Native::Navigation
-  class << self
-    def helper_method(name)
-    end
-  end
-
-  include Turbo::Native::Navigation
-
-  # Turbo Native requests that require authentication should return 401s to trigger the login modal
-  def http_auth?
-    turbo_native_app? || super
-  end
-end
-
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -124,7 +109,7 @@ Devise.setup do |config|
   # This can reduce the time taken to boot the app but if your application
   # requires the Devise mappings to be loaded during boot time the application
   # won't boot properly.
-  # config.reload_routes = true
+  config.reload_routes = false
 
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 12. If
@@ -308,7 +293,6 @@ Devise.setup do |config|
   # change the failure app, you can configure them inside the config.warden block.
   #
   config.warden do |manager|
-    manager.failure_app = TurboFailureApp
     # manager.intercept_401 = false
     # manager.default_strategies(scope: :user).unshift :some_external_strategy
   end

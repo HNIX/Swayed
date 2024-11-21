@@ -1,0 +1,104 @@
+:root.jumpstart-dark,
+.jumpstart-dark {
+  /*Primary*/
+  --bg-primary: theme('colors.avocado.950');
+  --bg-primary-hover: theme('colors.avocado.600');
+  --text-on-primary: theme('colors.avocado.300');
+  --border-primary: theme('colors.avocado.500');
+  --border-primary-hover: theme('colors.avocado.400');
+  --text-primary: theme('colors.avocado.300');
+  --text-primary-hover: theme('colors.avocado.400');
+
+  /*Secondary*/
+  --bg-secondary: theme('colors.smoke.900');
+  --text-on-secondary: theme('colors.smoke.50');
+  --bg-secondary-hover: theme('colors.smoke.800');
+  --text-on-secondary-hover: theme('colors.smoke.50');
+  --border-secondary: theme('colors.smoke.700');
+
+  /*Danger*/
+  --bg-danger: theme('colors.danger.800');
+  --bg-danger-hover: theme('colors.danger.700');
+  --text-on-danger: theme('colors.white');
+  --border-danger: theme('colors.danger.600');
+  --border-danger-focus: theme('colors.danger.600');
+  --text-danger: theme('colors.danger.400');
+  --bg-danger-secondary: theme('colors.danger.950');
+  --text-on-danger-secondary: theme('colors.danger.200');
+  --icon-on-danger-secondary: theme('colors.danger.400');
+
+  /*Success*/
+  --bg-success: theme('colors.success.800');
+  --bg-success-hover: theme('colors.success.700');
+  --text-on-success: theme('colors.white');
+  --border-success: theme('colors.success.400');
+  --border-success-focus: theme('colors.success.700');
+  --text-success: theme('colors.success.300');
+  --bg-success-secondary: theme('colors.success.950');
+  --text-on-success-secondary: theme('colors.success.100');
+  --icon-on-success-secondary: theme('colors.success.400');
+
+  /*Info*/
+  --bg-info-secondary: theme('colors.info.950');
+  --text-on-info-secondary: theme('colors.info.100');
+  --icon-on-info-secondary: theme('colors.info.300');
+
+  /*Warning*/
+  --bg-warning-secondary: theme('colors.warning.950');
+  --text-on-warning-secondary: theme('colors.warning.100');
+  --icon-on-warning-secondary: theme('colors.warning.500');
+
+  /*Accent*/
+  --bg-accent: theme('colors.accent.700');
+  --text-on-accent: theme('colors.white');
+  --border-accent: theme('colors.accent.500');
+  --text-accent: theme('colors.accent.400');
+
+  /*Light*/
+  --bg-light: theme('colors.smoke.50');
+  --bg-light-hover: theme('colors.smoke.100');
+  --text-on-light: theme('colors.smoke.800');
+  --text-on-light-outline: theme('colors.smoke.800');
+  --border-light: theme('colors.smoke.300');
+
+  /*Dark*/
+  --bg-dark: theme('colors.smoke.950');
+  --bg-dark-secondary: theme('colors.smoke.400');
+  --bg-dark-hover: theme('colors.smoke.900');
+  --text-on-dark: theme('colors.white');
+  --text-on-dark-outline: theme('colors.smoke.200');
+  --border-dark: theme('colors.smoke.700');
+  --border-dark-focus: theme('colors.smoke.500');
+
+  /*Disabled*/
+  --bg-disabled: theme('colors.smoke.600');
+  --bg-disabled-selected: theme('colors.smoke.700');
+  --text-on-disabled-selected: theme('colors.smoke.200');
+  --border-disabled: theme('colors.smoke.500');
+  --bg-disabled-secondary: theme('colors.smoke.800');
+  --icon-disabled: theme('colors.smoke.400');
+
+  /*Base*/
+  --base-text: theme('colors.smoke.50');
+  --base-text-secondary: theme('colors.smoke.200');
+  --base-text-tertiary: theme('colors.smoke.400');
+  --base-text-disabled: theme('colors.smoke.600');
+  --base-icon: theme('colors.smoke.400');
+  --base-bg-backdrop: theme('colors.smoke.300');
+  --base-bg-highest: theme('colors.smoke.500');
+  --base-bg-high: theme('colors.smoke.600');
+  --base-bg-base: theme('colors.smoke.700');
+  --base-bg-low: theme('colors.smoke.800');
+  --base-bg-lowest: theme('colors.smoke.900');
+  --base-border-primary: theme('colors.smoke.400');
+  --base-border-secondary: theme('colors.smoke.500');
+  --base-border-tertiary: theme('colors.smoke.600');
+  --base-border-focus: theme('colors.avocado.800');
+  --base-bg-selected: theme('colors.avocado.900');
+  --base-bg-hover: theme('colors.avocado.950');
+  --base-bg-tooltip: theme('colors.smoke.800');
+  --base-text-on-tooltip: theme('colors.smoke.50');
+
+  /* Background */
+  background-color: var(--base-bg-low);
+}

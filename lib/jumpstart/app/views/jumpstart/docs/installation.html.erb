@@ -44,19 +44,13 @@
 <p>These commands are defined in <code>Procfile</code> and <code>Procfile.dev</code> so they can be started and shutdown together.</p>
 <p>You'll also need to make sure the PostgreSQL, Redis, etc servers are installed and running externally.</p>
 
-<%= h3_with_anchor "Overmind & Foreman" %>
-<p><%= link_to "Overmind", "https://github.com/DarthSim/overmind", target: :_blank %> and Foreman are process managers that start/stop the processes defined in <code>Procfile.dev</code>. Overmind is recommended because it allows you to join a process and interact with it. Unfortunately, Foreman is incompatible with binding.irb, pry, or similar debuggers therefore you cannot join and interact with a process as you can with Overmind.</p>
-<p>Install Overmind with Homebrew:</p>
-<div class="not-prose">
-  <pre><code>brew install tmux overmind</code></pre>
-</div>
-
-<p>You can then run your application anytime with:</p>
+<%= h3_with_anchor "Overmind" %>
+<p><%= link_to "Overmind", "https://github.com/DarthSim/overmind", target: :_blank %> is a process manager that runs the processes defined in <code>Procfile.dev</code>. Overmind is recommended because it allows you to join a process and interact with it.</p>
+<p>Run your application with:</p>
 <div class="not-prose">
   <pre><code>bin/dev</code></pre>
 </div>
 
-<%= h4_with_anchor "Overmind Tips" %>
 <div class="not-prose">
   <pre><code># Debugging with byebug, binding.irb, etc: connect to the `web` process to be able to input commands:
 overmind connect web
@@ -69,20 +63,16 @@ overmind restart web
 overmind kill</code></pre>
 </div>
 
-<%= h3_with_anchor "Docker & Docker Compose", id: :docker %>
-<p>If you'd like to use Docker, we provide a <code>Dockerfile</code> and <code>docker-compose.yml</code> example configuration you can use as a starting point.</p>
+<%= h3_with_anchor "Devcontainers & Docker", id: :docker %>
+<p>If you'd like to use Docker, Rails provides a <code>devcontainer</code> that uses Docker Compose to set up dependencies for consistent development across any OS.</p>
+<p>To use the devcontainer, you will need to open the directory in VS Code <code>code .</code> and select "Reopen in Container" when prompted.</p>
+<%= link_to image_tag("https://jumpstartpro.b-cdn.net/devcontainer.png", class: "h-32"), "https://jumpstartpro.b-cdn.net/devcontainer.png", target: :_blank %>
+<p> Once inside the Devcontainer, you can run Rails as normal using <code>bin/dev</code> in VS Code's terminal. Ports will be forwarded from OS localhost to the devcontainer.</p>
 <div class="not-prose">
-  <pre><code>docker-compose up</code></pre>
+  <pre><code>bin/dev</code></pre>
 </div>
 <p>Then open <%= link_to "http://localhost:3000", "http://localhost:3000", target: :_blank %></p>
-<p>To run the Rails console, run:</p>
-<div class="not-prose">
-  <pre><code>docker-compose exec web bin/rails console</code></pre>
-</div>
 
 <%= h3_with_anchor "Developing on Windows", id: :windows %>
-<p>If you'd like to run Jumpstart Pro on Windows, we recommend using WSL2. You can find instructions here: <%= link_to "https://gorails.com/setup/windows", "https://gorails.com/setup/windows", target: :_blank %></p>
-<p>Alternatively, if you'd like to use Docker on Windows, you'll need to make sure you clone the repository and preserve the Linux line endings.</p>
-<div class="not-prose">
-  <pre><code>git clone git@github.com:username/myrepo.git --config core.autocrlf=input</code></pre>
-</div>
+<p>If you'd like to run Jumpstart Pro Rails on Windows, we recommend using WSL2. You can find instructions here: <%= link_to "https://gorails.com/setup/windows", "https://gorails.com/setup/windows", target: :_blank %></p>
+<p>The <%= link_to "Devcontainer", "#docker" %> is also a great option for development on Windows.</p>

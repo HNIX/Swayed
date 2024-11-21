@@ -7,19 +7,20 @@ class Api::BaseController < ActionController::API
   include ActiveStorage::SetCurrent
   include Authentication
   include Authorization
-  include CurrentHelper
   include Pagy::Backend
   include SetCurrentRequestDetails
   include SetLocale
   include Sortable
 
-  prepend_before_action :authenticate_api_token!
+  prepend_before_action :require_api_authentication
 
   helper :all
 
   private
 
-  def authenticate_api_token!
+  def require_api_authentication
+    return if user_signed_in?
+
     if (user = user_from_token)
       sign_in user, store: false
     else

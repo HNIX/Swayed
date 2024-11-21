@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::BaseController
-  skip_before_action :authenticate_api_token!, only: [:create], raise: false
+  skip_before_action :require_api_authentication, only: [:create]
   before_action :configure_permitted_parameters, only: [:create]
 
   def create
@@ -12,7 +12,7 @@ class Api::V1::UsersController < Api::BaseController
     end
 
     if user.save
-      if turbo_native_app?
+      if hotwire_native_app?
         user.remember_me = true
         sign_in user
         render json: {

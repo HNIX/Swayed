@@ -6,7 +6,7 @@
 <p>For more information on how accounts work in Jumpstart Pro, check out <%= link_to "the Accounts documentation", accounts_docs_path, target: :_blank, class: "link underline" %>.</p>
 
 <%= h3_with_anchor "Defining Subscription Plans" %>
-<p>Plans can be defined in the <%= link_to "Admin", main_app.admin_plans_path, target: :_blank, class: "link underline", data: { controller: "tooltip", tooltip_content_value: "You must be logged in as an Admin to view this" } %>. Each plan should be defined with the price amount in cents.</p>
+<p>Plans can be defined in the <%= link_to "Admin Area", main_app.madmin_plans_path, target: :_blank, class: "link underline", data: { controller: "tooltip", tooltip_content_value: "You must be logged in as an Admin to view this" } %>. Each plan should be defined with the price amount in cents.</p>
 
 <%= h5_with_anchor "Free Plans" %>
 <p>You can provide free subscriptions to friends and beta testers by using the Pay gem's fake payment processor.</p>
@@ -17,7 +17,7 @@ Plan.where(name: "Free").first_or_create(hidden: true, amount: 0, currency: :usd
 # Create a fake subscription for the admin user so they have access to everything by default
 account = user.accounts.first
 account.set_payment_processor :fake_processor, allow_fake: true
-account.payment_processor.subscribe</code></pre>
+account.payment_processor.subscribe(plan: :free)</code></pre>
 </div>
 
 <%= h5_with_anchor "Enterprise Plans" %>

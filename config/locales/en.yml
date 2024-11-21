@@ -39,6 +39,7 @@ en:
   processing: "Processing..."
   something_went_wrong: "Something went wrong"
   unauthorized: "You are not authorized to perform this action."
+  reveal: "Reveal"
 
   account_invitations_mailer:
     invite:
@@ -304,9 +305,10 @@ en:
 
   application:
     footer:
-      about: "About Us"
-      privacy: "Privacy Policy"
-      terms: "Terms of Service"
+      announcements: "News"
+      about: "About"
+      privacy: "Privacy"
+      terms: "Terms"
     account_navbar:
       profile: "Profile"
       password: "Password"
@@ -314,6 +316,7 @@ en:
       billing: "Billing"
       accounts: "Accounts"
       api_tokens: "API"
+      referrals: "Referrals"
       source_tokens: "Source Tokens"
     header:
       profile: "Profile"
@@ -325,7 +328,7 @@ en:
       source_tokens: "Source Tokens"
     flash:
       confirm_payment: "Confirm your latest payment"
-    navbar:
+    account_menu:
       profile: "Profile"
       password: "Password"
       connected_accounts: "Connected Accounts"
@@ -334,9 +337,11 @@ en:
       source_tokens: "Source Tokens"
       campaigns: "Campaigns"
       accounts: "Accounts"
-      admin: "Admin"
+      admin: "Admin Area"
       dashboard: "Dashboard"
       sign_out: "Sign Out"
+    right_nav:
+      pricing: "Pricing"
       log_in: "Log In"
       sign_up: "Sign Up"
     header:
@@ -348,16 +353,14 @@ en:
       source_tokens: "Source Tokens"
       campaigns: "Campaigns"
       accounts: "Accounts"
-      admin: "Admin"
+      admin: "Admin Area"
       dashboard: "Dashboard"
       sign_out: "Sign Out"
-      log_in: "Log In"
-      sign_up: "Sign Up"
     right_nav:
       pricing: "Pricing"
+      log_in: "Log In"
+      sign_up: "Sign Up"
       announcements: "What's New"
-    left_nav:
-      pricing: "Pricing"
 
   dashboard:
     show:
@@ -670,6 +673,17 @@ en:
         verify_description: "After scanning the QR code, the app will display a code that you can enter to continue."
         cancel: "Cancel"
         verify: "Verify"
+    referrals:
+      index:
+        title: "Referrals"
+        instructions: "Copy your unique link and share it with your friends and followers."
+        stats: "Stats"
+        clicks: "Clicks"
+        clicks_description: "Number of times your link has been clicked."
+        referrals: "Referrals"
+        referrals_description: "People who have signed up using your link."
+        completed: "Completed"
+        completed_description: "Users that have completed their first purchase."
 
   layouts:
     mailer:

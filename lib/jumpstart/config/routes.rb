@@ -45,6 +45,7 @@ Jumpstart::Engine.routes.draw do
     get :branding
     get :javascript
     get :tailwind
+    get :themes
     get :typography
 
     # Components
@@ -55,6 +56,7 @@ Jumpstart::Engine.routes.draw do
     get :forms
     get :icons
     get :modals
+    get :navigation
     get :pagination
     get :pills
     get :tabs

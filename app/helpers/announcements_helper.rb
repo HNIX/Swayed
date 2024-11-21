@@ -10,8 +10,4 @@ module AnnouncementsHelper
   def announcement_color(announcement)
     ANNOUNCEMENT_COLORS.fetch(announcement.kind, "announcement-update")
   end
-
-  def unread_announcements_class(user)
-    "unread-announcements" if Announcement.unread?(user)
-  end
 end

@@ -51,16 +51,7 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
     assert_equal user.api_tokens.find_by(name: ApiToken::DEFAULT_NAME).token, response.parsed_body["token"]
   end
 
-  test "creates a new turbo app api token if one didn't exist" do
-    user = users(:one)
-    assert_difference "user.api_tokens.count" do
-      post api_v1_auth_url, params: {email: user.email, password: "password"}, headers: {HTTP_USER_AGENT: "Turbo Native iOS"}
-      assert_response :success
-    end
-    assert_equal user.api_tokens.find_by(name: ApiToken::APP_NAME).token, response.parsed_body["token"]
-  end
-
-  test "sets Devise cookie during turbo app login" do
+  test "sets auth cookie during hotwire app login" do
     user = users(:one)
     post api_v1_auth_url, params: {email: user.email, password: "password"}, headers: {HTTP_USER_AGENT: "Turbo Native iOS"}
     assert_response :success
@@ -69,20 +60,19 @@ class AuthsControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil session["warden.user.user.key"]
   end
 
-  test "returns token during turbo app login" do
-    user = users(:one)
-    post api_v1_auth_url, params: {email: user.email, password: "password"}, headers: {HTTP_USER_AGENT: "Turbo Native iOS"}
-    assert_response :success
-    assert_not_nil json_response["token"]
-  end
-
   test "destroys notification tokens on sign out" do
     notification_token = notification_tokens(:ios)
-    user = notification_token.user
 
     assert_difference "NotificationToken.count", -1 do
-      delete api_v1_auth_url, params: {notification_token: notification_token.token}, headers: {Authorization: "token #{user.api_tokens.first.token}"}
+      sign_in notification_token.user
+      delete api_v1_auth_url, params: {notification_token: notification_token.token}
       assert_response :success
     end
+  end
+
+  test "destroy session" do
+    sign_in users(:one)
+    delete api_v1_auth_url
+    assert_response :success
   end
 end

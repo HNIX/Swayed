@@ -57,6 +57,7 @@
       ["Icons", icons_docs_path],
       ["JavaScript", javascript_docs_path],
       ["TailwindCSS", tailwind_docs_path],
+      ["Themes", themes_docs_path],
       ["Typography", typography_docs_path],
     ],
     "Components" => [
@@ -66,6 +67,7 @@
       ["Clipboard", clipboard_docs_path],
       ["Forms", forms_docs_path],
       ["Modals", modals_docs_path],
+      ["Navigation", navigation_docs_path],
       ["Pagination", pagination_docs_path],
       ["Pills", pills_docs_path],
       ["Tabs", tabs_docs_path],
@@ -76,7 +78,7 @@
     "Next Steps" => [
       ["Business", business_docs_path],
     ],
-    "Turbo Native" => [
+    "Hotwire Native" => [
       ["Existing Apps", existing_apps_docs_path],
     ]
   } %>
@@ -85,7 +87,7 @@
 
   <div class="hidden sm:block">
     <% nav.each do |section, links| %>
-      <h5 class="mt-4 font-semibold mb-1 text-gray-800 dark:text-gray-200"><%= section %></h5>
+      <%= header_with_anchor section, header_tag: :h5, header_class: "mt-4 font-semibold mb-1 text-gray-800 dark:text-gray-200" %>
       <ul class="ml-3 list-none leading-loose">
         <% links.each do |title, url| %>
           <li><%= nav_link_to title, url, class: classes, active_class: active_class, inactive_class: inactive_class %></li>

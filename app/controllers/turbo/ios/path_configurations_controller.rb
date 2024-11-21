@@ -29,25 +29,33 @@ class Turbo::Ios::PathConfigurationsController < ApplicationController
         {
           patterns: ["/new$", "/edit$"],
           properties: {
-            presentation: "modal"
+            context: "modal"
+          }
+        },
+        {
+          patterns: ["^/unauthorized"],
+          properties: {
+            view_controller: "unauthorized"
           }
         },
         {
           patterns: ["/users/sign_up"],
           properties: {
-            flow: "registration"
+            view_controller: "registration",
+            context: "modal"
           }
         },
         {
           patterns: ["/users/sign_in"],
           properties: {
-            flow: "authentication"
+            view_controller: "authentication",
+            context: "modal"
           }
         },
         {
-          patterns: ["/account/password/edit"],
+          patterns: ["^/reset_app$"],
           properties: {
-            flow: "update_password"
+            view_controller: "reset_app"
           }
         }
       ]

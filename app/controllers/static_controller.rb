@@ -7,9 +7,8 @@ class StaticController < ApplicationController
 
   def pricing
     plans = Plan.visible.sorted
-    redirect_to root_path, alert: t(".no_plans_html", link: helpers.link_to_if(current_user&.admin?, "Add a visible plan in the admin", admin_plans_path)) unless plans.exists?
-    @monthly_plans = plans.select(&:monthly?)
-    @yearly_plans = plans.select(&:yearly?)
+    redirect_to root_path, alert: t(".no_plans_html", link: helpers.link_to_if(current_user&.admin?, "Add a visible plan in the admin", madmin_plans_path)) unless plans.any?
+    @monthly_plans, @yearly_plans = plans.partition(&:monthly?)
   end
 
   def terms
@@ -18,5 +17,10 @@ class StaticController < ApplicationController
 
   def privacy
     @agreement = Rails.application.config.agreements.find { _1.id == :privacy_policy }
+  end
+
+  def reset_app
+    # Hotwire Native needs an empty page to route authentication and reset the app.
+    # We can't head: 200 because we also need the Turbo JavaScript in <head>.
   end
 end

@@ -463,6 +463,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_230655) do
     t.integer "subscription_id"
     t.bigint "customer_id"
     t.string "stripe_account"
+    t.string "type"
     t.index ["customer_id", "processor_id"], name: "index_pay_charges_on_customer_id_and_processor_id", unique: true
   end
 
@@ -477,6 +478,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_230655) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_account"
+    t.string "type"
     t.index ["owner_type", "owner_id", "deleted_at"], name: "customer_owner_processor_index"
     t.index ["processor", "processor_id"], name: "index_pay_customers_on_processor_and_processor_id"
   end
@@ -490,6 +492,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_230655) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type"
     t.index ["owner_type", "owner_id", "processor"], name: "index_pay_merchants_on_owner_type_and_owner_id_and_processor"
   end
 
@@ -497,11 +500,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_230655) do
     t.bigint "customer_id"
     t.string "processor_id"
     t.boolean "default"
-    t.string "type"
+    t.string "payment_method_type"
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_account"
+    t.string "type"
     t.index ["customer_id", "processor_id"], name: "index_pay_payment_methods_on_customer_id_and_processor_id", unique: true
   end
 
@@ -527,6 +531,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_230655) do
     t.datetime "pause_resumes_at"
     t.string "payment_method_id"
     t.string "stripe_account"
+    t.string "type"
     t.index ["customer_id", "processor_id"], name: "index_pay_subscriptions_on_customer_id_and_processor_id", unique: true
     t.index ["metered"], name: "index_pay_subscriptions_on_metered"
     t.index ["pause_starts_at"], name: "index_pay_subscriptions_on_pause_starts_at"

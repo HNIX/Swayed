@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  scan:
+  scan_ruby:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
@@ -22,8 +22,8 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Scan for security vulnerabilities
-        run: bin/brakeman
+      - name: Scan for common Rails security vulnerabilities
+        run: bin/brakeman --no-pager
 
   lint:
     timeout-minutes: 10
@@ -38,10 +38,10 @@ jobs:
           bundler-cache: true
 
       - name: Lint code for consistent style
-        run: bundle exec standardrb
+        run: bin/rubocop -f github
 
-      - name: Erblint
-        run: bundle exec erblint --lint-all
+      - name: Lint ERB for consistent style
+        run: bundle exec erb_lint --lint-all
 
   test:
     timeout-minutes: 10
@@ -95,8 +95,12 @@ jobs:
           RAILS_ENV: test
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
         run: |
-          bin/rails zeitwerk:check
-          bin/rails test:prepare
-          bin/rails db:test:prepare
-          bin/rails test
-          bin/rails test:system
+          bin/rails test:prepare db:test:prepare zeitwerk:check test test:system
+
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore

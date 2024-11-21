@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["badge", "list", "placeholder", "notification"]
+  static targets = ["badge", "list", "placeholder", "notification", "nativeBadge"]
   static values = {
     accountId: String, // Current account ID
     accountUnread: Number, // Unread count for the current account
@@ -64,11 +64,13 @@ export default class extends Controller {
   }
 
   showUnreadBadge() {
-    this.badgeTarget?.classList?.remove("hidden")
+    if (this.hasBadgeTarget)
+      this.badgeTarget.classList.remove("hidden")
   }
 
   hideUnreadBadge() {
-    this.badgeTarget?.classList?.add("hidden")
+    if (this.hasBadgeTarget)
+      this.badgeTarget?.classList?.add("hidden")
   }
 
   markAllAsSeen() {
@@ -109,18 +111,19 @@ export default class extends Controller {
     new Notification(data.title, data.options)
   }
 
-  // Automatically sync count to Native apps
   totalUnreadValueChanged() {
     this.syncCountToNative()
   }
 
-  // Automatically sync count to Native apps
   accountUnreadValueChanged() {
     this.syncCountToNative()
   }
 
   // Update the mobile device with the current unread count
   syncCountToNative() {
-    window.TurboNativeBridge.setNotificationCount(this.totalUnreadValue, this.accountUnreadValue)
+    if (this.hasNativeBadgeTarget) {
+      this.nativeBadgeTarget.setAttribute("data-bridge--notification-badge-total-value", this.totalUnreadValue)
+      this.nativeBadgeTarget.setAttribute("data-bridge--notification-badge-account-value", this.accountUnreadValue)
+    }
   }
 }

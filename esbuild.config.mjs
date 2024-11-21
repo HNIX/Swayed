@@ -17,15 +17,12 @@ import http from "http"
 import { setTimeout } from "timers/promises"
 
 const clients = []
-const entryPoints = [
-  "application.js",
-  "administrate.js"
-]
+const entryPoints = ["application.js"]
 const watchDirectories = [
-  "./app/javascript/**/*.js",
-  "./app/views/**/*.html.erb",
-  "./app/assets/builds/**/*.css", // Wait for cssbundling changes
-  "./config/locales/**/*.yml",
+  "./app/javascript",
+  "./app/views",
+  "./app/assets/builds", // Wait for cssbundling changes
+  "./config/locales",
 ]
 const config = {
   absWorkingDir: path.join(process.cwd(), "app/javascript"),
@@ -45,8 +42,8 @@ async function buildAndReload() {
     ...config,
     banner: {
       js: `
-        (() => { 
-          if (typeof EventSource !== 'undefined') { 
+        (() => {
+          if (typeof EventSource !== 'undefined') {
             new EventSource("http://localhost:${port}").onmessage = () => location.reload()
           }
         })();
@@ -72,8 +69,7 @@ async function buildAndReload() {
   console.log("[reload] initial build succeeded")
 
   let ready = false
-  chokidar
-    .watch(watchDirectories)
+  chokidar.watch(watchDirectories)
     .on("ready", () => {
       console.log("[reload] ready")
       ready = true

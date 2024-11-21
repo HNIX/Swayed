@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  # allow_browser versions: :modern
 
   include Accounts::SubscriptionStatus
   include ActiveStorage::SetCurrent
   include Authentication
   include Authorization
-  include CurrentHelper
   include DeviceFormat
   include Pagy::Backend
   include SetCurrentRequestDetails

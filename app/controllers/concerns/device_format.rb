@@ -14,7 +14,7 @@ module DeviceFormat
   private
 
   def set_variant_for_device
-    if turbo_native_app?
+    if hotwire_native_app?
       request.variant = :native
     end
   end

@@ -4,11 +4,12 @@ Rails.application.routes.draw do
   draw :api
   draw :billing
   draw :turbo_native
+  draw :hotwire_native
   draw :users
   draw :dev if Rails.env.local?
 
   authenticated :user, lambda { |u| u.admin? } do
-    draw :admin
+    draw :madmin
   end
 
   resources :source_tokens do
@@ -125,6 +126,7 @@ Rails.application.routes.draw do
     get :terms
     get :privacy
     get :pricing
+    get :reset_app
   end
 
   match "/404", via: :all, to: "errors#not_found"
@@ -138,7 +140,11 @@ Rails.application.routes.draw do
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up", to: "rails/health#show", as: :rails_health_check
+  get "up" => "rails/health#show", :as => :rails_health_check
+
+  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
+  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Public marketing homepage
   root to: "static#index"

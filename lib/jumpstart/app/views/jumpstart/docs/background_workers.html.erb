@@ -6,14 +6,10 @@
 <p>The Jumpstart Pro config admin lets you select your preferred tool for processing background jobs.</p>
 
 <ul>
-  <li>Async - Rails default, runs jobs with an in-process thread pool. Should not be used in production.</li>
-  <li><a href="https://github.com/basecamp/solid_queue" target="_blank">Solid Queue - Stores jobs in Rails database</a></li>
+  <li>Bring your own - Jumpstart Pro will let you configure your own ActiveJob queue adapter</li>
+  <li>Async - Runs jobs with an in-process thread pool. Should not be used in production.</li>
+  <li><a href="https://github.com/rails/solid_queue" target="_blank">Solid Queue</a> - Stores jobs in SQL database</li>
   <li><a href="https://github.com/sidekiq/sidekiq" target="_blank">Sidekiq</a> - requires Redis</li>
-  <li><a href="https://github.com/bensheldon/good_job" target="_blank">GoodJob</a> - Requires PostgreSQL</li>
-  <li><a href="https://github.com/que-rb/que" target="_blank">Que</a> - Requires PostgreSQL</li>
-  <li><a href="https://github.com/jondot/sneakers" target="_blank">Sneakers</a> - Requires RabbitMQ</li>
-  <li><a href="https://github.com/collectiveidea/delayed_job" target="_blank">Delayed Job</a></li>
-  <li><a href="https://github.com/brandonhilkert/sucker_punch" target="_blank">Sucker Punch</a> - doesn't require a separate process, but doesn't allow scheduling</li>
 </ul>
 
 <%= h2_with_anchor "Active Job" %>

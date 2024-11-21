@@ -6,17 +6,15 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-require "jumpstart"
-
 module JumpstartApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w[assets generators jumpstart rails tasks templates])
+    config.autoload_lib(ignore: %w[assets generators jumpstart tasks templates])
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -58,5 +56,11 @@ module JumpstartApp
 
     # Support older SHA1 digests for ActiveRecord::Encryption
     config.active_record.encryption.support_sha1_for_non_deterministic_encryption = true
+
+    config.after_initialize do |app|
+      Madmin.importmap.draw do
+        pin_all_from Rails.root.join("app/javascript/madmin/controllers"), under: "controllers", to: "madmin/controllers"
+      end
+    end
   end
 end

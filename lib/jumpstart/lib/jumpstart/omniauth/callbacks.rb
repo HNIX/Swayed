@@ -9,7 +9,7 @@ module Jumpstart
             # Handle authentication to another model
             record = GlobalID::Locator.locate_signed(signed_id, for: "oauth")
 
-            ConnectedAccount.where(owner: record).first_or_initialize.update(connected_account_params)
+            ConnectedAccount.for_auth(auth, owner: record).first_or_initialize.update(connected_account_params)
             run_connected_callback(connected_account)
             redirect_to(omniauth_params.fetch("redirect_to", record) || root_path)
           elsif connected_account.present?
@@ -100,11 +100,12 @@ module Jumpstart
 
       def success_message!(kind:)
         return unless is_navigational_format?
+        return if flash.notice.present?
         set_flash_message(:notice, :success, kind: t("oauth.#{kind}"))
       end
 
       def connected_account
-        @connected_account ||= ConnectedAccount.for_auth(auth)
+        @connected_account ||= ConnectedAccount.for_auth(auth).first
       end
 
       def after_connect_redirect_path

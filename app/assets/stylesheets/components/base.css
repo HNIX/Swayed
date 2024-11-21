@@ -1,47 +1,55 @@
-/* Tells browser to use dark mode scroll bars, etc */
-.dark {
-  color-scheme: dark;
-}
-
 body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  /* mobile viewport bug fix */
-  min-height: -webkit-fill-available;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 400;
+  line-height: 1.5;
 }
 
-.main {
-  flex: 1;
+main {
+  padding-left: 12px;
+  padding-right: 12px;
+
+  @media (min-width: 1024px) {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
 
 a {
-  @apply text-primary-600;
+  color: var(--text-primary);
 
   &:hover,
   &:focus {
-    @apply text-primary-500;
-
+    color: var(--text-primary-hover);
     transform: none;
   }
 }
 
 ul {
-  @apply list-disc list-inside;
+  list-style-type: disc;
+  list-style-position: inside;
 }
 
 ol {
-  @apply list-decimal list-inside;
+  list-style-type: decimal;
+  list-style-position: inside;
 }
 
 .table {
-  @apply w-full;
+  width: 100%;
+
   th, td {
-    @apply align-top;
+    vertical-align: top;
   }
 
 }
 
 .table-responsive {
-  @apply block w-full overflow-x-auto;
+  display: block;
+  width: 100%;
+  overflow-x: auto;
 }

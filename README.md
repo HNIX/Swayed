@@ -8,11 +8,9 @@ You'll need the following installed to run the template successfully:
 
 * Ruby 3.2+
 * Node.js v20+
-* PostgreSQL 12+
-* Redis - For ActionCable support (and Sidekiq, caching, etc)
-* Libvips or Imagemagick - `brew install vips imagemagick`
-* [Overmind](https://github.com/DarthSim/overmind) or Foreman - `brew install tmux overmind` or `gem install foreman` - helps run all your processes in development
-* [Stripe CLI](https://stripe.com/docs/stripe-cli) for Stripe webhooks in development - `brew install stripe/stripe-cli/stripe`
+* PostgreSQL 12+ (can be switched to SQLite or MySQL)
+* Libvips or Imagemagick
+* [Stripe CLI](https://stripe.com/docs/stripe-cli) for Stripe webhooks in development
 
 If you use Homebrew, dependencies are listed in `Brewfile` so you can install them using:
 
@@ -57,7 +55,7 @@ To run your application, you'll use the `bin/dev` command:
 bin/dev
 ```
 
-This starts up Overmind (or Foreman) running the processes defined in `Procfile.dev`. We've configured this to run the Rails server, CSS bundling, and JS bundling out of the box. You can add background workers like Sidekiq, the Stripe CLI, etc to have them run at the same time.
+This starts up Overmind running the processes defined in `Procfile.dev`. We've configured this to run the Rails server, CSS bundling, and JS bundling out of the box. You can add background workers like Sidekiq, the Stripe CLI, etc to have them run at the same time.
 
 
 ```bash

@@ -12,8 +12,6 @@ module Jumpstart
     end
 
     config.to_prepare do
-      Administrate::ApplicationController.helper Jumpstart::AdministrateHelpers
-
       if Rails.env.development?
         ::ApplicationController.include(Jumpstart::Welcome)
         ::ApplicationController.include(Jumpstart::BundleAssets)
@@ -23,7 +21,6 @@ module Jumpstart
     initializer "turbo.native.navigation.helper" do
       ActiveSupport.on_load(:action_controller_base) do
         include Turbo::Native::Navigation
-        helper Rails.application.helpers
       end
     end
 
@@ -36,11 +33,6 @@ module Jumpstart
       if Jumpstart::Multitenancy.path? || Rails.env.test?
         app.config.middleware.use Jumpstart::AccountMiddleware
       end
-    end
-
-    initializer "jumpstart.sidekiq" do
-      # Removable https://github.com/hotwired/turbo-rails/issues/522
-      ::Sidekiq.strict_args!(false) if defined?(::Sidekiq)
     end
   end
 end

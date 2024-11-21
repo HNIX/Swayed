@@ -1,129 +1,27 @@
-<!-- Site header -->
-<header class="sticky top-0 before:absolute before:inset-0 before:backdrop-blur-md before:bg-white/90 dark:before:bg-slate-900/50 lg:before:bg-gray-100/90 dark:lg:before:bg-slate-900/50 before:-z-10 max-lg:shadow-sm z-30">
-    <div class="px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16 lg:border-b border-gray-200 dark:border-gray-700/60">
+<nav class="top-nav" data-controller="toggle">
+  <section class="logo">
+    <%= link_to root_path do %>
+      <%= render_svg "logo", styles: "fill-current" %>
+      <span class="sr-only"><%= Jumpstart.config.application_name %></span>
+    <% end %>
+  </section>
 
-            <!-- Header: Left side -->
-            <div class="flex">
-                <!-- Hamburger button -->
-                <button
-                    class="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 lg:hidden"
-                    @click.stop="sidebarOpen = !sidebarOpen"
-                    aria-controls="sidebar"
-                    :aria-expanded="sidebarOpen"
-                >
-                    <span class="sr-only">Open sidebar</span>
-                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="5" width="16" height="2" />
-                        <rect x="4" y="11" width="16" height="2" />
-                        <rect x="4" y="17" width="16" height="2" />
-                    </svg>
-                </button>
-            </div>
+  <section class="nav-container hidden lg:flex" data-toggle-target="toggleable">
+    <nav><%= render "left_nav" %></nav>
+    <nav><%= render "right_nav" %></nav>
+  </section>
 
-            <!-- Header: Right side -->
-            <div class="flex items-center space-x-3">
+  <section class="nav-user-controls">
+    <button type="button" id="sidebar-open" data-action="click->toggle#toggle touch->toggle#toggle">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+    </button>
 
-                <%= render "right_nav" %>
-
-
-                <% if user_signed_in? %>
-          
-          
-
-          <!-- Main menu -->
-          <div class="hidden lg:inline-flex z-10 items-center leading-none no-underline align-middle rounded text-gray-700 hover:text-gray-800 dark:text-gray-50 dark:hover:text-gray-200">
-            <div class="relative" data-controller="dropdown">
-              <button data-action="click->dropdown#toggle click@window->dropdown#hide" role="button" class="inline-block select-none" aria-label="Profile Menu">
-                <span class="flex items-center text-gray-700 dark:text-gray-100 appearance-none">
-                  <%= account_avatar current_account, include_user: true, class: "rounded h-10 w-10 ring-2 ring-transparent hover:ring-gray-400 dark:hover:ring-gray-100" %>
-                  <div class="nav-link ml-2"><%= current_account.name %></div>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="fill-current w-4 h-4"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path></svg>
-                </span>
-              </button>
-
-              <!-- Dropdown menu -->
-          <div
-            data-dropdown-target="menu"
-                    data-transition-enter="transition ease-out duration-200"
-                    data-transition-enter-from="opacity-0 translate-y-1"
-                    data-transition-enter-to="opacity-100 translate-y-0"
-                    data-transition-leave="transition ease-in duration-150"
-                    data-transition-leave-from="opacity-100 translate-y-0"
-                    data-transition-leave-to="opacity-0 translate-y-1"
-                    class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-slate-800 dark:divide-slate-900 rounded-xl lg:absolute lg:right-0 ring ring-slate-700"
-          >
-            <div class="py-3 px-4">
-           
-              <%= link_to current_account.name, current_account, class: 'block text-sm font-semibold text-gray-900 dark:text-white' %>
-            
-            </div>
-            <ul class="list-none py-1 text-gray-700 dark:text-gray-300" aria-labelledby="dropdown">
-              <li>
-                <%= link_to t(".profile"), edit_user_registration_path, class: 'block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:text-gray-300 dark:hover:text-white' %>
-              </li>
-              <li>
-                <%= link_to t(".password"), edit_account_password_path, class: 'block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:text-gray-300 dark:hover:text-white' %>
-              </li>
-              <li>
-                <%= link_to t(".connected_accounts"), user_connected_accounts_path, class: 'block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:text-gray-300 dark:hover:text-white' if Devise.omniauth_configs.any? %>
-              </li>
-              <li>
-                <%= link_to t(".billing"), subscriptions_path, class: 'block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:text-gray-300 dark:hover:text-white' if Jumpstart.config.payments_enabled? %>
-              </li>
-              <li>
-                <%= link_to t(".accounts"), accounts_path, class: 'block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:text-gray-300 dark:hover:text-white' %>
-              </li>
-            </ul>
-            <ul
-              class="list-none py-1 text-gray-700 dark:text-gray-300"
-              aria-labelledby="dropdown"
-            >
-              <li>
-                 <% if other_accounts.any? %>
-                    <div class="flex items-center py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white">Switch Account</div>
-                    <% current_user.accounts.order(name: :asc).where.not(id: current_account.id).each do |account| %>
-                      <%= switch_account_button account, data: { controller: :accounts, action: "ajax:success->accounts#reconnect" }, class: 'flex items-center text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-gray-300  px-6 py-3' %>
-                    <% end %>
-                  <% end %>
-              </li>
-              <li>
-                <% if current_user.admin? %>
-                    <div class="px-6 py-3 text-xs font-bold text-gray-800 uppercase bg-white dark:text-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"><%= t(".admin") %></div>
-                    <%= link_to t(".dashboard"), admin_root_path, class: 'flex items-center text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-gray-300 px-6 py-3', target: :_blank, data: { turbo: false } %>
-                    <%= link_to 'Sidekiq', admin_sidekiq_web_path, class: 'flex items-center text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-gray-300 px-6 py-3', target: :_blank, data: { turbo: false } if defined?(::Sidekiq) %>
-                  <% end %>
-              </li>
-              <li>
-                 <% if Rails.env.development? %>
-                    <div class="flex items-center py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-gray-300">Development</div>
-                    <%= link_to 'Jumpstart Config', jumpstart_path(script_name: nil), class: 'flex items-center text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-gray-300 px-6 py-3', data: { turbo: false } %>
-                    <%= link_to 'Jumpstart Docs', jumpstart.docs_path, class: 'flex items-center text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-gray-300 px-6 py-3', target: :_blank, data: { turbo: false } %>
-                    <%= link_to 'Letter Opener', letter_opener_web_path(script_name: nil), class: 'flex items-center text-sm hover:bg-gray-100 dark:hover:bg-slate-600 dark:hover:text-white dark:text-gray-300 px-6 py-3', target: :_blank, data: { turbo: false } %>
-                  <% end %>
-              </li>
-            </ul>
-            <ul
-              class="list-none py-1 text-gray-700 dark:text-gray-300"
-              aria-labelledby="dropdown"
-            >
-              <li>
-                <%= button_to t(".sign_out"), destroy_user_session_path, method: :delete, class: 'block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white' %>
-              </li>
-            </ul>
-          </div>
-
-            </div>
-          </div>
-        <% else %>
-          <%= link_to t(".log_in"), new_user_session_path, class: 'nav-link' %>
-          <%= link_to t(".sign_up"), new_user_registration_path, class: 'btn btn-primary' %>
-        <% end %>
-
-            </div>
-
-        </div>
-    </div>
-</header>
-
-
+    <% if user_signed_in? %>
+      <%= render "dev_nav" if Rails.env.development? %>
+      <%= render "notifications" %>
+      <%= render "account_menu" %>
+    <% end %>
+  </section>
+</nav>

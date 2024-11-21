@@ -1,48 +1,111 @@
 # Gems cannot be loaded here since this runs during bundler/setup
-require_relative "yaml_serializer"
 
 module Jumpstart
-  def self.config
-    @config ||= Configuration.load!
-  end
+  def self.config = @config ||= Configuration.load!
 
   def self.config=(value)
     @config = value
   end
 
-  class Configuration
-    # Manages email provider integrations
-    module Mailable
-      AVAILABLE_PROVIDERS = {
-        "Amazon SES" => :ses,
-        "Mailgun" => :mailgun,
-        "Mailjet" => :mailjet,
-        "Mandrill" => :mandrill,
-        "OhMySMTP" => :ohmysmtp,
-        "Postmark" => :postmark,
-        "Sendgrid" => :sendgrid,
-        "SendinBlue" => :sendinblue,
-        "SparkPost" => :sparkpost
-      }.freeze
+  module YAMLSerializer
+    # A simple YAML serializer that does not support nested elements
 
-      AVAILABLE_PROVIDERS.values.map(&:to_s).each do |name|
-        define_method :"#{name}?" do
-          email_provider == name
+    module_function
+
+    def load(path)
+      result = {}
+      key = nil
+      multiline = false
+
+      File.readlines(path, chomp: true).each do |line|
+        # multiline hash key
+        if (match = /^(\w+):\s*\|-/.match(line))
+          multiline = true
+          key = match[1]
+          result[key] = ""
+
+        # hash keys
+        elsif (match = /^(\w+):\s*(.*)/.match(line))
+          multiline = false
+          key, value = match[1], match[2]
+          result[key] = value unless value.empty?
+
+        # array entries
+        elsif line.start_with? "- "
+          result[key] ||= []
+          result[key] << line.delete_prefix("- ")
+
+        # multiline string
+        elsif multiline
+          result[key] += "\n" unless result[key].empty?
+          result[key] += line.strip
         end
+      end
+
+      result
+    end
+
+    def dump(object)
+      yaml = "---\n"
+      object.instance_variables.each do |ivar|
+        key = ivar.to_s.delete_prefix("@")
+        value = object.instance_variable_get(ivar)
+        yaml << key << ":"
+
+        if value.is_a?(Array)
+          yaml << value.map { |e| "\n- #{e.to_s.gsub(/\s+/, " ")}" }.join << "\n"
+        elsif value.is_a?(String) && value.include?("\n")
+          yaml << " |-\n  " << value.split("\n").join("\n  ") << "\n"
+        else
+          yaml << " " << value.to_s.gsub(/\s+/, " ") << "\n"
+        end
+      end
+
+      yaml
+    end
+
+    def dump_to_file(path, object)
+      File.write(path, dump(object))
+    end
+  end
+
+  class Configuration
+    QUEUE_ADAPTERS = {
+      "I'll configure my own" => nil,
+      "Async" => :async,
+      "SolidQueue" => :solid_queue,
+      "Sidekiq" => :sidekiq
+    }.freeze
+
+    def job_command(processor)
+      case processor.to_s
+      when "solid_queue"
+        "bin/jobs"
+      when "sidekiq"
+        "bundle exec sidekiq"
       end
     end
 
+    MAIL_PROVIDERS = {
+      "Amazon SES" => :ses,
+      "Mailgun" => :mailgun,
+      "Mailjet" => :mailjet,
+      "Mandrill" => :mandrill,
+      "OhMySMTP" => :ohmysmtp,
+      "Postmark" => :postmark,
+      "Sendgrid" => :sendgrid,
+      "SendinBlue" => :sendinblue,
+      "SparkPost" => :sparkpost
+    }.freeze
+
     # Manages 3rd party service integrations
     module Integratable
-      AVAILABLE_PROVIDERS = {
+      INTEGRATIONS = {
         "AirBrake" => "airbrake",
         "AppSignal" => "appsignal",
         "BugSnag" => "bugsnag",
-        "ConvertKit" => "convertkit",
-        "Drip" => "drip",
         "Honeybadger" => "honeybadger",
         "Intercom" => "intercom",
-        "MailChimp" => "mailchimp",
         "Rollbar" => "rollbar",
         "Scout" => "scout",
         "Sentry" => "sentry",
@@ -51,15 +114,13 @@ module Jumpstart
 
       attr_writer :integrations
 
-      AVAILABLE_PROVIDERS.values.each do |provider|
+      INTEGRATIONS.values.each do |provider|
         define_method(:"#{provider}?") do
           integrations.include?(provider)
         end
       end
 
-      def integrations
-        @integrations || []
-      end
+      def integrations = @integrations || []
 
       def self.has_credentials?(integration)
         credentials_for(integration).first.last.present? if credentials_for(integration).present?
@@ -72,60 +133,24 @@ module Jumpstart
 
     module Payable
       attr_writer :payment_processors
-      attr_writer :plans
-      attr_writer :monthly_plans
-      attr_writer :yearly_plans
 
-      def payment_processors
-        Array(@payment_processors)
-      end
+      def payment_processors = Array(@payment_processors)
 
-      def payments_enabled?
-        payment_processors.any?
-      end
+      def payments_enabled? = payment_processors.any?
 
-      def stripe?
-        payment_processors.include? "stripe"
-      end
+      def stripe? = payment_processors.include? "stripe"
 
-      def braintree?
-        payment_processors.include? "braintree"
-      end
+      def lemon_squeezy? = payment_processors.include? "lemon_squeezy"
 
-      def paypal?
-        payment_processors.include? "paypal"
-      end
+      def braintree? = payment_processors.include? "braintree"
 
-      def paddle_billing?
-        payment_processors.include? "paddle_billing"
-      end
+      def paypal? = payment_processors.include? "paypal"
 
-      def paddle_classic?
-        payment_processors.include? "paddle_classic"
-      end
+      def paddle_billing? = payment_processors.include? "paddle_billing"
 
-      def plans
-        Array.wrap(@plans)
-      end
-
-      def monthly_plans
-        @monthly_plans ||= filter_plans("month")
-      end
-
-      def yearly_plans
-        @yearly_plans ||= filter_plans("year")
-      end
-
-      private
-
-      def filter_plans(frequency, default = "month")
-        plans.select do |plan|
-          plan.fetch(frequency, default).present?
-        end
-      end
+      def paddle_classic? = payment_processors.include? "paddle_classic"
     end
 
-    include Mailable
     include Integratable
     include Payable
 
@@ -152,9 +177,7 @@ module Jumpstart
       end
     end
 
-    def self.config_path
-      File.join("config", "jumpstart.yml")
-    end
+    def self.config_path = File.join("config", "jumpstart.yml")
 
     def self.create_default_config
       FileUtils.cp File.join(File.dirname(__FILE__), "../templates/jumpstart.yml"), config_path
@@ -167,7 +190,7 @@ module Jumpstart
       @domain = options["domain"] || "example.com"
       @support_email = options["support_email"] || "support@example.com"
       @default_from_email = options["default_from_email"] || "My App <no-reply@example.com>"
-      @background_job_processor = options["background_job_processor"] || "async"
+      @background_job_processor = QUEUE_ADAPTERS.values.map(&:to_s).include?(options["background_job_processor"]) ? options["background_job_processor"] : nil
       @email_provider = options["email_provider"]
       @personal_accounts = cast_to_boolean(options["personal_accounts"], default: true)
       @apns = cast_to_boolean(options["apns"])
@@ -201,46 +224,25 @@ module Jumpstart
       Jumpstart.config = self
     end
 
-    def job_processor
-      (background_job_processor || :async).to_sym
-    end
+    def job_processor = background_job_processor&.to_sym
 
-    def queue_adapter
-      case job_processor
-      when :delayed_job
-        :delayed
-      else
-        job_processor
-      end
-    end
+    def queue_adapter = job_processor
 
-    def gems
-      Array(@gems)
-    end
+    def gems = Array(@gems)
 
-    def omniauth_providers
-      Array(@omniauth_providers)
-    end
-
-    def register_with_account?
-      !personal_accounts?
-    end
+    def omniauth_providers = Array(@omniauth_providers)
 
     def personal_accounts=(value)
       @personal_accounts = cast_to_boolean(value)
     end
 
-    def personal_accounts?
-      @personal_accounts.nil? ? true : cast_to_boolean(@personal_accounts)
-    end
+    def personal_accounts? = @personal_accounts.nil? ? true : cast_to_boolean(@personal_accounts)
 
-    def apns?
-      cast_to_boolean(@apns || false)
-    end
+    def register_with_account? = !personal_accounts?
 
-    def fcm?
-      cast_to_boolean(@fcm || false)
-    end
+    def apns? = cast_to_boolean(@apns || false)
+
+    def fcm? = cast_to_boolean(@fcm || false)
 
     def update_procfiles
       write_procfile Rails.root.join("Procfile"), procfile_content
@@ -248,7 +250,7 @@ module Jumpstart
     end
 
     def copy_configs
-      if job_processor == :sidekiq
+      if queue_adapter == :sidekiq
         copy_template("config/sidekiq.yml")
       end
 
@@ -264,24 +266,12 @@ module Jumpstart
         copy_template("config/initializers/bugsnag.rb")
       end
 
-      if convertkit?
-        copy_template("config/initializers/convertkit.rb")
-      end
-
-      if drip?
-        copy_template("config/initializers/drip.rb")
-      end
-
       if honeybadger?
         copy_template("config/honeybadger.yml")
       end
 
       if intercom?
         copy_template("config/initializers/intercom.rb")
-      end
-
-      if mailchimp?
-        copy_template("config/initializers/mailchimp.rb")
       end
 
       if rollbar?
@@ -301,13 +291,9 @@ module Jumpstart
       end
     end
 
-    def model_name
-      ActiveModel::Name.new(self, nil, "Configuration")
-    end
+    def model_name = ActiveModel::Name.new(self, nil, "Configuration")
 
-    def persisted?
-      false
-    end
+    def persisted? = false
 
     private
 
@@ -315,7 +301,7 @@ module Jumpstart
       content = {web: "bundle exec rails s"}
 
       # Background workers
-      if (worker_command = Jumpstart::JobProcessor.command(job_processor))
+      if (worker_command = job_command(queue_adapter))
         content[:worker] = worker_command
       end
 
@@ -340,16 +326,14 @@ module Jumpstart
       end
     end
 
+    # Safely copy template, so we don't blow away any customizations you made
     def copy_template(filename)
-      # Safely copy template, so we don't blow away any customizations you made
       unless File.exist?(filename)
         FileUtils.cp(template_path(filename), Rails.root.join(filename))
       end
     end
 
-    def template_path(filename)
-      Rails.root.join("lib/templates", filename)
-    end
+    def template_path(filename) = Rails.root.join("lib/templates", filename)
 
     FALSE_VALUES = [
       false, 0,

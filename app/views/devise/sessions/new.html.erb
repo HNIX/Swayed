@@ -16,10 +16,14 @@
     </div>
 
     <% if devise_mapping.rememberable? -%>
-      <div class="form-group">
-        <%= f.check_box :remember_me, class: "form-checkbox" %>
-        <%= f.label :remember_me, class: "inline-block" %>
-      </div>
+      <% if hotwire_native_app? %>
+        <%= f.hidden_field :remember_me, value: true %>
+      <% else %>
+        <div class="form-group form-picker-group">
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me %>
+        </div>
+      <% end -%>
     <% end -%>
 
     <div class="form-group">
