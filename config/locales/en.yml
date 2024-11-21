@@ -356,6 +356,8 @@ en:
     right_nav:
       pricing: "Pricing"
       announcements: "What's New"
+    left_nav:
+      pricing: "Pricing"
 
   dashboard:
     show:

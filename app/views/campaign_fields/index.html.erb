@@ -1,13 +1,13 @@
-<div class="card-panel">
+<div class="">
   <div>
     <% if @campaign %>
       <%= render 'campaigns/campaign_header', campaign: @campaign %>
-      <%= render 'subnav' %>
     <% end %>
-
   </div>
 
-  <div class="card-inner pt-4">
+  <div class="mx-auto">
+    <%= render 'subnav' %>
+
     <% if @fields.present? %>
       <%= render 'table', fields: @fields %>
     <% else %>

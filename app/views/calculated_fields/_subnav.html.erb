@@ -1,18 +1,30 @@
-<!-- Secondary navigation -->
-<nav class="flex justify-between overflow-x-auto bg-gray-700/10 py-5 border border-slate-100/5 px-4 sm:px-6 lg:px-8">
-    <ul role="list" class="list-none flex flex-none gap-x-6 text-sm font-semibold leading-6 text-gray-400">
-        <li>
-            <%= nav_link_to campaign_campaign_fields_path(@campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400' do %>
-                    All Fields
+
+
+<!-- Page header -->
+  <div class="sm:flex sm:justify-between sm:items-center mb-5">
+  
+      <!-- Left: Title -->
+      <div class="mb-4 sm:mb-0">
+          <h2 class="antialiased font-sans font-medium text-2xl text-gray-900 dark:text-white leading-8 m-0">Campaign Fields</h2>
+      </div>
+  
+      <!-- Add card button -->
+      <%= link_to "New calculated field", new_campaign_calculated_field_path(@campaign), { data: {turbo_frame: "modal"}, class: "btn btn-primary"} %>
+  
+  </div>
+
+  <!-- Filters -->
+  <div class="mb-5">
+      <ul class="list-none flex flex-wrap -m-1">
+          <li class="m-1">
+            <%= nav_link_to campaign_campaign_fields_path(@campaign), inactive_class: "inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-sm bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 transition", active_class: 'inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-gray-900 dark:bg-gray-100 text-white dark:text-indigo-600 transition' do %>
+                Standard Fields
             <% end %>
-        </li>
-        <li>
-        <%= nav_link_to campaign_calculated_fields_path(@campaign), inactive_class: "border-transparent text-gray-600 dark:text-gray-300 hover:border-neutral-300 hover:text-indigo-500 dark:hover:text-neutral-300", active_class: '-mb-px transition text-indigo-500 dark:text-indigo-400 focus:text-indigo-400' do %>
-            Calculated Fields
-        <% end %>
-        </li>
-    </ul>
-    <div>
-        <%= link_to "New calculated field", new_campaign_calculated_field_path(@campaign), { data: {turbo_frame: "modal"}, class: "btn btn-small btn-primary"} %>
-    </div>
-</nav>
+          </li>
+          <li class="m-1">
+            <%= nav_link_to campaign_calculated_fields_path(@campaign), inactive_class: "inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 shadow-sm bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 transition", active_class: 'inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-gray-900 dark:bg-gray-100 text-white dark:text-indigo-600 transition' do %>
+                Calculated Fields
+            <% end %>
+          </li>
+      </ul>
+  </div>

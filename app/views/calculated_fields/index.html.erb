@@ -1,12 +1,13 @@
-<div class="card-panel">
+<div>
   <div>
     <% if @campaign %>
-      <%= render 'campaigns/header', campaign: @campaign %>
-      <%= render 'subnav' %>
+      <%= render 'campaigns/campaign_header', campaign: @campaign %>
     <% end %>
   </div>
 
-  <div class="card-inner pt-0">
+  <div>
+    <%= render 'subnav' %>
+
     <% if @calculated_fields.present? %>
       <%= render 'field_list' %>
     <% else %>

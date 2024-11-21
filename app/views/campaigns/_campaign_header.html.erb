@@ -1,5 +1,4 @@
-<div class="bg-slate-15 border-b border-solid border-b-slate-200 dark:border-b-slate-500 pb-10">
-  <div class="">
+<div class="bg-slate-15">
     <div class="flex justify-between">
       <div>
         <div class="antialiased font-sans font-normal text-sm text-gray-800 dark:text-white uppercase tracking-wider leading-6 flex items-center mb-1">
@@ -30,95 +29,71 @@
           </div>
           
         </div>
-        <div>
-          <div class="mt-3 mb-0">
-            <span class="antialiased font-sans font-medium text-sm text-gray-900 dark:text-white leading-6 mr-2">API Endpoint
-              <div class="relative inline-flex">
-                <div>
-                  <svg width="28" height="12" viewBox="0 0 28 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" width="12" height="12" rx="6" class="fill-slate-100"></rect><path d="M13.9861 4.128C14.3061 4.128 14.5621 3.888 14.5621 3.576C14.5621 3.256 14.3061 3.016 13.9861 3.016C13.6661 3.016 13.4101 3.256 13.4101 3.576C13.4101 3.888 13.6661 4.128 13.9861 4.128ZM13.5141 9H14.4821V4.816H13.5141V9Z" class="fill-slate-900"></path></svg>
-                </div>
-              </div>
-            </span>
-            <span class="mr-5">
-              <div class="h-6 inline-flex">
-                <span class="antialiased font-sans font-normal text-sm leading-6 dark:text-white text-slate-800">rails-ocwu:10000</span>
-                <div class="relative inline-flex">
-                  <div>
-                    <button type="button" aria-label="Copy" class="ml-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="w-4 h-4 stroke-indigo-600"><path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg></button>
-                  </div>
-                </div>
-              </div>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="relative" data-controller="dropdown">
-          <button type="button" class="inline-flex items-center gap-x-2 rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" data-action="click->dropdown#toggle click@window->dropdown#hide" role="button">
-            Connect
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </button>
 
-          <div data-dropdown-target="menu"
-                            data-transition-enter="transition ease-out duration-200"
-                            data-transition-enter-from="opacity-0 translate-y-1"
-                            data-transition-enter-to="opacity-100 translate-y-0"
-                            data-transition-leave="transition ease-in duration-150"
-                            data-transition-leave-from="opacity-100 translate-y-0"
-                            data-transition-leave-to="opacity-0 translate-y-1"
-                            class="z-20 hidden mt-2 lg:absolute lg:right-0 dropdown-menu">
-            <div class="overflow-hidden bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-700 rounded shadow-md">
-              <div class="css-ie3v1c">
-                <ul role="tablist" class="css-c6vsn3">
-                  <li><a href="#connect-internal" role="tab" aria-controls="connect-internal" aria-selected="true" class="css-1ujvsuo">Internal</a></li>
-                  <li><a href="#connect-ssh" role="tab" aria-controls="connect-ssh" aria-selected="false" class="css-1ujvsuo">SSH</a></li>
-                  <li><a href="#connect-outbound" role="tab" aria-controls="connect-outbound" aria-selected="false" class="css-1ujvsuo">Outbound</a></li>
-                </ul>
-                
-                <section role="tabpanel" id="connect-ssh" data-selected="false" class="css-1oz7gqt">
-                  <h6 class="css-129z80x">SSH Command</h6>
-                  <p class="css-1ffqlk5">Access your service on Render from anywhere with an <a class="external-link" target="_blank" rel="noreferrer noopener" href="https://docs.render.com/ssh">SSH</a> client.</p>
-                  <div class="antialiased font-sans font-normal text-sm text-gray-900 leading-6 relative items-center w-full whitespace-pre-wrap flex justify-between px-4 rounded border border-solid bg-orange-25 border-orange-600 box-border min-h-[56px] mt-4">
-                    <div class="flex py-4">
-                      <div class="flex items-center mr-4">
-                        <svg width="24" height="24" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.25107 3.34184C7.88662 3.79979 7.47772 4.50308 6.89105 5.51641L3.84439 10.7788C3.25563 11.7958 2.84775 12.5033 2.63131 13.0493C2.41671 13.5906 2.45384 13.8189 2.54002 13.9684C2.6262 14.1178 2.80514 14.2643 3.38114 14.3499C3.96212 14.4361 4.77877 14.4376 5.95387 14.4376H12.0472C13.2223 14.4376 14.0389 14.4361 14.6199 14.3499C15.1959 14.2643 15.3749 14.1178 15.461 13.9684C15.5472 13.8189 15.5844 13.5906 15.3698 13.0493C15.1533 12.5033 14.7454 11.7958 14.1567 10.7788L11.11 5.51642C10.5233 4.50308 10.1144 3.7998 9.74998 3.34184C9.38879 2.88798 9.17293 2.8064 9.00053 2.8064C8.82813 2.8064 8.61227 2.88798 8.25107 3.34184ZM7.37081 2.6413C7.80297 2.09826 8.3081 1.6814 9.00053 1.6814C9.69296 1.6814 10.1981 2.09826 10.6303 2.6413C11.053 3.17245 11.5028 3.94945 12.0591 4.91036L12.0836 4.95275L15.1303 10.2152L15.1548 10.2576L15.1548 10.2576L15.1548 10.2576C15.7132 11.2221 16.1647 12.0018 16.4156 12.6347C16.672 13.2816 16.7823 13.929 16.4357 14.5303C16.089 15.1316 15.4734 15.3605 14.7851 15.4627C14.1116 15.5626 13.2107 15.5626 12.0962 15.5626H12.0472H5.95387H5.90488C4.79039 15.5626 3.88944 15.5626 3.21594 15.4627C2.52763 15.3605 1.91209 15.1316 1.56541 14.5303C1.21872 13.929 1.32905 13.2816 1.58548 12.6347C1.8364 12.0018 2.28783 11.2221 2.84624 10.2576L2.87079 10.2152L5.91745 4.95275L5.94198 4.91037L5.94199 4.91035C6.49828 3.94945 6.94811 3.17245 7.37081 2.6413ZM9.00053 6.1876C9.31119 6.1876 9.56303 6.43944 9.56303 6.7501V9.7501C9.56303 10.0608 9.31119 10.3126 9.00053 10.3126C8.68987 10.3126 8.43803 10.0608 8.43803 9.7501V6.7501C8.43803 6.43944 8.68987 6.1876 9.00053 6.1876ZM9.00053 12.7501C9.41474 12.7501 9.75053 12.4143 9.75053 12.0001C9.75053 11.5859 9.41474 11.2501 9.00053 11.2501C8.58632 11.2501 8.25053 11.5859 8.25053 12.0001C8.25053 12.4143 8.58632 12.7501 9.00053 12.7501Z" class="fill-orange-600"></path></svg>
-                      </div>
-                      <div class="flex-col">
-                        <span>To make SSH available, <a class="antialiased font-sans font-normal text-sm text-gray-900 leading-6 !text-indigo-600 !hover:text-indigo-700 no-underline" href="/u/settings#ssh-keys">add an SSH public key.</a></span>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-                <section role="tabpanel" id="connect-outbound" data-selected="false" class="css-1oz7gqt">
-                  <h6 class="css-129z80x">Static Outbound IP Addresses</h6>
-                  <p class="css-1ffqlk5">Network requests from your service to the public internet will come from one of the following <a class="external-link" target="_blank" rel="noreferrer noopener" href="https://docs.render.com/static-outbound-ip-addresses">IP addresses</a>.</p>
-                  <ul class="css-7xgfen">
-                    <li>
-                      <label for="connect-outbound-address" class="css-15unluu"><span class="css-12h6whl">IP Addresses</span>
-                        <textarea id="connect-outbound-address" readonly="" spellcheck="false" class="css-gs1sq6">
-                          44.226.145.213
-                          54.187.200.255
-                          34.213.214.55
-                          35.164.95.156
-                          44.230.95.183
-                          44.229.200.200
-                        </textarea>
-                      </label>
-                      <span class="css-1nx2sv9">
-                        <button type="button" aria-label="Copy to clipboard" class="copy-to-clipboard ml-2 css-iupss2">
-                          <span class="fe fe-copy" style="font-size: 16px;"></span>
-                        </button>
-                      </span>
-                    </li>
-                  </ul>
-                </section>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+      
+     
     </div>
-  </div>
+
+    <div class="my-6 border-b border-gray-200 dark:border-gray-700/60">
+        <ul class="list-none text-sm font-medium flex flex-nowrap -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-scroll no-scrollbar">
+            <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
+              <%= nav_link_to campaign_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold dark:hover:text-indigo-600 hover:text-indigo-600", inactive_class: "text-gray-700 dark:text-gray-400 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+                </svg>
+
+                Metrics
+              <% end %>
+            </li>
+            <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
+              <%= nav_link_to campaign_campaign_fields_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold dark:hover:text-indigo-600 hover:text-indigo-600", inactive_class: "text-gray-700 dark:text-gray-400 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", contains: ["/calculated_fields", "/fields"] do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5" />
+                </svg>
+
+                Fields
+              <% end %>
+            </li>
+            <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
+              <%= nav_link_to campaign_sources_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold dark:hover:text-indigo-600 hover:text-indigo-600", inactive_class: "text-gray-700 dark:text-gray-400 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", contains: ["/source_filters", "/sources"] do %>
+    
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                  </svg>
+
+                Sources
+              <% end %>
+            </li>
+            <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
+              <%= nav_link_to campaign_distributions_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold dark:hover:text-indigo-600 hover:text-indigo-600", inactive_class: "text-gray-700 dark:text-gray-400 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold", contains: ["/distribution_filters", "/distributions"] do %>
+                <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                </svg>
+                Distributions
+              <% end %>
+            </li>
+            <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
+              <%= nav_link_to edit_campaign_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold dark:hover:text-indigo-600 hover:text-indigo-600", inactive_class: "text-gray-700 dark:text-gray-400 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+     
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+
+                Settings
+              <% end %>
+            </li>
+            <li class="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
+              <%= nav_link_to logs_campaign_path(@campaign), active_class: "bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold dark:hover:text-indigo-600 hover:text-indigo-600", inactive_class: "text-gray-700 dark:text-gray-400 dark:hover:text-indigo-600 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 shrink-0">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+
+                Logs
+              <% end %>
+            </li>
+        </ul>
+    </div>
+
 </div>

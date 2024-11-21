@@ -32,6 +32,29 @@ module NavHelper
     link_to name, url, html_options
   end
 
+  def sidebar_link_class(options = {}, html_options = {})
+   
+    url = url_for(options)
+    starts_with = html_options.delete(:starts_with)
+    contains = html_options.delete(:contains)
+    html_options[:class] = Array.wrap(html_options[:class])
+    active_class = html_options.delete(:active_class) || "active"
+    inactive_class = html_options.delete(:inactive_class) || ""
+
+    paths = Array.wrap(starts_with)
+    active = if paths.present?
+      paths.any? { |path| request.path.start_with?(path) }
+    elsif (paths = Array.wrap(contains)) && paths.present?
+      paths.any? { |path| request.path.include?(path) }
+    else
+      request.path == url
+    end
+
+    classes = active ? active_class : inactive_class
+    
+    classes
+  end
+
   # Generates a header with a link with an anchor for sharing
   def header_with_anchor(title, header_tag: :h2, id: nil, icon: nil, header_class: "group", link_class: "hidden align-middle group-hover:inline-block p-1", icon_class: "text-gray-500 h-4 w-4")
     id ||= title.parameterize

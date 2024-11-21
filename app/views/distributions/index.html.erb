@@ -1,4 +1,4 @@
-<div class="card-panel">
+<div>
   <div>
     <% if @campaign %>
       <%= render 'campaigns/campaign_header', campaign: @campaign %>
@@ -6,7 +6,7 @@
     <% end %>
   </div>
 
-  <div class="card-inner pt-0">
+  <div>
     <% if @distributions.present? %>
       <%= render 'distribution_list' %>
     <% else %>

@@ -1,7 +1,7 @@
 
 <%= form_with(model: [@campaign, calculated_field], local: true, data: { turbo: false }, class: "contents") do |form| %>
 
-    <%= render "shared/error_messages", resource: form.object %>
+    <%= render "error_messages", resource: form.object %>
 
     <div class="space-y-12">
         <div data-controller="json-insert">

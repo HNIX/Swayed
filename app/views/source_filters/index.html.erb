@@ -1,4 +1,4 @@
-<div class="card-panel">
+<div>
   <div>
     <% if @campaign %>
       <%= render 'campaigns/campaign_header', campaign: @campaign %>
@@ -7,7 +7,7 @@
 
   </div>
 
-  <div class="card-inner pt-0">
+  <div>
     <% if @source_filters.present? %>
       <%= render 'filter_list' %>
     <% else %>

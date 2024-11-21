@@ -1,12 +1,3 @@
-<% if user_signed_in? %>
-    <div class="flex items-center">
-    <%= nav_link_to "Dashboard", root_path, class: "nav-link" %>
-    <%= nav_link_to "Campaigns", campaigns_path, class: "nav-link", starts_with: ["/campaign", "/campaigns", "/fields"] %>
-    <%= nav_link_to "Reports", "#", class: "nav-link" %>
-    <div class="p-0 w-px h-6 bg-slate-300 nav-link"></div>
+<% if Jumpstart.config.payments_enabled? && (!user_signed_in? || current_account_admin?) && not_subscribed? %>
+  <%= nav_link_to t(".pricing"), pricing_path, class: "nav-link" %>
 <% end %>
-
-<a href="#" class="nav-link">Docs</a>
-<a href="#" class="nav-link">Community</a>
-<a href="#" class="nav-link">Help</a>
-</div>

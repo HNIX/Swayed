@@ -74,12 +74,12 @@ class CampaignsController < ApplicationController
     outbound_api_requests = api_requests.where(requestable_type: 'Distribution', requestable_id: session[:distribution]) if session[:distribution].present? 
 
     # Group and count api_requests by day within the given range
-    @inbound_requests_by_date = inbound_api_requests.group_by_day(:created_at, range: start_date..end_date).count
-    @outbound_requests_by_date = outbound_api_requests.group_by_day(:created_at, range: start_date..end_date).count
+    @inbound_requests_by_date = inbound_api_requests&.group_by_day(:created_at, range: start_date..end_date)&.count
+    @outbound_requests_by_date = outbound_api_requests&.group_by_day(:created_at, range: start_date..end_date)&.count
 
 
-    @accepted_inbound_ping_count = inbound_api_requests.where(created_at: start_date..end_date).count
-    @outbound_ping_count = outbound_api_requests.where(created_at: start_date..end_date).count
+    @accepted_inbound_ping_count = inbound_api_requests.nil? ? 0 : inbound_api_requests&.where(created_at: start_date..end_date)&.count
+    @outbound_ping_count = outbound_api_requests&.where(created_at: start_date..end_date)&.count
 
     
     @leads_count = @campaign.leads.where(created_at: start_date..end_date).count
